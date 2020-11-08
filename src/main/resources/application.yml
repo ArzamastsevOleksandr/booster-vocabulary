@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+#      hibernate:
+#        ddl-auto: create-drop
+#        jdbc:
+#          lob:
+#            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  app:
+    jwtSecret: bezKoderSecretKey
+    jwtExpirationMs: 86400000
