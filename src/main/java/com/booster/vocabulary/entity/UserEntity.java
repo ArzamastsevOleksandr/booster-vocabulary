@@ -25,33 +25,22 @@ import java.util.Set;
 })
 @Data
 @NoArgsConstructor
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-//    @Column(length = 20)
-    private ERole name;
-
-//    @NotBlank
-//    @Size(max = 20)
+    private RoleEnum name;
     private String username;
-
-//    @NotBlank
-//    @Size(max = 50)
-//    @Email
     private String email;
-
-//    @NotBlank
-//    @Size(max = 120)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
-    private Set<Role> roles = new HashSet<>();
+    private Set<RoleEntity> roleEntities = new HashSet<>();
 
 }

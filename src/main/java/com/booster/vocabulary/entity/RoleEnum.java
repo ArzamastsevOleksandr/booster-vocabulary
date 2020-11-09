@@ -1,6 +1,6 @@
 package com.booster.vocabulary.entity;
 
-public enum ERole {
+public enum RoleEnum {
 
     ROLE_USER,
     ROLE_MODERATOR,

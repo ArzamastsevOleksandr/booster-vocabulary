@@ -1,6 +1,6 @@
-package com.booster.vocabulary.config;
+package com.booster.vocabulary.config.security;
 
-import com.booster.vocabulary.entity.User;
+import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +18,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
-        return UserDetailsImpl.from(user);
+        return UserDetailsImpl.from(userEntity);
     }
 
 }

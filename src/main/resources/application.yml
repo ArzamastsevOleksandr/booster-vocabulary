@@ -16,5 +16,5 @@ spring:
 
 jwt:
   app:
-    jwtSecret: bezKoderSecretKey
-    jwtExpirationMs: 86400000
+    jwtSecret: dummySecretKey
+    jwtExpirationMs: 360000000

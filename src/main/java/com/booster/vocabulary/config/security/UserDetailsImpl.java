@@ -1,6 +1,6 @@
-package com.booster.vocabulary.config;
+package com.booster.vocabulary.config.security;
 
-import com.booster.vocabulary.entity.User;
+import com.booster.vocabulary.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -30,16 +30,16 @@ public class UserDetailsImpl implements UserDetails {
 
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public static UserDetailsImpl from(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
+    public static UserDetailsImpl from(UserEntity userEntity) {
+        List<GrantedAuthority> authorities = userEntity.getRoleEntities().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(toList());
 
         return UserDetailsImpl.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .password(user.getPassword())
+                .id(userEntity.getId())
+                .username(userEntity.getUsername())
+                .email(userEntity.getEmail())
+                .password(userEntity.getPassword())
                 .authorities(authorities)
                 .build();
     }

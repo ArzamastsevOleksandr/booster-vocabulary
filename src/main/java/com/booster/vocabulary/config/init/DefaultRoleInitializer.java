@@ -1,7 +1,7 @@
-package com.booster.vocabulary.config;
+package com.booster.vocabulary.config.init;
 
-import com.booster.vocabulary.entity.ERole;
-import com.booster.vocabulary.entity.Role;
+import com.booster.vocabulary.entity.RoleEnum;
+import com.booster.vocabulary.entity.RoleEntity;
 import com.booster.vocabulary.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +24,11 @@ public class DefaultRoleInitializer {
     @EventListener
     @Transactional
     public void mockUser(ContextRefreshedEvent event) {
-        Stream.of(ERole.values())
+        Stream.of(RoleEnum.values())
                 .map(r -> {
-                    Role role = new Role();
-                    role.setName(r);
-                    return role;
+                    RoleEntity roleEntity = new RoleEntity();
+                    roleEntity.setName(r);
+                    return roleEntity;
                 }).forEach(roleRepository::save);
     }
 

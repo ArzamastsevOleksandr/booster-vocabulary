@@ -1,5 +1,7 @@
-package com.booster.vocabulary.config;
+package com.booster.vocabulary.config.security.jwt;
 
+import com.booster.vocabulary.config.security.UserDetailsServiceImpl;
+import com.booster.vocabulary.config.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

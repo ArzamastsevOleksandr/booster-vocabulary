@@ -1,13 +1,13 @@
 package com.booster.vocabulary.repository;
 
-import com.booster.vocabulary.entity.ERole;
-import com.booster.vocabulary.entity.Role;
+import com.booster.vocabulary.entity.RoleEnum;
+import com.booster.vocabulary.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
-    Optional<Role> findByName(ERole name);
+    Optional<RoleEntity> findByName(RoleEnum name);
 
 }

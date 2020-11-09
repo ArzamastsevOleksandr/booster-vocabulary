@@ -1,5 +1,6 @@
-package com.booster.vocabulary.config;
+package com.booster.vocabulary.config.security.jwt;
 
+import com.booster.vocabulary.config.security.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;

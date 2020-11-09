@@ -1,10 +1,10 @@
 package com.booster.vocabulary.controller;
 
-import com.booster.vocabulary.config.JwtUtils;
-import com.booster.vocabulary.config.UserDetailsImpl;
-import com.booster.vocabulary.entity.ERole;
-import com.booster.vocabulary.entity.Role;
-import com.booster.vocabulary.entity.User;
+import com.booster.vocabulary.config.security.jwt.JwtUtils;
+import com.booster.vocabulary.config.security.UserDetailsImpl;
+import com.booster.vocabulary.entity.RoleEnum;
+import com.booster.vocabulary.entity.RoleEntity;
+import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.repository.RoleRepository;
 import com.booster.vocabulary.repository.UserRepository;
 import lombok.Data;
@@ -43,18 +43,18 @@ public class TestController {
     PasswordEncoder encoder;
 
     @GetMapping
-    public List<Role> roles() {
+    public List<RoleEntity> roles() {
         return roleRepository.findAll();
     }
 
     @GetMapping("/u")
-    public List<User> users() {
+    public List<UserEntity> users() {
         return userRepository.findAll();
     }
 
     @GetMapping("/s")
     @PreAuthorize(value = "hasAnyRole('ROLE_USER', 'ROLE_MODERATOR')")
-    public List<User> users1() {
+    public List<UserEntity> users1() {
         return userRepository.findAll();
     }
 
@@ -94,43 +94,43 @@ public class TestController {
         }
 
         // Create new user's account
-        User user = new User();
-        user.setUsername(signUpRequest.getUsername());
-         user.setEmail(signUpRequest.getEmail());
-                user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(signUpRequest.getUsername());
+         userEntity.setEmail(signUpRequest.getEmail());
+                userEntity.setPassword(encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRoles();
-        Set<Role> roles = new HashSet<>();
+        Set<RoleEntity> roleEntities = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+            RoleEntity userRoleEntity = roleRepository.findByName(RoleEnum.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
+            roleEntities.add(userRoleEntity);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        RoleEntity adminRoleEntity = roleRepository.findByName(RoleEnum.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
+                        roleEntities.add(adminRoleEntity);
 
                         break;
                     case "mod":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                        RoleEntity modRoleEntity = roleRepository.findByName(RoleEnum.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
+                        roleEntities.add(modRoleEntity);
 
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        RoleEntity userRoleEntity = roleRepository.findByName(RoleEnum.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
+                        roleEntities.add(userRoleEntity);
                 }
             });
         }
 
-        user.setRoles(roles);
-        userRepository.save(user);
+        userEntity.setRoleEntities(roleEntities);
+        userRepository.save(userEntity);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

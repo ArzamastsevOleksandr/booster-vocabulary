@@ -1,5 +1,7 @@
-package com.booster.vocabulary.config;
+package com.booster.vocabulary.config.security;
 
+import com.booster.vocabulary.config.security.jwt.AuthenticationEntryPointJwt;
+import com.booster.vocabulary.config.security.jwt.AuthenticationTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,12 +49,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/signup", "/signin").permitAll()
-                .antMatchers("/api/test/**", "/", "/u").permitAll()
-                .anyRequest().authenticated();
+        http.cors()
+                .and()
+                .csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests().antMatchers("/signup", "/signin")
+                .permitAll()
+                .antMatchers("/api/test/**", "/", "/u")
+                .permitAll()
+                .anyRequest()
+                .authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
