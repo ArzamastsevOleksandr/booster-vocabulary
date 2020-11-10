@@ -1,7 +1,7 @@
 package com.booster.vocabulary.repository;
 
+import com.booster.vocabulary.entity.VocabularyEntryEntity;
 import com.booster.vocabulary.entity.WordEntity;
-import com.booster.vocabulary.entity.WordEntryEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@TestPropertySource(properties = "application.yml")
+@TestPropertySource(properties = "application-test.yml")
 @ExtendWith(SpringExtension.class)
 @Transactional
 class RepositoryTest {
@@ -24,29 +24,30 @@ class RepositoryTest {
     @Autowired
     WordRepository wordRepository;
     @Autowired
-    WordEntryRepository wordEntryRepository;
+    VocabularyEntryRepository vocabularyEntryRepository;
 
     @Test
-    void wordRepository() {
+    void vocabularyEntryRepository() {
         // given
-        var wordEntryEntity1 = new WordEntryEntity();
-        var wordEntryEntity2 = new WordEntryEntity();
-
-        wordEntryRepository.save(wordEntryEntity1);
-        wordEntryRepository.save(wordEntryEntity2);
-
         var wordEntity1 = new WordEntity();
-        wordEntity1.setAntonyms(Set.of(wordEntryEntity1, wordEntryEntity2));
-        wordEntity1.setSynonyms(Set.of(wordEntryEntity1, wordEntryEntity2));
-        wordRepository.save(wordEntity1);
-        // when
-        List<WordEntity> wordEntities = wordRepository.findAll();
-        // then
-        assertThat(wordEntities).isNotEmpty();
+        var wordEntity2 = new WordEntity();
 
-        wordEntities.forEach(word -> {
-            assertThat(word.getCreatedOn()).isNotNull();
-            assertThat(word.getAntonyms().containsAll(Set.of(wordEntryEntity1, wordEntryEntity2)));
+        wordRepository.save(wordEntity1);
+        wordRepository.save(wordEntity2);
+
+        var vocabularyEntryEntity1 = new VocabularyEntryEntity();
+
+        vocabularyEntryEntity1.setAntonyms(Set.of(wordEntity1, wordEntity2));
+        vocabularyEntryEntity1.setSynonyms(Set.of(wordEntity1, wordEntity2));
+        vocabularyEntryRepository.save(vocabularyEntryEntity1);
+        // when
+        List<VocabularyEntryEntity> vocabularyEntries = vocabularyEntryRepository.findAll();
+        // then
+        assertThat(vocabularyEntries).isNotEmpty();
+
+        vocabularyEntries.forEach(vocabularyEntryEntity -> {
+            assertThat(vocabularyEntryEntity.getCreatedOn()).isNotNull();
+            assertThat(vocabularyEntryEntity.getAntonyms().containsAll(Set.of(wordEntity1, wordEntity2)));
         });
     }
 

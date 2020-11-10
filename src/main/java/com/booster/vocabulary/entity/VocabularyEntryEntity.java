@@ -10,40 +10,43 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "Vocabulary")
-@Table(name = "vocabulary")
+@Entity(name = "VocabularyEntry")
+@Table(name = "vocabulary_entry")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "vocabularyEntries",
-        "user"
+        "antonyms",
+        "synonyms"
 })
 @ToString(exclude = {
-        "vocabularyEntries",
-        "user"
+        "antonyms",
+        "synonyms"
 })
-public class VocabularyEntity {
+public class VocabularyEntryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @ManyToOne
+    private WordEntity targetWord;
+
+    private Integer correctAnswersCount = 0;
 
     private Timestamp createdOn = Timestamp.from(Instant.now());
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserEntity user;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<WordEntity> antonyms = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<VocabularyEntryEntity> vocabularyEntries = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<WordEntity> synonyms = new HashSet<>();
 
 }
