@@ -36,7 +36,7 @@ public class VocabularyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String name = "Default";
 
     private Timestamp createdOn = Timestamp.from(Instant.now());
 
