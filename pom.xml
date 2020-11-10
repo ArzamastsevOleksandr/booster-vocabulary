@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.booster</groupId>
-    <artifactId>vocabulary</artifactId>
+    <artifactId>booster-vocabulary</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>booster-vocabulary</name>
     <description>Vocabulary Booster</description>

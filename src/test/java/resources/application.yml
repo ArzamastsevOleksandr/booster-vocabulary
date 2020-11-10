@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:~/peeq;DB_CLOSE_ON_EXIT=TRUE
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: com.peeq.jpa.CustomJpaImplicitNamingStrategy
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate.format_sql: true
