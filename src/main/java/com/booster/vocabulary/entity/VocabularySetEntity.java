@@ -16,8 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "VocabularySet")
 @Table(name = "vocabulary_set")
@@ -42,7 +42,7 @@ public class VocabularySetEntity {
     private LanguageEnum languageName;
 
     @OneToMany(fetch = FetchType.LAZY)
-    private Set<VocabularyEntity> vocabularies = new HashSet<>();
+    private List<VocabularyEntity> vocabularies = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;

@@ -4,11 +4,13 @@ import com.booster.vocabulary.controller.VocabularyEntryController;
 import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.entity.VocabularyEntryEntity;
+import com.booster.vocabulary.entity.VocabularySetEntity;
 import com.booster.vocabulary.entity.WordEntity;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
+import com.booster.vocabulary.repository.VocabularySetRepository;
 import com.booster.vocabulary.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import static java.util.Optional.ofNullable;
 @RequiredArgsConstructor
 public class VocabularyEntryService {
 
+    private final VocabularySetRepository vocabularySetRepository;
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyEntryRepository vocabularyEntryRepository;
     private final WordRepository wordRepository;
@@ -34,13 +37,13 @@ public class VocabularyEntryService {
         UserEntity userEntity = userRepository.findById(vocabularyEntryRequestDto.getUserId())
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(vocabularyEntryRequestDto.getUserId()));
 
-        VocabularyEntryEntity vocabularyEntryEntity = new VocabularyEntryEntity();
+        var vocabularyEntryEntity = new VocabularyEntryEntity();
         Optional<WordEntity> optionalWord = wordRepository.findByWord(vocabularyEntryRequestDto.getWord());
 
         if (optionalWord.isPresent()) {
             vocabularyEntryEntity.setTargetWord(optionalWord.get());
         } else {
-            WordEntity wordEntity = new WordEntity();
+            var wordEntity = new WordEntity();
             wordEntity.setWord(vocabularyEntryRequestDto.getWord());
             wordRepository.save(wordEntity);
 
@@ -53,7 +56,7 @@ public class VocabularyEntryService {
                             if (optionalAntonym.isPresent()) {
                                 vocabularyEntryEntity.getAntonyms().add(optionalAntonym.get());
                             } else {
-                                WordEntity antonymEntity = new WordEntity();
+                                var antonymEntity = new WordEntity();
                                 antonymEntity.setWord(antonym);
                                 wordRepository.save(antonymEntity);
 
@@ -69,7 +72,7 @@ public class VocabularyEntryService {
                             if (optionalSynonym.isPresent()) {
                                 vocabularyEntryEntity.getSynonyms().add(optionalSynonym.get());
                             } else {
-                                WordEntity synonymEntity = new WordEntity();
+                                var synonymEntity = new WordEntity();
                                 synonymEntity.setWord(synonym);
                                 wordRepository.save(synonymEntity);
 
@@ -85,7 +88,7 @@ public class VocabularyEntryService {
 
         VocabularyEntity vocabularyEntity = vocabularyRepository.findByUserIdAndName(vocabularyEntryRequestDto.getUserId(), vocabularyName)
                 .orElseGet(() -> {
-                    VocabularyEntity newVocabularyEntity = new VocabularyEntity();
+                    var newVocabularyEntity = new VocabularyEntity();
                     newVocabularyEntity.setName(vocabularyName);
                     newVocabularyEntity.setUser(userEntity);
                     return newVocabularyEntity;
@@ -93,6 +96,16 @@ public class VocabularyEntryService {
         vocabularyEntity.getVocabularyEntries().add(vocabularyEntryEntity);
         vocabularyRepository.save(vocabularyEntity);
 
+        Optional<VocabularySetEntity> optionalVocabularySetEntity = vocabularySetRepository.findByLanguageNameAndUserId(
+                vocabularyEntryRequestDto.getLanguageName(), userEntity.getId()
+        );
+        if (optionalVocabularySetEntity.isEmpty()) {
+            var vocabularySetEntity = new VocabularySetEntity();
+            vocabularySetEntity.getVocabularies().add(vocabularyEntity);
+            vocabularySetEntity.setLanguageName(vocabularyEntryRequestDto.getLanguageName());
+            vocabularySetEntity.setUser(userEntity);
+            vocabularySetRepository.save(vocabularySetEntity);
+        }
         return vocabularyEntryEntity.getId();
     }
 

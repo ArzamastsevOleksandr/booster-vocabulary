@@ -37,8 +37,8 @@ class RepositoryTest {
 
         var vocabularyEntryEntity1 = new VocabularyEntryEntity();
 
-        vocabularyEntryEntity1.setAntonyms(Set.of(wordEntity1, wordEntity2));
-        vocabularyEntryEntity1.setSynonyms(Set.of(wordEntity1, wordEntity2));
+        vocabularyEntryEntity1.setAntonyms(List.of(wordEntity1, wordEntity2));
+        vocabularyEntryEntity1.setSynonyms(List.of(wordEntity1, wordEntity2));
         vocabularyEntryRepository.save(vocabularyEntryEntity1);
         // when
         List<VocabularyEntryEntity> vocabularyEntries = vocabularyEntryRepository.findAll();

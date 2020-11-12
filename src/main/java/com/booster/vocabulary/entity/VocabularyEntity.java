@@ -15,8 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Vocabulary")
 @Table(name = "vocabulary")
@@ -44,6 +44,6 @@ public class VocabularyEntity {
     private UserEntity user;
 
     @OneToMany(fetch = FetchType.LAZY)
-    private Set<VocabularyEntryEntity> vocabularyEntries = new HashSet<>();
+    private List<VocabularyEntryEntity> vocabularyEntries = new ArrayList<>();
 
 }

@@ -15,8 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "VocabularyEntry")
 @Table(name = "vocabulary_entry")
@@ -36,7 +36,7 @@ public class VocabularyEntryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private WordEntity targetWord;
 
     private Integer correctAnswersCount = 0;
@@ -44,9 +44,9 @@ public class VocabularyEntryEntity {
     private Timestamp createdOn = Timestamp.from(Instant.now());
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private Set<WordEntity> antonyms = new HashSet<>();
+    private List<WordEntity> antonyms = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private Set<WordEntity> synonyms = new HashSet<>();
+    private List<WordEntity> synonyms = new ArrayList<>();
 
 }
