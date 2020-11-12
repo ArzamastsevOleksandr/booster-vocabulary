@@ -37,7 +37,7 @@ public class VocabularyEntryService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long add(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
+    public Long create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
         UserEntity userEntity = userRepository.findById(vocabularyEntryRequestDto.getUserId())
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(vocabularyEntryRequestDto.getUserId()));
 

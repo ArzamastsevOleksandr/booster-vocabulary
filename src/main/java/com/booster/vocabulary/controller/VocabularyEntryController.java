@@ -28,12 +28,12 @@ public class VocabularyEntryController {
 
     private final VocabularyEntryService vocabularyEntryService;
 
-    @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<VocabularyEntryResponseId> add(@RequestBody VocabularyEntryRequestDto vocabularyEntryRequestDto) {
+    @PostMapping(value = "/create", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    ResponseEntity<VocabularyEntryResponseId> create(@RequestBody VocabularyEntryRequestDto vocabularyEntryRequestDto) {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         vocabularyEntryRequestDto.setUserId(userId);
 
-        Long vocabularyEntryId = vocabularyEntryService.add(vocabularyEntryRequestDto);
+        Long vocabularyEntryId = vocabularyEntryService.create(vocabularyEntryRequestDto);
         return ResponseEntity.ok(new VocabularyEntryResponseId(vocabularyEntryId));
     }
 
