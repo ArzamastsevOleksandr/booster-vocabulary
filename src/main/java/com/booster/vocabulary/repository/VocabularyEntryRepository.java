@@ -11,4 +11,6 @@ public interface VocabularyEntryRepository extends JpaRepository<VocabularyEntry
 
     boolean existsByUserIdAndTargetWordWord(Long userId, String word);
 
+    Integer countAllByVocabularyId(Long vocabularyId);
+
 }
