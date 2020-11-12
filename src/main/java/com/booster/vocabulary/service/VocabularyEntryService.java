@@ -8,6 +8,7 @@ import com.booster.vocabulary.entity.VocabularyEntryEntity;
 import com.booster.vocabulary.entity.VocabularySetEntity;
 import com.booster.vocabulary.entity.WordEntity;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
+import com.booster.vocabulary.exception.VocabularyEntryEntityByIdNotFoundException;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
@@ -131,6 +132,26 @@ public class VocabularyEntryService {
                             .antonyms(antonyms)
                             .build();
                 }).collect(toList());
+    }
+
+    public VocabularyEntryDto findById(Long vocabularyEntryId) {
+        VocabularyEntryEntity vocabularyEntryEntity = vocabularyEntryRepository.findById(vocabularyEntryId)
+                .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(vocabularyEntryId));
+
+        List<String> synonyms = vocabularyEntryEntity.getSynonyms().stream()
+                .map(WordEntity::getWord)
+                .collect(toList());
+        List<String> antonyms = vocabularyEntryEntity.getAntonyms().stream()
+                .map(WordEntity::getWord)
+                .collect(toList());
+        return VocabularyEntryDto.builder()
+                .id(vocabularyEntryEntity.getId())
+                .targetWord(vocabularyEntryEntity.getTargetWord().getWord())
+                .createdOn(vocabularyEntryEntity.getCreatedOn())
+                .correctAnswersCount(vocabularyEntryEntity.getCorrectAnswersCount())
+                .synonyms(synonyms)
+                .antonyms(antonyms)
+                .build();
     }
 
 }
