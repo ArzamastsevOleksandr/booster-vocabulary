@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Builder
@@ -16,5 +17,5 @@ public class VocabularyDto {
     String name;
     Integer entryCount;
     Timestamp createdOn;
-//    List<VocabularyEntryDto> vocabularyEntries;
+    List<VocabularyEntryDto> vocabularyEntries;
 }

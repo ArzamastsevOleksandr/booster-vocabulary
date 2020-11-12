@@ -5,8 +5,10 @@ import com.booster.vocabulary.dto.VocabularyDto;
 import com.booster.vocabulary.service.VocabularyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +26,11 @@ public class VocabularyController {
     List<VocabularyDto> list() {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         return vocabularyService.findAllForUserId(userId);
+    }
+
+    @GetMapping("/{vocabularyId}")
+    ResponseEntity<VocabularyDto> vocabularyById(@PathVariable Long vocabularyId) {
+        return ResponseEntity.ok(vocabularyService.findById(vocabularyId));
     }
 
 }
