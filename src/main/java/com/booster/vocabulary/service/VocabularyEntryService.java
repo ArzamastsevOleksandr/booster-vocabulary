@@ -1,6 +1,7 @@
 package com.booster.vocabulary.service;
 
-import com.booster.vocabulary.controller.VocabularyEntryController;
+import com.booster.vocabulary.dto.VocabularyEntryDto;
+import com.booster.vocabulary.dto.request.VocabularyEntryRequestDto;
 import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.entity.VocabularyEntryEntity;
@@ -17,9 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -33,7 +36,7 @@ public class VocabularyEntryService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long add(VocabularyEntryController.VocabularyEntryRequestDto vocabularyEntryRequestDto) {
+    public Long add(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
         UserEntity userEntity = userRepository.findById(vocabularyEntryRequestDto.getUserId())
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(vocabularyEntryRequestDto.getUserId()));
 
@@ -107,6 +110,27 @@ public class VocabularyEntryService {
             vocabularySetRepository.save(vocabularySetEntity);
         }
         return vocabularyEntryEntity.getId();
+    }
+
+    public List<VocabularyEntryDto> findAll() {
+        return vocabularyEntryRepository.findAll().stream()
+                .map(vocabularyEntryEntity -> {
+                    List<String> synonyms = vocabularyEntryEntity.getSynonyms().stream()
+                            .map(WordEntity::getWord)
+                            .collect(toList());
+                    List<String> antonyms = vocabularyEntryEntity.getAntonyms().stream()
+                            .map(WordEntity::getWord)
+                            .collect(toList());
+
+                    return VocabularyEntryDto.builder()
+                            .id(vocabularyEntryEntity.getId())
+                            .targetWord(vocabularyEntryEntity.getTargetWord().getWord())
+                            .createdOn(vocabularyEntryEntity.getCreatedOn())
+                            .correctAnswersCount(vocabularyEntryEntity.getCorrectAnswersCount())
+                            .synonyms(synonyms)
+                            .antonyms(antonyms)
+                            .build();
+                }).collect(toList());
     }
 
 }
