@@ -42,6 +42,8 @@ public class VocabularyEntryService {
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(vocabularyEntryRequestDto.getUserId()));
 
         var vocabularyEntryEntity = new VocabularyEntryEntity();
+        vocabularyEntryEntity.setUser(userEntity);
+
         Optional<WordEntity> optionalWord = wordRepository.findByWord(vocabularyEntryRequestDto.getWord());
 
         if (optionalWord.isPresent()) {
@@ -85,9 +87,9 @@ public class VocabularyEntryService {
                         }
                 )
         );
-        vocabularyEntryRepository.save(vocabularyEntryEntity);
+//        vocabularyEntryRepository.save(vocabularyEntryEntity);
 
-        String vocabularyName = ofNullable(vocabularyEntryRequestDto.getVocabularyName())
+        var vocabularyName = ofNullable(vocabularyEntryRequestDto.getVocabularyName())
                 .orElse("Default");
 
         VocabularyEntity vocabularyEntity = vocabularyRepository.findByUserIdAndName(vocabularyEntryRequestDto.getUserId(), vocabularyName)
@@ -100,6 +102,9 @@ public class VocabularyEntryService {
         vocabularyEntity.getVocabularyEntries().add(vocabularyEntryEntity);
         vocabularyRepository.save(vocabularyEntity);
 
+        vocabularyEntryEntity.setVocabulary(vocabularyEntity);
+        vocabularyEntryRepository.save(vocabularyEntryEntity);
+
         Optional<VocabularySetEntity> optionalVocabularySetEntity = vocabularySetRepository.findByLanguageNameAndUserId(
                 vocabularyEntryRequestDto.getLanguageName(), userEntity.getId()
         );
@@ -111,27 +116,6 @@ public class VocabularyEntryService {
             vocabularySetRepository.save(vocabularySetEntity);
         }
         return vocabularyEntryEntity.getId();
-    }
-
-    public List<VocabularyEntryDto> findAll() {
-        return vocabularyEntryRepository.findAll().stream()
-                .map(vocabularyEntryEntity -> {
-                    List<String> synonyms = vocabularyEntryEntity.getSynonyms().stream()
-                            .map(WordEntity::getWord)
-                            .collect(toList());
-                    List<String> antonyms = vocabularyEntryEntity.getAntonyms().stream()
-                            .map(WordEntity::getWord)
-                            .collect(toList());
-
-                    return VocabularyEntryDto.builder()
-                            .id(vocabularyEntryEntity.getId())
-                            .targetWord(vocabularyEntryEntity.getTargetWord().getWord())
-                            .createdOn(vocabularyEntryEntity.getCreatedOn())
-                            .correctAnswersCount(vocabularyEntryEntity.getCorrectAnswersCount())
-                            .synonyms(synonyms)
-                            .antonyms(antonyms)
-                            .build();
-                }).collect(toList());
     }
 
     public VocabularyEntryDto findById(Long vocabularyEntryId) {
@@ -152,6 +136,28 @@ public class VocabularyEntryService {
                 .synonyms(synonyms)
                 .antonyms(antonyms)
                 .build();
+    }
+
+    @Transactional
+    public List<VocabularyEntryDto> findAllForUserId(Long userId) {
+        return vocabularyEntryRepository.findAllByUserId(userId).stream()
+                .map(vocabularyEntryEntity -> {
+                    List<String> synonyms = vocabularyEntryEntity.getSynonyms().stream()
+                            .map(WordEntity::getWord)
+                            .collect(toList());
+                    List<String> antonyms = vocabularyEntryEntity.getAntonyms().stream()
+                            .map(WordEntity::getWord)
+                            .collect(toList());
+
+                    return VocabularyEntryDto.builder()
+                            .id(vocabularyEntryEntity.getId())
+                            .targetWord(vocabularyEntryEntity.getTargetWord().getWord())
+                            .createdOn(vocabularyEntryEntity.getCreatedOn())
+                            .correctAnswersCount(vocabularyEntryEntity.getCorrectAnswersCount())
+                            .synonyms(synonyms)
+                            .antonyms(antonyms)
+                            .build();
+                }).collect(toList());
     }
 
 }

@@ -49,4 +49,10 @@ public class VocabularyEntryEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<WordEntity> synonyms = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private VocabularyEntity vocabulary;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity user;
+
 }

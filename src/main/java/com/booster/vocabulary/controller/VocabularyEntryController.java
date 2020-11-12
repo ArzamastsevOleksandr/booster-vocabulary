@@ -39,7 +39,8 @@ public class VocabularyEntryController {
 
     @GetMapping("/list")
     List<VocabularyEntryDto> list() {
-        return vocabularyEntryService.findAll();
+        Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return vocabularyEntryService.findAllForUserId(userId);
     }
 
     @GetMapping("/{vocabularyEntryId}")
