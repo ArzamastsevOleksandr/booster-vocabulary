@@ -87,7 +87,7 @@ public class VocabularyEntryService {
                         }
                 )
         );
-//        vocabularyEntryRepository.save(vocabularyEntryEntity);
+        vocabularyEntryRepository.save(vocabularyEntryEntity);
 
         var vocabularyName = ofNullable(vocabularyEntryRequestDto.getVocabularyName())
                 .orElse("Default");
