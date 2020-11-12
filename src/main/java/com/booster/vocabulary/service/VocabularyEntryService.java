@@ -8,6 +8,7 @@ import com.booster.vocabulary.entity.VocabularyEntryEntity;
 import com.booster.vocabulary.entity.VocabularySetEntity;
 import com.booster.vocabulary.entity.WordEntity;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
+import com.booster.vocabulary.exception.VocabularyEntryEntityAlreadyExistsByTargetWordException;
 import com.booster.vocabulary.exception.VocabularyEntryEntityByIdNotFoundException;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
@@ -40,6 +41,10 @@ public class VocabularyEntryService {
     public Long create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
         UserEntity userEntity = userRepository.findById(vocabularyEntryRequestDto.getUserId())
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(vocabularyEntryRequestDto.getUserId()));
+
+        if (vocabularyEntryRepository.existsByUserIdAndTargetWordWord(userEntity.getId(), vocabularyEntryRequestDto.getWord())) {
+            throw new VocabularyEntryEntityAlreadyExistsByTargetWordException(vocabularyEntryRequestDto.getWord());
+        }
 
         var vocabularyEntryEntity = new VocabularyEntryEntity();
         vocabularyEntryEntity.setUser(userEntity);
