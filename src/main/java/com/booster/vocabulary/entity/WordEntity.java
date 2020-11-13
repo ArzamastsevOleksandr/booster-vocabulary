@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+// todo: @Value?
 @Entity(name = "Word")
 @Table(name = "word")
 @Data

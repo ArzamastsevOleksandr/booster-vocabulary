@@ -36,23 +36,23 @@ public class VocabularyEntryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private WordEntity targetWord;
-
     private Integer correctAnswersCount = 0;
 
     private Timestamp createdOn = Timestamp.from(Instant.now());
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<WordEntity> antonyms = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<WordEntity> synonyms = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    private WordEntity targetWord;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private VocabularyEntity vocabulary;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<WordEntity> antonyms = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<WordEntity> synonyms = new ArrayList<>();
 
 }
