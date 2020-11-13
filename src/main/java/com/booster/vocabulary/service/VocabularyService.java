@@ -5,14 +5,14 @@ import com.booster.vocabulary.dto.VocabularyEntryDto;
 import com.booster.vocabulary.dto.request.VocabularyRequestDto;
 import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
-import com.booster.vocabulary.entity.VocabularySetEntity;
+import com.booster.vocabulary.entity.LanguageVocabularySetEntity;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.VocabularyEntityAlreadyExistsWithNameException;
 import com.booster.vocabulary.exception.VocabularyEntityByIdNotFoundException;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
-import com.booster.vocabulary.repository.VocabularySetRepository;
+import com.booster.vocabulary.repository.LanguageVocabularySetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class VocabularyService {
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyEntryRepository vocabularyEntryRepository;
     private final UserRepository userRepository;
-    private final VocabularySetRepository vocabularySetRepository;
+    private final LanguageVocabularySetRepository languageVocabularySetRepository;
 
     public List<VocabularyDto> findAllForUserId(Long userId) {
         List<VocabularyEntity> vocabularyEntityList = vocabularyRepository.findByUserId(userId);
@@ -81,17 +81,17 @@ public class VocabularyService {
         vocabularyEntity.setUser(userEntity);
         vocabularyRepository.save(vocabularyEntity);
 
-        VocabularySetEntity vocabularySetEntity = vocabularySetRepository.findByLanguageNameAndUserId(
-                vocabularyRequestDto.getLanguageName(),
-                vocabularyRequestDto.getUserId()
-        ).orElseGet(() -> {
-            var newVocabularySetEntity = new VocabularySetEntity();
-            newVocabularySetEntity.setLanguageName(vocabularyRequestDto.getLanguageName());
-            newVocabularySetEntity.setUser(userEntity);
-            return newVocabularySetEntity;
-        });
-        vocabularySetEntity.getVocabularies().add(vocabularyEntity);
-        vocabularySetRepository.save(vocabularySetEntity);
+//        LanguageVocabularySetEntity languageVocabularySetEntity = languageVocabularySetRepository.findByLanguageNameAndUserId(
+//                vocabularyRequestDto.getLanguageName(),
+//                vocabularyRequestDto.getUserId()
+//        ).orElseGet(() -> {
+//            var newVocabularySetEntity = new LanguageVocabularySetEntity();
+//            newVocabularySetEntity.setLanguageName(vocabularyRequestDto.getLanguageName());
+//            newVocabularySetEntity.setUser(userEntity);
+//            return newVocabularySetEntity;
+//        });
+//        languageVocabularySetEntity.getVocabularies().add(vocabularyEntity);
+//        languageVocabularySetRepository.save(languageVocabularySetEntity);
 
         return vocabularyEntity.getId();
     }

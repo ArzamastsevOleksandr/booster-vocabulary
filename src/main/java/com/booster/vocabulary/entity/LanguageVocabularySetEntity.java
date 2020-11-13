@@ -5,10 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,27 +16,28 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "VocabularySet")
-@Table(name = "vocabulary_set")
+@Entity(name = "LanguageVocabularySet")
+@Table(name = "language_vocabulary_set")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {
+        "language",
         "vocabularies",
         "user"
 })
 @ToString(exclude = {
+        "language",
         "vocabularies",
         "user"
 })
-public class VocabularySetEntity {
+public class LanguageVocabularySetEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private LanguageEnum languageName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private LanguageEntity language;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<VocabularyEntity> vocabularies = new ArrayList<>();

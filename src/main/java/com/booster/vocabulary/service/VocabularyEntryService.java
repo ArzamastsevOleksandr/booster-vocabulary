@@ -5,7 +5,7 @@ import com.booster.vocabulary.dto.request.VocabularyEntryRequestDto;
 import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.entity.VocabularyEntryEntity;
-import com.booster.vocabulary.entity.VocabularySetEntity;
+import com.booster.vocabulary.entity.LanguageVocabularySetEntity;
 import com.booster.vocabulary.entity.WordEntity;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.VocabularyEntryEntityAlreadyExistsByTargetWordException;
@@ -13,7 +13,7 @@ import com.booster.vocabulary.exception.VocabularyEntryEntityByIdNotFoundExcepti
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
-import com.booster.vocabulary.repository.VocabularySetRepository;
+import com.booster.vocabulary.repository.LanguageVocabularySetRepository;
 import com.booster.vocabulary.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class VocabularyEntryService {
 
-    private final VocabularySetRepository vocabularySetRepository;
+    private final LanguageVocabularySetRepository languageVocabularySetRepository;
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyEntryRepository vocabularyEntryRepository;
     private final WordRepository wordRepository;
@@ -111,16 +111,16 @@ public class VocabularyEntryService {
         vocabularyEntryRepository.save(vocabularyEntryEntity);
 
         // todo: defect
-        Optional<VocabularySetEntity> optionalVocabularySetEntity = vocabularySetRepository.findByLanguageNameAndUserId(
-                vocabularyEntryRequestDto.getLanguageName(), userEntity.getId()
-        );
-        if (optionalVocabularySetEntity.isEmpty()) {
-            var vocabularySetEntity = new VocabularySetEntity();
-            vocabularySetEntity.getVocabularies().add(vocabularyEntity);
-            vocabularySetEntity.setLanguageName(vocabularyEntryRequestDto.getLanguageName());
-            vocabularySetEntity.setUser(userEntity);
-            vocabularySetRepository.save(vocabularySetEntity);
-        }
+//        Optional<LanguageVocabularySetEntity> optionalVocabularySetEntity = languageVocabularySetRepository.findByLanguageNameAndUserId(
+//                vocabularyEntryRequestDto.getLanguageName(), userEntity.getId()
+//        );
+//        if (optionalVocabularySetEntity.isEmpty()) {
+//            var vocabularySetEntity = new LanguageVocabularySetEntity();
+//            vocabularySetEntity.getVocabularies().add(vocabularyEntity);
+//            vocabularySetEntity.setLanguageName(vocabularyEntryRequestDto.getLanguageName());
+//            vocabularySetEntity.setUser(userEntity);
+//            languageVocabularySetRepository.save(vocabularySetEntity);
+//        }
         return vocabularyEntryEntity.getId();
     }
 
