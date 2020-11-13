@@ -1,6 +1,9 @@
 package com.booster.vocabulary.service;
 
+import com.booster.vocabulary.dto.LanguageDto;
+import com.booster.vocabulary.dto.VocabularyDto;
 import com.booster.vocabulary.dto.request.LanguageVocabularySetRequestDto;
+import com.booster.vocabulary.dto.response.LanguageVocabularySetDto;
 import com.booster.vocabulary.entity.LanguageEntity;
 import com.booster.vocabulary.entity.LanguageVocabularySetEntity;
 import com.booster.vocabulary.entity.UserEntity;
@@ -16,7 +19,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -54,6 +60,28 @@ public class LanguageVocabularySetService {
         languageVocabularySetRepository.save(languageVocabularySetEntity);
 
         return languageVocabularySetEntity.getId();
+    }
+
+    public List<LanguageVocabularySetDto> findAllForUserId(Long userId) {
+        return languageVocabularySetRepository.findAllByUserId(userId)
+                .stream()
+                .map(languageVocabularySetEntity -> LanguageVocabularySetDto.builder()
+                        .id(languageVocabularySetEntity.getId())
+                        .languageDto(LanguageDto.builder()
+                                .id(languageVocabularySetEntity.getLanguage().getId())
+                                .name(languageVocabularySetEntity.getLanguage().getName())
+                                .build()
+                        )
+                        .vocabularyDtoList(languageVocabularySetEntity.getVocabularies().stream()
+                            .map(vocabularyEntity -> VocabularyDto.builder()
+                                    .id(vocabularyEntity.getId())
+                                    .name(vocabularyEntity.getName())
+                                    .build()
+                            ).collect(toList())
+                        )
+                        .build()
+                )
+                .collect(toList());
     }
 
 }
