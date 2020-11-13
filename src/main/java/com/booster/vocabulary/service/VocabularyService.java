@@ -77,7 +77,7 @@ public class VocabularyService {
 
         var vocabularyEntity = new VocabularyEntity();
         vocabularyEntity.setName(vocabularyRequestDto.getVocabularyName());
-        vocabularyEntity.setLanguageName(vocabularyRequestDto.getLanguageName());
+//        vocabularyEntity.setLanguageName(vocabularyRequestDto.getLanguageName());
         vocabularyEntity.setUser(userEntity);
         vocabularyRepository.save(vocabularyEntity);
 

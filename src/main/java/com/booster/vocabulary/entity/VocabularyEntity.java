@@ -5,10 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,10 +23,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {
+        "language",
         "vocabularyEntries",
         "user"
 })
 @ToString(exclude = {
+        "language",
         "vocabularyEntries",
         "user"
 })
@@ -41,9 +40,8 @@ public class VocabularyEntity {
 
     private String name = "Default";
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private LanguageEnum languageName;
+    @ManyToOne
+    private LanguageEntity language;
 
     private Timestamp createdOn = Timestamp.from(Instant.now());
 

@@ -9,4 +9,6 @@ public interface LanguageVocabularySetRepository extends JpaRepository<LanguageV
 
     Optional<LanguageVocabularySetEntity> findByLanguageNameAndUserId(String languageName, Long userId);
 
+    boolean existsByUserIdAndLanguageId(Long userId, Long languageId);
+
 }
