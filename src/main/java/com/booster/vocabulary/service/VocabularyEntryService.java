@@ -110,6 +110,7 @@ public class VocabularyEntryService {
         vocabularyEntryEntity.setVocabulary(vocabularyEntity);
         vocabularyEntryRepository.save(vocabularyEntryEntity);
 
+        // todo: defect
         Optional<VocabularySetEntity> optionalVocabularySetEntity = vocabularySetRepository.findByLanguageNameAndUserId(
                 vocabularyEntryRequestDto.getLanguageName(), userEntity.getId()
         );

@@ -12,4 +12,6 @@ public interface VocabularyRepository extends JpaRepository<VocabularyEntity, Lo
 
     List<VocabularyEntity> findByUserId(Long userId);
 
+    boolean existsByUserIdAndName(Long userId, String name);
+
 }
