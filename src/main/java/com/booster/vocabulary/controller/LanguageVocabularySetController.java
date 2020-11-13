@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,12 @@ public class LanguageVocabularySetController {
     List<LanguageVocabularySetDto> list() {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         return languageVocabularySetService.findAllForUserId(userId);
+    }
+
+    @GetMapping("/{languageVocabularySetId}")
+    ResponseEntity<LanguageVocabularySetDto> languageVocabularySetById(@PathVariable Long languageVocabularySetId) {
+        LanguageVocabularySetDto languageVocabularySetDto = languageVocabularySetService.findById(languageVocabularySetId);
+        return ResponseEntity.ok(languageVocabularySetDto);
     }
 
 }

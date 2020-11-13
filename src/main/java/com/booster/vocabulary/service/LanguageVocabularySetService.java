@@ -10,6 +10,7 @@ import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.exception.LanguageEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.LanguageVocabularySetEntityAlreadyExistsException;
+import com.booster.vocabulary.exception.LanguageVocabularySetEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
 import com.booster.vocabulary.repository.LanguageRepository;
 import com.booster.vocabulary.repository.LanguageVocabularySetRepository;
@@ -82,6 +83,27 @@ public class LanguageVocabularySetService {
                         .build()
                 )
                 .collect(toList());
+    }
+
+    public LanguageVocabularySetDto findById(Long languageVocabularySetId) {
+        LanguageVocabularySetEntity languageVocabularySetEntity = languageVocabularySetRepository.findById(languageVocabularySetId)
+                .orElseThrow(() -> new LanguageVocabularySetEntityByIdNotFoundException(languageVocabularySetId));
+
+        return LanguageVocabularySetDto.builder()
+                .id(languageVocabularySetEntity.getId())
+                .languageDto(LanguageDto.builder()
+                        .id(languageVocabularySetEntity.getLanguage().getId())
+                        .name(languageVocabularySetEntity.getLanguage().getName())
+                        .build()
+                )
+                .vocabularyDtoList(languageVocabularySetEntity.getVocabularies().stream()
+                        .map(vocabularyEntity -> VocabularyDto.builder()
+                                .id(vocabularyEntity.getId())
+                                .name(vocabularyEntity.getName())
+                                .build()
+                        ).collect(toList())
+                )
+                .build();
     }
 
 }
