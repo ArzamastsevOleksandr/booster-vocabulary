@@ -14,4 +14,6 @@ public interface LanguageVocabularySetRepository extends JpaRepository<LanguageV
 
     List<LanguageVocabularySetEntity> findAllByUserId(Long userId);
 
+    Optional<LanguageVocabularySetEntity> findByUserIdAndLanguageId(Long userId, Long languageId);
+
 }

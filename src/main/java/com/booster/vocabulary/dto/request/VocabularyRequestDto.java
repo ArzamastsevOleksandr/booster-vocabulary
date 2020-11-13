@@ -1,6 +1,5 @@
 package com.booster.vocabulary.dto.request;
 
-import com.booster.vocabulary.entity.LanguageEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.Data;
 @Builder
 public class VocabularyRequestDto {
     String vocabularyName;
-    LanguageEnum languageName;
+    Long languageId;
 
     @JsonIgnore
     Long userId;
