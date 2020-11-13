@@ -4,7 +4,9 @@ import com.booster.vocabulary.dto.LanguageDto;
 import com.booster.vocabulary.service.LanguageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +23,11 @@ public class LanguageController {
     @GetMapping("/list")
     List<LanguageDto> list() {
         return languageService.findAll();
+    }
+
+    @GetMapping("/{languageId}")
+    ResponseEntity<LanguageDto> languageById(@PathVariable Long languageId) {
+        return ResponseEntity.ok(languageService.findById(languageId));
     }
 
 }
