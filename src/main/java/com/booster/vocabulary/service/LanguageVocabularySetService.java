@@ -62,15 +62,15 @@ public class LanguageVocabularySetService {
 
         LanguageEntity languageEntity = optionalLanguageEntity.get();
 
-        var vocabularyEntity = new VocabularyEntity();
-        vocabularyEntity.setLanguage(languageEntity);
-        vocabularyEntity.setUser(userEntity);
-        vocabularyRepository.save(vocabularyEntity);
+        var defaultVocabularyEntity = new VocabularyEntity();
+        defaultVocabularyEntity.setLanguage(languageEntity);
+        defaultVocabularyEntity.setUser(userEntity);
+        vocabularyRepository.save(defaultVocabularyEntity);
 
         var languageVocabularySetEntity = new LanguageVocabularySetEntity();
         languageVocabularySetEntity.setLanguage(languageEntity);
         languageVocabularySetEntity.setUser(userEntity);
-        languageVocabularySetEntity.getVocabularies().add(vocabularyEntity);
+        languageVocabularySetEntity.getVocabularies().add(defaultVocabularyEntity);
         languageVocabularySetRepository.save(languageVocabularySetEntity);
 
         return languageVocabularySetEntity.getId();
@@ -94,10 +94,11 @@ public class LanguageVocabularySetService {
     public List<LanguageVocabularySetDto> findAllForUserId(Long userId) {
         return languageVocabularySetRepository.findAllByUserId(userId)
                 .stream()
-                .map(languageVocabularySetEntity -> LanguageVocabularySetDto.builder()
-                        .id(languageVocabularySetEntity.getId())
-                        .languageDto(languageEntity2LanguageDto.apply(languageVocabularySetEntity.getLanguage()))
-                        .build()
+                .map(
+                        languageVocabularySetEntity -> LanguageVocabularySetDto.builder()
+                                .id(languageVocabularySetEntity.getId())
+                                .languageDto(languageEntity2LanguageDto.apply(languageVocabularySetEntity.getLanguage()))
+                                .build()
                 )
                 .collect(toList());
     }

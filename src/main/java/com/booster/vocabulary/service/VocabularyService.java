@@ -96,12 +96,10 @@ public class VocabularyService {
 
     public List<VocabularyDto> findAllForUserId(Long userId) {
         return vocabularyRepository.findByUserId(userId).stream()
-                .map(vocabularyEntity ->
-                        VocabularyDto.builder()
+                .map(
+                        vocabularyEntity -> VocabularyDto.builder()
                                 .id(vocabularyEntity.getId())
                                 .name(vocabularyEntity.getName())
-                                .createdOn(vocabularyEntity.getCreatedOn())
-                                // todo: bug
                                 .entryCount(vocabularyEntryRepository.countAllByVocabularyId(vocabularyEntity.getId()))
                                 .build()
                 ).collect(toList());
