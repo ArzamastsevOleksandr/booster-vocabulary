@@ -1,0 +1,3 @@
+* set custom request mapping prefix:
+    https://stackoverflow.com/questions/28006501/how-to-specify-prefix-for-all-controllers-in-spring-boot
+

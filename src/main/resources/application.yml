@@ -8,8 +8,14 @@ spring:
       ddl-auto: create
     properties:
       dialect: org.hibernate.dialect.PostgreSQLDialect
+#  jmx:
+#    default-domain: jmx-domain
 
 jwt:
   app:
     jwtSecret: dummySecretKey
     jwtExpirationMs: 360000000
+
+server:
+  servlet:
+    contextPath: /api
