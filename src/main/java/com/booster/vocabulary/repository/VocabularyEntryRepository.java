@@ -9,7 +9,7 @@ public interface VocabularyEntryRepository extends JpaRepository<VocabularyEntry
 
     List<VocabularyEntryEntity> findAllByUserId(Long userId);
 
-    boolean existsByUserIdAndTargetWordWord(Long userId, String word);
+    boolean existsByUserIdAndTargetWordName(Long userId, String word);
 
     Integer countAllByVocabularyId(Long vocabularyId);
 

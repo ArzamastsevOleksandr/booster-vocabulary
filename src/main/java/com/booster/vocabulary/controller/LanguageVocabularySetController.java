@@ -33,8 +33,8 @@ public class LanguageVocabularySetController {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         languageVocabularySetRequestDto.setUserId(userId);
 
-        Long vocabularyId = languageVocabularySetService.create(languageVocabularySetRequestDto);
-        return ResponseEntity.ok(new LanguageVocabularySetResponseId(vocabularyId));
+        Long languageVocabularySetId = languageVocabularySetService.create(languageVocabularySetRequestDto);
+        return ResponseEntity.ok(new LanguageVocabularySetResponseId(languageVocabularySetId));
     }
 
     @GetMapping("/list")

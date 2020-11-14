@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface WordRepository extends JpaRepository<WordEntity, Long> {
 
-    Optional<WordEntity> findByWord(String word);
+    Optional<WordEntity> findByName(String word);
 
 }

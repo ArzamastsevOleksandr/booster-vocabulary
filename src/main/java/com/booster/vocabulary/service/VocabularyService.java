@@ -7,7 +7,9 @@ import com.booster.vocabulary.entity.LanguageEntity;
 import com.booster.vocabulary.entity.LanguageVocabularySetEntity;
 import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
+import com.booster.vocabulary.entity.VocabularyEntryEntity;
 import com.booster.vocabulary.exception.LanguageEntityByIdNotFoundException;
+import com.booster.vocabulary.exception.LanguageVocabularySetEntityByLanguageIdNotFoundException;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.VocabularyEntityAlreadyExistsWithNameException;
 import com.booster.vocabulary.exception.VocabularyEntityByIdNotFoundException;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -29,24 +32,48 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class VocabularyService {
 
+    private static final Function<VocabularyEntryEntity, VocabularyEntryDto> vocabularyEntryEntity2VocabularyEntryDto =
+            vee -> VocabularyEntryDto.builder()
+                    .id(vee.getId())
+                    .targetWord(vee.getTargetWord().getName())
+                    .build();
+
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyEntryRepository vocabularyEntryRepository;
     private final UserRepository userRepository;
     private final LanguageVocabularySetRepository languageVocabularySetRepository;
     private final LanguageRepository languageRepository;
 
-    public List<VocabularyDto> findAllForUserId(Long userId) {
-        List<VocabularyEntity> vocabularyEntityList = vocabularyRepository.findByUserId(userId);
+    public Long create(VocabularyRequestDto vocabularyRequestDto) {
+        Long userId = vocabularyRequestDto.getUserId();
+        Long languageId = vocabularyRequestDto.getLanguageId();
+        String vocabularyName = vocabularyRequestDto.getVocabularyName();
 
-        return vocabularyEntityList.stream()
-                .map(vocabularyEntity ->
-                        VocabularyDto.builder()
-                                .id(vocabularyEntity.getId())
-                                .name(vocabularyEntity.getName())
-                                .createdOn(vocabularyEntity.getCreatedOn())
-                                .entryCount(vocabularyEntryRepository.countAllByVocabularyId(vocabularyEntity.getId()))
-                                .build()
-                ).collect(toList());
+        LanguageVocabularySetEntity languageVocabularySetEntity = languageVocabularySetRepository.findByUserIdAndLanguageId(
+                userId, languageId
+        ).orElseThrow(
+                () -> new LanguageVocabularySetEntityByLanguageIdNotFoundException(languageId)
+        );
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
+
+        if (vocabularyRepository.existsByUserIdAndName(userId, vocabularyName)) {
+            throw new VocabularyEntityAlreadyExistsWithNameException(vocabularyName);
+        }
+
+        LanguageEntity languageEntity = languageRepository.findById(languageId)
+                .orElseThrow(() -> new LanguageEntityByIdNotFoundException(languageId));
+
+        var vocabularyEntity = new VocabularyEntity();
+        vocabularyEntity.setName(vocabularyName);
+        vocabularyEntity.setLanguage(languageEntity);
+        vocabularyEntity.setUser(userEntity);
+        vocabularyRepository.save(vocabularyEntity);
+
+        languageVocabularySetEntity.getVocabularies().add(vocabularyEntity);
+        languageVocabularySetRepository.save(languageVocabularySetEntity);
+
+        return vocabularyEntity.getId();
     }
 
     public VocabularyDto findById(Long vocabularyId) {
@@ -61,42 +88,23 @@ public class VocabularyService {
                 .vocabularyEntries(
                         vocabularyEntity.getVocabularyEntries()
                                 .stream()
-                                .map(vocabularyEntryEntity -> VocabularyEntryDto.builder()
-                                        .id(vocabularyEntryEntity.getId())
-                                        .targetWord(vocabularyEntryEntity.getTargetWord().getWord())
-                                        .build()
-                                )
+                                .map(vocabularyEntryEntity2VocabularyEntryDto)
                                 .collect(toList())
                 )
                 .build();
     }
 
-    public Long create(VocabularyRequestDto vocabularyRequestDto) {
-        LanguageVocabularySetEntity languageVocabularySetEntity = languageVocabularySetRepository.findByUserIdAndLanguageId(
-                vocabularyRequestDto.getUserId(),
-                vocabularyRequestDto.getLanguageId()
-        ).orElseThrow(
-                () -> new RuntimeException("languageVocabularySet not found")
-        );
-        UserEntity userEntity = userRepository.findById(vocabularyRequestDto.getUserId())
-                .orElseThrow(() -> new UserEntityByIdNotFoundException(vocabularyRequestDto.getUserId()));
-
-        if (vocabularyRepository.existsByUserIdAndName(vocabularyRequestDto.getUserId(), vocabularyRequestDto.getVocabularyName())) {
-            throw new VocabularyEntityAlreadyExistsWithNameException(vocabularyRequestDto.getVocabularyName());
-        }
-        LanguageEntity languageEntity = languageRepository.findById(vocabularyRequestDto.getLanguageId())
-                .orElseThrow(() -> new LanguageEntityByIdNotFoundException(vocabularyRequestDto.getLanguageId()));
-
-        var vocabularyEntity = new VocabularyEntity();
-        vocabularyEntity.setName(vocabularyRequestDto.getVocabularyName());
-        vocabularyEntity.setLanguage(languageEntity);
-        vocabularyEntity.setUser(userEntity);
-        vocabularyRepository.save(vocabularyEntity);
-
-        languageVocabularySetEntity.getVocabularies().add(vocabularyEntity);
-        languageVocabularySetRepository.save(languageVocabularySetEntity);
-
-        return vocabularyEntity.getId();
+    public List<VocabularyDto> findAllForUserId(Long userId) {
+        return vocabularyRepository.findByUserId(userId).stream()
+                .map(vocabularyEntity ->
+                        VocabularyDto.builder()
+                                .id(vocabularyEntity.getId())
+                                .name(vocabularyEntity.getName())
+                                .createdOn(vocabularyEntity.getCreatedOn())
+                                // todo: bug
+                                .entryCount(vocabularyEntryRepository.countAllByVocabularyId(vocabularyEntity.getId()))
+                                .build()
+                ).collect(toList());
     }
 
 }

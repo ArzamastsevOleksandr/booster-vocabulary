@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -17,16 +18,17 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class LanguageService {
 
+    private static final Function<LanguageEntity, LanguageDto> languageEntity2LanguageDto = le -> LanguageDto.builder()
+            .id(le.getId())
+            .name(le.getName())
+            .build();
+
     private final LanguageRepository languageRepository;
 
     public List<LanguageDto> findAll() {
         return languageRepository.findAll()
                 .stream()
-                .map(languageEntity -> LanguageDto.builder()
-                        .id(languageEntity.getId())
-                        .name(languageEntity.getName())
-                        .build()
-                )
+                .map(languageEntity2LanguageDto)
                 .collect(toList());
     }
 
@@ -34,10 +36,7 @@ public class LanguageService {
         LanguageEntity languageEntity = languageRepository.findById(languageId)
                 .orElseThrow(() -> new LanguageEntityByIdNotFoundException(languageId));
 
-        return LanguageDto.builder()
-                .id(languageEntity.getId())
-                .name(languageEntity.getName())
-                .build();
+        return languageEntity2LanguageDto.apply(languageEntity);
     }
 
 }

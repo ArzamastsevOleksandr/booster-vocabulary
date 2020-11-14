@@ -10,13 +10,13 @@ import static java.lang.String.format;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class VocabularyEntryEntityAlreadyExistsByTargetWordException extends EntityNotFoundException {
+public class VocabularyEntryEntityAlreadyExistsWithTargetWordException extends EntityNotFoundException {
 
     private static final String ERROR_MESSAGE_TEMPLATE = VocabularyEntryEntity.class.getName() + " already exists by target word: %s";
 
     String word;
 
-    public VocabularyEntryEntityAlreadyExistsByTargetWordException(String word) {
+    public VocabularyEntryEntityAlreadyExistsWithTargetWordException(String word) {
         super(format(ERROR_MESSAGE_TEMPLATE, word));
         this.word = word;
     }

@@ -8,7 +8,7 @@ import com.booster.vocabulary.entity.VocabularyEntryEntity;
 import com.booster.vocabulary.entity.WordEntity;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.VocabularyEntityByIdNotFoundException;
-import com.booster.vocabulary.exception.VocabularyEntryEntityAlreadyExistsByTargetWordException;
+import com.booster.vocabulary.exception.VocabularyEntryEntityAlreadyExistsWithTargetWordException;
 import com.booster.vocabulary.exception.VocabularyEntryEntityByIdNotFoundException;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -29,6 +31,12 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class VocabularyEntryService {
 
+    private static final Function<VocabularyEntryEntity, VocabularyEntryDto> vocabularyEntryEntity2VocabularyEntryDto =
+            vee -> VocabularyEntryDto.builder()
+                    .id(vee.getId())
+                    .targetWord(vee.getTargetWord().getName())
+                    .build();
+
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyEntryRepository vocabularyEntryRepository;
     private final WordRepository wordRepository;
@@ -36,41 +44,30 @@ public class VocabularyEntryService {
 
     @Transactional
     public Long create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
-        UserEntity userEntity = userRepository.findById(vocabularyEntryRequestDto.getUserId())
-                .orElseThrow(() -> new UserEntityByIdNotFoundException(vocabularyEntryRequestDto.getUserId()));
+        Long userId = vocabularyEntryRequestDto.getUserId();
+        Long vocabularyId = vocabularyEntryRequestDto.getVocabularyId();
+        String word = vocabularyEntryRequestDto.getWord();
 
-        VocabularyEntity vocabularyEntity = vocabularyRepository.findById(vocabularyEntryRequestDto.getVocabularyId())
-                .orElseThrow(() -> new VocabularyEntityByIdNotFoundException(vocabularyEntryRequestDto.getVocabularyId()));
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
 
-        if (vocabularyEntryRepository.existsByUserIdAndTargetWordWord(
-                vocabularyEntryRequestDto.getUserId(),
-                vocabularyEntryRequestDto.getWord()
-        )) {
-            throw new VocabularyEntryEntityAlreadyExistsByTargetWordException(vocabularyEntryRequestDto.getWord());
+        VocabularyEntity vocabularyEntity = vocabularyRepository.findById(vocabularyId)
+                .orElseThrow(() -> new VocabularyEntityByIdNotFoundException(vocabularyId));
+
+        if (vocabularyEntryRepository.existsByUserIdAndTargetWordName(userId, word)) {
+            throw new VocabularyEntryEntityAlreadyExistsWithTargetWordException(word);
         }
 
         var vocabularyEntryEntity = new VocabularyEntryEntity();
         vocabularyEntryEntity.setUser(userEntity);
 
-        WordEntity wordEntity = wordRepository.findByWord(vocabularyEntryRequestDto.getWord())
-                .orElseGet(() -> {
-                    var newWordEntity = new WordEntity();
-                    newWordEntity.setWord(vocabularyEntryRequestDto.getWord());
-                    wordRepository.save(newWordEntity);
-                    return newWordEntity;
-                });
+        WordEntity wordEntity = getWordEntityByNameOrCreateAndSave(word);
         vocabularyEntryEntity.setTargetWord(wordEntity);
 
         ofNullable(vocabularyEntryRequestDto.getAntonyms()).ifPresent(
                 antonyms -> antonyms.forEach(
                         antonym -> {
-                            WordEntity antonymEntity = wordRepository.findByWord(antonym)
-                                    .orElseGet(() -> {
-                                        var newWordEntity = new WordEntity();
-                                        newWordEntity.setWord(antonym);
-                                        wordRepository.save(newWordEntity);
-                                        return newWordEntity;
-                                    });
+                            WordEntity antonymEntity = getWordEntityByNameOrCreateAndSave(antonym);
                             vocabularyEntryEntity.getAntonyms().add(antonymEntity);
                         }
                 )
@@ -78,65 +75,57 @@ public class VocabularyEntryService {
         ofNullable(vocabularyEntryRequestDto.getSynonyms()).ifPresent(
                 synonyms -> synonyms.forEach(
                         synonym -> {
-                            WordEntity synonymEntity = wordRepository.findByWord(synonym)
-                                    .orElseGet(() -> {
-                                        var newWordEntity = new WordEntity();
-                                        newWordEntity.setWord(synonym);
-                                        wordRepository.save(newWordEntity);
-                                        return newWordEntity;
-                                    });
+                            WordEntity synonymEntity = getWordEntityByNameOrCreateAndSave(synonym);
                             vocabularyEntryEntity.getSynonyms().add(synonymEntity);
                         }
                 )
         );
         vocabularyEntryRepository.save(vocabularyEntryEntity);
 
+        // todo: assign vocabulary
         vocabularyEntity.getVocabularyEntries().add(vocabularyEntryEntity);
         vocabularyRepository.save(vocabularyEntity);
 
         return vocabularyEntryEntity.getId();
     }
 
+    private WordEntity getWordEntityByNameOrCreateAndSave(String word) {
+        return wordRepository.findByName(word)
+                .orElseGet(() -> {
+                    var newWordEntity = new WordEntity();
+                    newWordEntity.setName(word);
+                    wordRepository.save(newWordEntity);
+                    return newWordEntity;
+                });
+    }
+
     public VocabularyEntryDto findById(Long vocabularyEntryId) {
         VocabularyEntryEntity vocabularyEntryEntity = vocabularyEntryRepository.findById(vocabularyEntryId)
                 .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(vocabularyEntryId));
 
-        List<String> synonyms = vocabularyEntryEntity.getSynonyms().stream()
-                .map(WordEntity::getWord)
-                .collect(toList());
-        List<String> antonyms = vocabularyEntryEntity.getAntonyms().stream()
-                .map(WordEntity::getWord)
-                .collect(toList());
         return VocabularyEntryDto.builder()
                 .id(vocabularyEntryEntity.getId())
-                .targetWord(vocabularyEntryEntity.getTargetWord().getWord())
+                .targetWord(vocabularyEntryEntity.getTargetWord().getName())
                 .createdOn(vocabularyEntryEntity.getCreatedOn())
                 .correctAnswersCount(vocabularyEntryEntity.getCorrectAnswersCount())
-                .synonyms(synonyms)
-                .antonyms(antonyms)
+                .synonyms(getWordNames(vocabularyEntryEntity::getSynonyms))
+                .antonyms(getWordNames(vocabularyEntryEntity::getAntonyms))
                 .build();
+    }
+
+    private List<String> getWordNames(Supplier<List<WordEntity>> supplier) {
+        return supplier.get()
+                .stream()
+                .map(WordEntity::getName)
+                .collect(toList());
     }
 
     @Transactional
     public List<VocabularyEntryDto> findAllForUserId(Long userId) {
-        return vocabularyEntryRepository.findAllByUserId(userId).stream()
-                .map(vocabularyEntryEntity -> {
-                    List<String> synonyms = vocabularyEntryEntity.getSynonyms().stream()
-                            .map(WordEntity::getWord)
-                            .collect(toList());
-                    List<String> antonyms = vocabularyEntryEntity.getAntonyms().stream()
-                            .map(WordEntity::getWord)
-                            .collect(toList());
-
-                    return VocabularyEntryDto.builder()
-                            .id(vocabularyEntryEntity.getId())
-                            .targetWord(vocabularyEntryEntity.getTargetWord().getWord())
-                            .createdOn(vocabularyEntryEntity.getCreatedOn())
-                            .correctAnswersCount(vocabularyEntryEntity.getCorrectAnswersCount())
-                            .synonyms(synonyms)
-                            .antonyms(antonyms)
-                            .build();
-                }).collect(toList());
+        return vocabularyEntryRepository.findAllByUserId(userId)
+                .stream()
+                .map(vocabularyEntryEntity2VocabularyEntryDto)
+                .collect(toList());
     }
 
 }
