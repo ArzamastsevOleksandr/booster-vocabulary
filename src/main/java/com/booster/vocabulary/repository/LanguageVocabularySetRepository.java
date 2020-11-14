@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface LanguageVocabularySetRepository extends JpaRepository<LanguageVocabularySetEntity, Long> {
 
-    Optional<LanguageVocabularySetEntity> findByLanguageNameAndUserId(String languageName, Long userId);
-
     boolean existsByUserIdAndLanguageId(Long userId, Long languageId);
 
     List<LanguageVocabularySetEntity> findAllByUserId(Long userId);
