@@ -1,14 +1,13 @@
 package com.booster.vocabulary.config.init;
 
-import com.booster.vocabulary.entity.RoleEnum;
 import com.booster.vocabulary.entity.RoleEntity;
+import com.booster.vocabulary.entity.RoleEnum;
 import com.booster.vocabulary.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Stream;
 
@@ -17,16 +16,14 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class DefaultRoleInitializer {
 
-    // todo: save to db if not exists
-
     private final RoleRepository roleRepository;
 
     @EventListener
-    @Transactional
     public void mockUser(ContextRefreshedEvent event) {
         Stream.of(RoleEnum.values())
+                .filter(roleEnum -> !roleRepository.existsByName(roleEnum))
                 .map(r -> {
-                    RoleEntity roleEntity = new RoleEntity();
+                    var roleEntity = new RoleEntity();
                     roleEntity.setName(r);
                     return roleEntity;
                 }).forEach(roleRepository::save);

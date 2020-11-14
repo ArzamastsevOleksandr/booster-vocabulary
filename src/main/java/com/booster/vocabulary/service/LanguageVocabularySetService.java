@@ -82,6 +82,7 @@ public class LanguageVocabularySetService {
 
         return LanguageVocabularySetDto.builder()
                 .id(languageVocabularySetEntity.getId())
+                .createdOn(languageVocabularySetEntity.getCreatedOn())
                 .languageDto(languageEntity2LanguageDto.apply(languageVocabularySetEntity.getLanguage()))
                 .vocabularyDtoList(languageVocabularySetEntity.getVocabularies()
                         .stream()

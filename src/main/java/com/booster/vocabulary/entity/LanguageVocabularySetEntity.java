@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class LanguageVocabularySetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Timestamp createdOn = Timestamp.from(Instant.now());
 
     @ManyToOne(fetch = FetchType.LAZY)
     private LanguageEntity language;

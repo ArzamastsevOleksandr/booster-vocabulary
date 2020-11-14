@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LanguageVocabularySetDto {
     Long id;
+    Timestamp createdOn;
     LanguageDto languageDto;
     List<VocabularyDto> vocabularyDtoList;
 }

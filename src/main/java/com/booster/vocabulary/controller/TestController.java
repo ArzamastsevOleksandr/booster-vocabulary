@@ -1,9 +1,9 @@
 package com.booster.vocabulary.controller;
 
-import com.booster.vocabulary.config.security.jwt.JwtUtils;
 import com.booster.vocabulary.config.security.UserDetailsImpl;
-import com.booster.vocabulary.entity.RoleEnum;
+import com.booster.vocabulary.config.security.jwt.JwtUtils;
 import com.booster.vocabulary.entity.RoleEntity;
+import com.booster.vocabulary.entity.RoleEnum;
 import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.repository.RoleRepository;
 import com.booster.vocabulary.repository.UserRepository;

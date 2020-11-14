@@ -40,10 +40,10 @@ public class VocabularyEntity {
 
     private String name = "Default";
 
+    private Timestamp createdOn = Timestamp.from(Instant.now());
+
     @ManyToOne
     private LanguageEntity language;
-
-    private Timestamp createdOn = Timestamp.from(Instant.now());
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
