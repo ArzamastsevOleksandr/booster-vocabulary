@@ -18,16 +18,25 @@ import java.util.List;
 @RequestMapping("/language")
 public class LanguageController {
 
+    private static final String LIST_PATH = "/list";
+    private static final String BY_ID_PATH = "/{languageId}";
+
     private final LanguageService languageService;
 
-    @GetMapping("/list")
-    List<LanguageDto> list() {
-        return languageService.findAll();
+    @GetMapping(LIST_PATH)
+    ResponseEntity<List<LanguageDto>> list() {
+        log.debug("{}: {}", this.getClass().getName(), LIST_PATH);
+
+        List<LanguageDto> languageDtoList = languageService.findAll();
+        return ResponseEntity.ok(languageDtoList);
     }
 
-    @GetMapping("/{languageId}")
+    @GetMapping(BY_ID_PATH)
     ResponseEntity<LanguageDto> languageById(@PathVariable Long languageId) {
-        return ResponseEntity.ok(languageService.findById(languageId));
+        log.debug("{}: {}. ID: {}", this.getClass().getName(), BY_ID_PATH, languageId);
+
+        LanguageDto languageDto = languageService.findById(languageId);
+        return ResponseEntity.ok(languageDto);
     }
 
 }

@@ -19,3 +19,7 @@ jwt:
 server:
   servlet:
     contextPath: /api
+
+logging:
+  level:
+    com.booster.vocabulary: DEBUG
