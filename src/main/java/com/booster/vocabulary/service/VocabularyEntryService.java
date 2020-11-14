@@ -80,9 +80,9 @@ public class VocabularyEntryService {
                         }
                 )
         );
+        vocabularyEntryEntity.setVocabulary(vocabularyEntity);
         vocabularyEntryRepository.save(vocabularyEntryEntity);
 
-        // todo: assign vocabulary
         vocabularyEntity.getVocabularyEntries().add(vocabularyEntryEntity);
         vocabularyRepository.save(vocabularyEntity);
 
