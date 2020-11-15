@@ -26,36 +26,24 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/language-vocabulary-set")
 public class LanguageVocabularySetController {
 
-    private static final String CREATE_PATH = "/create";
-    private static final String LANGUAGE_VOCABULARY_SET_ID_PATH = "/{languageVocabularySetId}";
-    private static final String LIST_PATH = "/list";
-
     private final LanguageVocabularySetService languageVocabularySetService;
 
-    @PostMapping(value = CREATE_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     ResponseEntity<LanguageVocabularySetResponseId> create(@RequestBody LanguageVocabularySetRequestDto languageVocabularySetRequestDto) {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         languageVocabularySetRequestDto.setUserId(userId);
-
-        log.debug("{}: {}. {}", this.getClass().getName(), CREATE_PATH, languageVocabularySetRequestDto);
-
         Long languageVocabularySetId = languageVocabularySetService.create(languageVocabularySetRequestDto);
         return ResponseEntity.ok(new LanguageVocabularySetResponseId(languageVocabularySetId));
     }
 
-    @GetMapping(LIST_PATH)
+    @GetMapping("/list")
     List<LanguageVocabularySetDto> list() {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-
-        log.debug("{} {}: userId={}", this.getClass().getName(), LANGUAGE_VOCABULARY_SET_ID_PATH, userId);
-
         return languageVocabularySetService.findAllForUserId(userId);
     }
 
-    @GetMapping(LANGUAGE_VOCABULARY_SET_ID_PATH)
+    @GetMapping("/{languageVocabularySetId}")
     ResponseEntity<LanguageVocabularySetDto> languageVocabularySetById(@PathVariable Long languageVocabularySetId) {
-        log.debug("{} {}: languageVocabularySetId={}", this.getClass().getName(), LANGUAGE_VOCABULARY_SET_ID_PATH, languageVocabularySetId);
-
         LanguageVocabularySetDto languageVocabularySetDto = languageVocabularySetService.findById(languageVocabularySetId);
         return ResponseEntity.ok(languageVocabularySetDto);
     }
