@@ -43,6 +43,11 @@
             <stringProp name="Argument.value">/language-vocabulary-set</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="vocabularyPath" elementType="Argument">
+            <stringProp name="Argument.name">vocabularyPath</stringProp>
+            <stringProp name="Argument.value">/vocabulary</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="#####################SEPARATOR2#####################" elementType="Argument">
             <stringProp name="Argument.name">#####################SEPARATOR2#####################</stringProp>
             <stringProp name="Argument.value">#####################SEPARATOR2#####################</stringProp>
@@ -146,12 +151,6 @@
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
-          <boolProp name="displayJMeterProperties">false</boolProp>
-          <boolProp name="displayJMeterVariables">true</boolProp>
-          <boolProp name="displaySystemProperties">false</boolProp>
-        </DebugSampler>
-        <hashTree/>
         <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="VAR USERNAME" enabled="true">
           <stringProp name="CounterConfig.start">1</stringProp>
           <stringProp name="CounterConfig.end">9999</stringProp>
@@ -183,6 +182,12 @@
           <stringProp name="TestPlan.comments">Sign up a new user</stringProp>
         </GenericController>
         <hashTree>
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="### Sign Up ###" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugSampler>
+          <hashTree/>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Signup" enabled="true">
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -306,6 +311,12 @@ if (failureMessage?.trim()) {
           <stringProp name="TestPlan.comments">Sign In with username and password</stringProp>
         </GenericController>
         <hashTree>
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="### Sign In ###" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugSampler>
+          <hashTree/>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Sign In" enabled="true">
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -359,17 +370,23 @@ if (failureMessage?.trim()) {
             </JSR223PostProcessor>
             <hashTree/>
           </hashTree>
-          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Update test when auth finished" enabled="true">
             <boolProp name="displayJMeterProperties">false</boolProp>
             <boolProp name="displayJMeterVariables">true</boolProp>
             <boolProp name="displaySystemProperties">false</boolProp>
           </DebugSampler>
           <hashTree/>
         </hashTree>
-        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Language List" enabled="true">
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Language" enabled="true">
           <stringProp name="TestPlan.comments">Get a language dictionary</stringProp>
         </GenericController>
         <hashTree>
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="### Language ###" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugSampler>
+          <hashTree/>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Language List" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
@@ -543,11 +560,17 @@ if (failureMessage?.trim()) {
           </DebugSampler>
           <hashTree/>
         </hashTree>
-        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Create LanguageVocabularySet" enabled="true">
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="LanguageVocabularySet" enabled="true">
           <stringProp name="TestPlan.comments">Create a new LanguageVocabularySet</stringProp>
         </GenericController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Language Dictionary" enabled="true">
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="### LanguageVocabularySet ###" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugSampler>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Create LanguageVocabularySet" enabled="true">
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments">
@@ -629,11 +652,6 @@ if (failureMessage?.trim()) {
             <boolProp name="displaySystemProperties">false</boolProp>
           </DebugSampler>
           <hashTree/>
-        </hashTree>
-        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Get LanguageVocabularySet By Id" enabled="true">
-          <stringProp name="TestPlan.comments">Get a LanguageVocabularySet by id</stringProp>
-        </GenericController>
-        <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET LanguageVocabularySet By Id" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
@@ -666,75 +684,80 @@ if (failureMessage?.trim()) {
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-              <collectionProp name="Asserion.test_strings">
-                <stringProp name="49586">200</stringProp>
-              </collectionProp>
-              <stringProp name="Assertion.custom_message"></stringProp>
-              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-              <boolProp name="Assertion.assume_success">false</boolProp>
-              <intProp name="Assertion.test_type">8</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion: id" enabled="true">
-              <stringProp name="JSON_PATH">$.id</stringProp>
-              <stringProp name="EXPECTED_VALUE">${LANG_VOCAB_SET_ID_ONE}</stringProp>
-              <boolProp name="JSONVALIDATION">true</boolProp>
-              <boolProp name="EXPECT_NULL">false</boolProp>
-              <boolProp name="INVERT">false</boolProp>
-              <boolProp name="ISREGEX">false</boolProp>
-            </JSONPathAssertion>
-            <hashTree/>
-            <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion: createdOn" enabled="true">
-              <stringProp name="JSON_PATH">$.createdOn</stringProp>
-              <stringProp name="EXPECTED_VALUE"></stringProp>
-              <boolProp name="JSONVALIDATION">false</boolProp>
-              <boolProp name="EXPECT_NULL">false</boolProp>
-              <boolProp name="INVERT">false</boolProp>
-              <boolProp name="ISREGEX">false</boolProp>
-            </JSONPathAssertion>
-            <hashTree/>
-            <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion: languageDto.id" enabled="true">
-              <stringProp name="JSON_PATH">$.languageDto.id</stringProp>
-              <stringProp name="EXPECTED_VALUE">${LANG_ID}</stringProp>
-              <boolProp name="JSONVALIDATION">true</boolProp>
-              <boolProp name="EXPECT_NULL">false</boolProp>
-              <boolProp name="INVERT">false</boolProp>
-              <boolProp name="ISREGEX">false</boolProp>
-            </JSONPathAssertion>
-            <hashTree/>
-            <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion: languageDto.name" enabled="true">
-              <stringProp name="JSON_PATH">$.languageDto.name</stringProp>
-              <stringProp name="EXPECTED_VALUE">${LANG_NAME}</stringProp>
-              <boolProp name="JSONVALIDATION">true</boolProp>
-              <boolProp name="EXPECT_NULL">false</boolProp>
-              <boolProp name="INVERT">false</boolProp>
-              <boolProp name="ISREGEX">false</boolProp>
-            </JSONPathAssertion>
-            <hashTree/>
-            <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion: vocabularyDtoList[0].id" enabled="true">
-              <stringProp name="JSON_PATH">$.vocabularyDtoList.[0].id</stringProp>
-              <stringProp name="EXPECTED_VALUE"></stringProp>
-              <boolProp name="JSONVALIDATION">false</boolProp>
-              <boolProp name="EXPECT_NULL">false</boolProp>
-              <boolProp name="INVERT">false</boolProp>
-              <boolProp name="ISREGEX">false</boolProp>
-            </JSONPathAssertion>
-            <hashTree/>
-            <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion: vocabularyDtoList.[0].name" enabled="true">
-              <stringProp name="JSON_PATH">$.vocabularyDtoList.[0].name</stringProp>
-              <stringProp name="EXPECTED_VALUE">${DEFAULT_VOCABULARY_NAME}</stringProp>
-              <boolProp name="JSONVALIDATION">true</boolProp>
-              <boolProp name="EXPECT_NULL">false</boolProp>
-              <boolProp name="INVERT">false</boolProp>
-              <boolProp name="ISREGEX">false</boolProp>
-            </JSONPathAssertion>
-            <hashTree/>
-            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor: defaultVocabularyId" enabled="true">
-              <stringProp name="JSONPostProcessor.referenceNames">DEFAULT_VOCABULARY_ID</stringProp>
-              <stringProp name="JSONPostProcessor.jsonPathExprs">$.vocabularyDtoList.[0].id</stringProp>
-              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
-            </JSONPostProcessor>
+            <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">import groovy.json.JsonSlurper
+
+final EXPECTED_STATUS = &quot;200&quot;
+final EXPECTED_LANGUAGE_VOCABULARY_ID = Integer.valueOf((String) vars.get(&quot;LANG_VOCAB_SET_ID_ONE&quot;))
+final EXPECTED_LANGUAGE_ID = Integer.valueOf((String) vars.get(&quot;LANG_ID&quot;))
+final EXPECTED_LANGUAGE_NAME = vars.get(&quot;LANG_NAME&quot;)
+final EXPECTED_VOCABULARY_DTO_LIST_SIZE = 1
+final DEFAULT_VOCABULARY_NAME = vars.get(&quot;DEFAULT_VOCABULARY_NAME&quot;)
+
+def failureMessage = &quot;&quot;
+org.apache.groovy.json.internal.LazyMap responseMap = null
+
+JsonSlurper JSON = new JsonSlurper()
+
+try {
+    responseMap = JSON.parseText(prev.getResponseDataAsString())
+} catch (Exception ignored) {
+    failureMessage += &quot;Invalid JSON.\n&quot;
+}
+
+if (!EXPECTED_STATUS.equals(prev.getResponseCode())) {
+    failureMessage += &quot;Expected &quot; + EXPECTED_STATUS + &quot; but got [&quot; + prev.getResponseCode() + &quot;]\n\n&quot;
+}
+
+def actualId = responseMap.get(&quot;id&quot;)
+if (EXPECTED_LANGUAGE_VOCABULARY_ID != actualId) {
+    failureMessage += String.format(&quot;Expected id %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_VOCABULARY_ID, actualId)
+}
+if (responseMap.get(&quot;createdOn&quot;) == null) {
+    failureMessage += &quot;createdOn is null\n\n&quot;
+}
+
+org.apache.groovy.json.internal.LazyMap languageDto = responseMap.get(&quot;languageDto&quot;)
+def actualLanguageId = languageDto.get(&quot;id&quot;)
+if (actualLanguageId != EXPECTED_LANGUAGE_ID) {
+    failureMessage += String.format(&quot;Expected languageDto.id %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_ID, actualLanguageId)
+}
+def actualLanguageName = languageDto.get(&quot;name&quot;)
+if (actualLanguageName != EXPECTED_LANGUAGE_NAME) {
+    failureMessage += String.format(&quot;Expected languageDto.name %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_NAME, actualLanguageName)
+}
+
+List&lt;org.apache.groovy.json.internal.LazyMap&gt; actualVocabularyDtoList = responseMap.get(&quot;vocabularyDtoList&quot;)
+def actualVocabularyDtoListSize = actualVocabularyDtoList.size()
+if (actualVocabularyDtoListSize != EXPECTED_VOCABULARY_DTO_LIST_SIZE) {
+    failureMessage += String.format(&quot;Expected vocabularyDtoList.size() %s, got %s\n\n&quot;, EXPECTED_VOCABULARY_DTO_LIST_SIZE, actualVocabularyDtoListSize)
+}
+org.apache.groovy.json.internal.LazyMap firstVocabularyDto = actualVocabularyDtoList.get(0)
+def firstVocabularyDtoId = firstVocabularyDto.get(&quot;id&quot;)
+if (firstVocabularyDtoId == null) {
+    failureMessage += &quot;firstVocabularyDto.id is null &quot; + firstVocabularyDto + &quot;\n\n&quot;
+} else {
+    vars.put(&quot;DEFAULT_VOCABULARY_ID_ONE&quot;, &quot;&quot; + firstVocabularyDtoId)
+}
+def firstVocabularyDtoName = firstVocabularyDto.get(&quot;name&quot;)
+if (!DEFAULT_VOCABULARY_NAME.equals(firstVocabularyDtoName)) {
+    failureMessage += String.format(&quot;Expected firstVocabularyDto.name to be equal to %s, got %s\n\n&quot;, DEFAULT_VOCABULARY_NAME, firstVocabularyDtoName)
+}
+
+if (failureMessage?.trim()) {
+    failureMessage += &quot;URL: &quot; + SampleResult.getURL() + &quot;\n\n&quot;
+    failureMessage += &quot;JSON RESPONSE: &quot; + responseMap + &quot;\n\n&quot;
+    failureMessage += &quot;REQUEST HEADERS: &quot; + SampleResult.getRequestHeaders() + &quot;\n\n&quot;
+
+    AssertionResult.setFailureMessage(failureMessage)
+    AssertionResult.setFailure(true)
+}
+</stringProp>
+            </JSR223Assertion>
             <hashTree/>
             <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor: JsonFormat" enabled="true">
               <stringProp name="cacheKey">true</stringProp>
@@ -751,6 +774,122 @@ if (failureMessage?.trim()) {
             <boolProp name="displaySystemProperties">false</boolProp>
           </DebugSampler>
           <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Vocabulary By Id" enabled="false">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${boosterVocabularyHost}</stringProp>
+            <stringProp name="HTTPSampler.port">${boosterVocabularyPort}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${boosterVocabularyProtocol}</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">${boosterVocabularyPath}/${vocabularyPath}/${DEFAULT_VOCABULARY_ID_ONE}</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">Content-Type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">Authorization</stringProp>
+                  <stringProp name="Header.value">Bearer ${JWT}</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">import groovy.json.JsonSlurper
+
+final EXPECTED_STATUS = &quot;200&quot;
+final EXPECTED_LANGUAGE_VOCABULARY_ID = Integer.valueOf((String) vars.get(&quot;LANG_VOCAB_SET_ID_ONE&quot;))
+final EXPECTED_LANGUAGE_ID = Integer.valueOf((String) vars.get(&quot;LANG_ID&quot;))
+final EXPECTED_LANGUAGE_NAME = vars.get(&quot;LANG_NAME&quot;)
+final EXPECTED_VOCABULARY_DTO_LIST_SIZE = 1
+final DEFAULT_VOCABULARY_NAME = vars.get(&quot;DEFAULT_VOCABULARY_NAME&quot;)
+
+def failureMessage = &quot;&quot;
+org.apache.groovy.json.internal.LazyMap responseMap = null
+
+JsonSlurper JSON = new JsonSlurper()
+
+try {
+    responseMap = JSON.parseText(prev.getResponseDataAsString())
+} catch (Exception ignored) {
+    failureMessage += &quot;Invalid JSON.\n&quot;
+}
+
+if (!EXPECTED_STATUS.equals(prev.getResponseCode())) {
+    failureMessage += &quot;Expected &quot; + EXPECTED_STATUS + &quot; but got [&quot; + prev.getResponseCode() + &quot;]\n\n&quot;
+}
+
+def actualId = responseMap.get(&quot;id&quot;)
+if (EXPECTED_LANGUAGE_VOCABULARY_ID != actualId) {
+    failureMessage += String.format(&quot;Expected id %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_VOCABULARY_ID, actualId)
+}
+if (responseMap.get(&quot;createdOn&quot;) == null) {
+    failureMessage += &quot;createdOn is null\n\n&quot;
+}
+
+org.apache.groovy.json.internal.LazyMap languageDto = responseMap.get(&quot;languageDto&quot;)
+def actualLanguageId = languageDto.get(&quot;id&quot;)
+if (actualLanguageId != EXPECTED_LANGUAGE_ID) {
+    failureMessage += String.format(&quot;Expected languageDto.id %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_ID, actualLanguageId)
+}
+def actualLanguageName = languageDto.get(&quot;name&quot;)
+if (actualLanguageName != EXPECTED_LANGUAGE_NAME) {
+    failureMessage += String.format(&quot;Expected languageDto.name %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_NAME, actualLanguageName)
+}
+
+List&lt;org.apache.groovy.json.internal.LazyMap&gt; actualVocabularyDtoList = responseMap.get(&quot;vocabularyDtoList&quot;)
+def actualVocabularyDtoListSize = actualVocabularyDtoList.size()
+if (actualVocabularyDtoListSize != EXPECTED_VOCABULARY_DTO_LIST_SIZE) {
+    failureMessage += String.format(&quot;Expected vocabularyDtoList.size() %s, got %s\n\n&quot;, EXPECTED_VOCABULARY_DTO_LIST_SIZE, actualVocabularyDtoListSize)
+}
+org.apache.groovy.json.internal.LazyMap firstVocabularyDto = actualVocabularyDtoList.get(0)
+def firstVocabularyDtoId = firstVocabularyDto.get(&quot;id&quot;)
+if (firstVocabularyDtoId == null) {
+    failureMessage += &quot;firstVocabularyDto.id is null &quot; + firstVocabularyDto + &quot;\n\n&quot;
+} else {
+    vars.put(&quot;DEFAULT_VOCABULARY_ID_ONE&quot;, &quot;&quot; + firstVocabularyDtoId)
+}
+def firstVocabularyDtoName = firstVocabularyDto.get(&quot;name&quot;)
+if (!DEFAULT_VOCABULARY_NAME.equals(firstVocabularyDtoName)) {
+    failureMessage += String.format(&quot;Expected firstVocabularyDto.name to be equal to %s, got %s\n\n&quot;, DEFAULT_VOCABULARY_NAME, firstVocabularyDtoName)
+}
+
+if (failureMessage?.trim()) {
+    failureMessage += &quot;URL: &quot; + SampleResult.getURL() + &quot;\n\n&quot;
+    failureMessage += &quot;JSON RESPONSE: &quot; + responseMap + &quot;\n\n&quot;
+    failureMessage += &quot;REQUEST HEADERS: &quot; + SampleResult.getRequestHeaders() + &quot;\n\n&quot;
+
+    AssertionResult.setFailureMessage(failureMessage)
+    AssertionResult.setFailure(true)
+}
+</stringProp>
+            </JSR223Assertion>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor: JsonFormat" enabled="true">
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="script">prev.setResponseData(groovy.json.JsonOutput.prettyPrint(prev.getResponseDataAsString()))</stringProp>
+              <stringProp name="scriptLanguage">groovy</stringProp>
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
         </hashTree>
       </hashTree>
     </hashTree>
