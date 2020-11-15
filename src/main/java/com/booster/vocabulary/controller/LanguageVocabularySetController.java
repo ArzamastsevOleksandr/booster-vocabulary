@@ -37,9 +37,10 @@ public class LanguageVocabularySetController {
     }
 
     @GetMapping("/list")
-    List<LanguageVocabularySetDto> list() {
+    ResponseEntity<List<LanguageVocabularySetDto>> list() {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        return languageVocabularySetService.findAllForUserId(userId);
+        List<LanguageVocabularySetDto> languageVocabularySetDtoList = languageVocabularySetService.findAllForUserId(userId);
+        return ResponseEntity.ok(languageVocabularySetDtoList);
     }
 
     @GetMapping("/{languageVocabularySetId}")
