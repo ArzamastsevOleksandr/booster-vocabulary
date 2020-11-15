@@ -18,7 +18,7 @@ try {
     failureMessage += "Invalid JSON.\n"
 }
 
-if (!EXPECTED_STATUS.equals(prev.getResponseCode())){
+if (!EXPECTED_STATUS.equals(prev.getResponseCode())) {
     failureMessage += "Expected " + EXPECTED_STATUS + " but got [" + prev.getResponseCode() + "]\n\n"
 }
 
@@ -29,12 +29,15 @@ if (actualListSize != EXPECTED_LANGUAGE_LIST_SIZE) {
 
 // todo: optimize (create a map and reduce complexity to O(1)
 def listOfMaps = (responseList as List<org.apache.groovy.json.internal.LazyMap>)
-EXPECTED_LANGUAGE_NAMES.each {languageName -> {
-    def anyMatch = listOfMaps.any {it.get("name") == languageName}
-    if (!anyMatch) {
-        failureMessage += "Expected to find [" + languageName + "] in the response collection\n\n"
+EXPECTED_LANGUAGE_NAMES.each { languageName ->
+    {
+        def anyMatch = listOfMaps.any { it.get("name") == languageName }
+        if (!anyMatch) {
+            failureMessage += "Expected to find [" + languageName + "] in the response collection\n\n"
+        }
     }
-}}
+}
+
 if (failureMessage?.trim()) {
     failureMessage += "URL: " + SampleResult.getURL() + "\n\n"
     failureMessage += "JSON RESPONSE: " + responseList + "\n\n"
