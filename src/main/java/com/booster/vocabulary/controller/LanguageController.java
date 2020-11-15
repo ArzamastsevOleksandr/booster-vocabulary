@@ -33,7 +33,7 @@ public class LanguageController {
 
     @GetMapping(BY_ID_PATH)
     ResponseEntity<LanguageDto> languageById(@PathVariable Long languageId) {
-        log.debug("{}: {}. ID: {}", this.getClass().getName(), BY_ID_PATH, languageId);
+        log.debug("{}: {}. languageId={}", this.getClass().getName(), BY_ID_PATH, languageId);
 
         LanguageDto languageDto = languageService.findById(languageId);
         return ResponseEntity.ok(languageDto);
