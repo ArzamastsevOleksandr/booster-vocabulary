@@ -316,11 +316,11 @@
           </DebugSampler>
           <hashTree/>
         </hashTree>
-        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Language Dictionary" enabled="true">
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Language List" enabled="true">
           <stringProp name="TestPlan.comments">Get a language dictionary</stringProp>
         </GenericController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Language Dictionary" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Language List" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -352,26 +352,58 @@
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-              <collectionProp name="Asserion.test_strings">
-                <stringProp name="49586">200</stringProp>
-              </collectionProp>
-              <stringProp name="Assertion.custom_message"></stringProp>
-              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-              <boolProp name="Assertion.assume_success">false</boolProp>
-              <intProp name="Assertion.test_type">8</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-              <collectionProp name="Asserion.test_strings">
-                <stringProp name="1622339161">&quot;name&quot;: &quot;English&quot;</stringProp>
-                <stringProp name="-1883824171">&quot;name&quot;: &quot;German&quot;</stringProp>
-              </collectionProp>
-              <stringProp name="Assertion.custom_message"></stringProp>
-              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-              <boolProp name="Assertion.assume_success">false</boolProp>
-              <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
+            <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">import groovy.json.JsonSlurper
+
+final EXPECTED_STATUS = &quot;200&quot;
+final EXPECTED_LANGUAGE_LIST_SIZE = 2
+final EXPECTED_LANGUAGE_NAMES = Arrays.asList(
+        &quot;English&quot;,
+        &quot;German&quot;
+)
+
+def failureMessage = &quot;&quot;
+List&lt;String&gt; responseList = null
+
+JsonSlurper JSON = new JsonSlurper()
+
+try {
+    responseList = JSON.parseText(prev.getResponseDataAsString())
+} catch (Exception ignored) {
+    failureMessage += &quot;Invalid JSON.\n&quot;
+}
+
+if (!EXPECTED_STATUS.equals(prev.getResponseCode())){
+    failureMessage += &quot;Expected &quot; + EXPECTED_STATUS + &quot; but got [&quot; + prev.getResponseCode() + &quot;]\n\n&quot;
+}
+
+def actualListSize = responseList.size()
+if (actualListSize != EXPECTED_LANGUAGE_LIST_SIZE) {
+    failureMessage += String.format(&quot;Expected list of size %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_LIST_SIZE, actualListSize)
+}
+
+// todo: optimize (create a map and reduce complexity to O(1)
+def listOfMaps = (responseList as List&lt;org.apache.groovy.json.internal.LazyMap&gt;)
+EXPECTED_LANGUAGE_NAMES.each {languageName -&gt; {
+    def anyMatch = listOfMaps.any {it.get(&quot;name&quot;) == languageName}
+    if (!anyMatch) {
+        failureMessage += &quot;Expected to find [&quot; + languageName + &quot;] in the response collection\n\n&quot;
+    }
+}}
+if (failureMessage?.trim()) {
+    failureMessage += &quot;URL: &quot; + SampleResult.getURL() + &quot;\n\n&quot;
+    failureMessage += &quot;JSON RESPONSE: &quot; + responseList + &quot;\n\n&quot;
+    failureMessage += &quot;REQUEST HEADERS: &quot; + SampleResult.getRequestHeaders() + &quot;\n\n&quot;
+
+    AssertionResult.setFailureMessage(failureMessage)
+    AssertionResult.setFailure(true)
+}
+</stringProp>
+            </JSR223Assertion>
             <hashTree/>
             <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor: Language Id" enabled="true">
               <stringProp name="JSONPostProcessor.referenceNames">LANG_ID</stringProp>
