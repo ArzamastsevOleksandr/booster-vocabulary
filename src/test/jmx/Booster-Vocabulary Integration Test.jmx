@@ -774,7 +774,7 @@ if (failureMessage?.trim()) {
             <boolProp name="displaySystemProperties">false</boolProp>
           </DebugSampler>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Vocabulary By Id" enabled="false">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Default Vocabulary By Id" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -814,11 +814,8 @@ if (failureMessage?.trim()) {
               <stringProp name="script">import groovy.json.JsonSlurper
 
 final EXPECTED_STATUS = &quot;200&quot;
-final EXPECTED_LANGUAGE_VOCABULARY_ID = Integer.valueOf((String) vars.get(&quot;LANG_VOCAB_SET_ID_ONE&quot;))
-final EXPECTED_LANGUAGE_ID = Integer.valueOf((String) vars.get(&quot;LANG_ID&quot;))
-final EXPECTED_LANGUAGE_NAME = vars.get(&quot;LANG_NAME&quot;)
-final EXPECTED_VOCABULARY_DTO_LIST_SIZE = 1
-final DEFAULT_VOCABULARY_NAME = vars.get(&quot;DEFAULT_VOCABULARY_NAME&quot;)
+final EXPECTED_DEFAULT_VOCABULARY_ID = Integer.valueOf((String) vars.get(&quot;DEFAULT_VOCABULARY_ID_ONE&quot;))
+final EXPECTED_ENTRY_COUNT = 0
 
 def failureMessage = &quot;&quot;
 org.apache.groovy.json.internal.LazyMap responseMap = null
@@ -836,38 +833,22 @@ if (!EXPECTED_STATUS.equals(prev.getResponseCode())) {
 }
 
 def actualId = responseMap.get(&quot;id&quot;)
-if (EXPECTED_LANGUAGE_VOCABULARY_ID != actualId) {
-    failureMessage += String.format(&quot;Expected id %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_VOCABULARY_ID, actualId)
+if (EXPECTED_DEFAULT_VOCABULARY_ID != actualId) {
+    failureMessage += String.format(&quot;Expected id %s, got %s\n\n&quot;, EXPECTED_DEFAULT_VOCABULARY_ID, actualId)
 }
+
 if (responseMap.get(&quot;createdOn&quot;) == null) {
     failureMessage += &quot;createdOn is null\n\n&quot;
 }
 
-org.apache.groovy.json.internal.LazyMap languageDto = responseMap.get(&quot;languageDto&quot;)
-def actualLanguageId = languageDto.get(&quot;id&quot;)
-if (actualLanguageId != EXPECTED_LANGUAGE_ID) {
-    failureMessage += String.format(&quot;Expected languageDto.id %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_ID, actualLanguageId)
-}
-def actualLanguageName = languageDto.get(&quot;name&quot;)
-if (actualLanguageName != EXPECTED_LANGUAGE_NAME) {
-    failureMessage += String.format(&quot;Expected languageDto.name %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_NAME, actualLanguageName)
+def actualEntryCount = responseMap.get(&quot;entryCount&quot;)
+if (actualEntryCount != EXPECTED_ENTRY_COUNT) {
+    failureMessage += String.format(&quot;Expected entryCount %s, got %s\n\n&quot;, EXPECTED_ENTRY_COUNT, actualEntryCount)
 }
 
-List&lt;org.apache.groovy.json.internal.LazyMap&gt; actualVocabularyDtoList = responseMap.get(&quot;vocabularyDtoList&quot;)
-def actualVocabularyDtoListSize = actualVocabularyDtoList.size()
-if (actualVocabularyDtoListSize != EXPECTED_VOCABULARY_DTO_LIST_SIZE) {
-    failureMessage += String.format(&quot;Expected vocabularyDtoList.size() %s, got %s\n\n&quot;, EXPECTED_VOCABULARY_DTO_LIST_SIZE, actualVocabularyDtoListSize)
-}
-org.apache.groovy.json.internal.LazyMap firstVocabularyDto = actualVocabularyDtoList.get(0)
-def firstVocabularyDtoId = firstVocabularyDto.get(&quot;id&quot;)
-if (firstVocabularyDtoId == null) {
-    failureMessage += &quot;firstVocabularyDto.id is null &quot; + firstVocabularyDto + &quot;\n\n&quot;
-} else {
-    vars.put(&quot;DEFAULT_VOCABULARY_ID_ONE&quot;, &quot;&quot; + firstVocabularyDtoId)
-}
-def firstVocabularyDtoName = firstVocabularyDto.get(&quot;name&quot;)
-if (!DEFAULT_VOCABULARY_NAME.equals(firstVocabularyDtoName)) {
-    failureMessage += String.format(&quot;Expected firstVocabularyDto.name to be equal to %s, got %s\n\n&quot;, DEFAULT_VOCABULARY_NAME, firstVocabularyDtoName)
+List&lt;org.apache.groovy.json.internal.LazyMap&gt; actualVocabularyEntries = responseMap.get(&quot;vocabularyEntries&quot;)
+if (!actualVocabularyEntries.isEmpty()) {
+    failureMessage += String.format(&quot;Expected vocabularyEntries to have size %s, got %s\n\n&quot;, 0, actualVocabularyEntries.size())
 }
 
 if (failureMessage?.trim()) {
