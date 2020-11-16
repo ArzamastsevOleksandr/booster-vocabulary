@@ -7,7 +7,6 @@ import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.entity.VocabularyEntryEntity;
 import com.booster.vocabulary.entity.WordEntity;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
-import com.booster.vocabulary.exception.VocabularyEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.VocabularyEntryEntityAlreadyExistsWithTargetWordException;
 import com.booster.vocabulary.exception.VocabularyEntryEntityByIdNotFoundException;
 import com.booster.vocabulary.repository.UserRepository;
@@ -45,14 +44,15 @@ public class VocabularyEntryService {
     @Transactional
     public Long create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
         Long userId = vocabularyEntryRequestDto.getUserId();
-        Long vocabularyId = vocabularyEntryRequestDto.getVocabularyId();
         String word = vocabularyEntryRequestDto.getWord();
 
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
 
-        VocabularyEntity vocabularyEntity = vocabularyRepository.findById(vocabularyId)
-                .orElseThrow(() -> new VocabularyEntityByIdNotFoundException(vocabularyId));
+        VocabularyEntity vocabularyEntity = ofNullable(vocabularyEntryRequestDto.getVocabularyId())
+                .map(vocabularyRepository::findById)
+                .orElseGet(() -> vocabularyRepository.findDefaultVocabulary(userId))
+                .orElseThrow(RuntimeException::new);
 
         if (vocabularyEntryRepository.existsByUserIdAndTargetWordName(userId, word)) {
             throw new VocabularyEntryEntityAlreadyExistsWithTargetWordException(word);

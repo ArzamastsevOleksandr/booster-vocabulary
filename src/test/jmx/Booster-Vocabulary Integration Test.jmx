@@ -48,6 +48,11 @@
             <stringProp name="Argument.value">/vocabulary</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="vocabularyEntryPath" elementType="Argument">
+            <stringProp name="Argument.name">vocabularyEntryPath</stringProp>
+            <stringProp name="Argument.value">/vocabulary-entry</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="#####################SEPARATOR2#####################" elementType="Argument">
             <stringProp name="Argument.name">#####################SEPARATOR2#####################</stringProp>
             <stringProp name="Argument.value">#####################SEPARATOR2#####################</stringProp>
@@ -61,6 +66,26 @@
           <elementProp name="NEW_VOCABULARY_NAME" elementType="Argument">
             <stringProp name="Argument.name">NEW_VOCABULARY_NAME</stringProp>
             <stringProp name="Argument.value">NewVocabularyName</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="VOCABULARY_ENTRY_ONE" elementType="Argument">
+            <stringProp name="Argument.name">VOCABULARY_ENTRY_ONE</stringProp>
+            <stringProp name="Argument.value">run</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="VOCABULARY_ENTRY_ONE_SYNONYM_ONE" elementType="Argument">
+            <stringProp name="Argument.name">VOCABULARY_ENTRY_ONE_SYNONYM_ONE</stringProp>
+            <stringProp name="Argument.value">sprint</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="VOCABULARY_ENTRY_ONE_SYNONYM_TWO" elementType="Argument">
+            <stringProp name="Argument.name">VOCABULARY_ENTRY_ONE_SYNONYM_TWO</stringProp>
+            <stringProp name="Argument.value">race</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="VOCABULARY_ENTRY_ONE_ANTONYM_ONE" elementType="Argument">
+            <stringProp name="Argument.name">VOCABULARY_ENTRY_ONE_ANTONYM_ONE</stringProp>
+            <stringProp name="Argument.value">dawdle</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -1073,7 +1098,236 @@ if (failureMessage?.trim()) {
             <boolProp name="displaySystemProperties">false</boolProp>
           </DebugSampler>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Default Vocabulary By Id" enabled="false">
+        </hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Vocabulary Entry" enabled="true">
+          <stringProp name="TestPlan.comments">Create a new VocabularyEntry</stringProp>
+        </GenericController>
+        <hashTree>
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="### Vocabulary Entry ###" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugSampler>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Create VocabularyEntry for Default Vocabulary" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+	&quot;word&quot;: &quot;${VOCABULARY_ENTRY_ONE}&quot;,&#xd;
+	&quot;synonyms&quot;: [&quot;${VOCABULARY_ENTRY_ONE_SYNONYM_ONE}&quot;, &quot;${VOCABULARY_ENTRY_ONE_SYNONYM_TWO}&quot;],&#xd;
+	&quot;antonyms&quot;: [&quot;${VOCABULARY_ENTRY_ONE_ANTONYM_ONE}&quot;]&#xd;
+}&#xd;
+</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${boosterVocabularyHost}</stringProp>
+            <stringProp name="HTTPSampler.port">${boosterVocabularyPort}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${boosterVocabularyProtocol}</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">${boosterVocabularyPath}/${vocabularyEntryPath}/create</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">Content-Type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">Authorization</stringProp>
+                  <stringProp name="Header.value">Bearer ${JWT}</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49586">200</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">8</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+              <stringProp name="JSON_PATH">$.vocabularyEntryId</stringProp>
+              <stringProp name="EXPECTED_VALUE"></stringProp>
+              <boolProp name="JSONVALIDATION">false</boolProp>
+              <boolProp name="EXPECT_NULL">false</boolProp>
+              <boolProp name="INVERT">false</boolProp>
+              <boolProp name="ISREGEX">true</boolProp>
+            </JSONPathAssertion>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor: VOCABULARY_ENTRY_ID_ONE" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">VOCABULARY_ENTRY_ID_ONE</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.vocabularyEntryId</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor: JsonFormat" enabled="true">
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="script">prev.setResponseData(groovy.json.JsonOutput.prettyPrint(prev.getResponseDataAsString()))</stringProp>
+              <stringProp name="scriptLanguage">groovy</stringProp>
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugSampler>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Newly Created VocabularyEntry By Id" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${boosterVocabularyHost}</stringProp>
+            <stringProp name="HTTPSampler.port">${boosterVocabularyPort}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${boosterVocabularyProtocol}</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">${boosterVocabularyPath}/${vocabularyEntryPath}/${VOCABULARY_ENTRY_ID_ONE}</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">Content-Type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">Authorization</stringProp>
+                  <stringProp name="Header.value">Bearer ${JWT}</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">import groovy.json.JsonSlurper
+
+final EXPECTED_STATUS = &quot;200&quot;
+final EXPECTED_TARGET_WORD = vars.get(&quot;VOCABULARY_ENTRY_ONE&quot;)
+final EXPECTED_VOCABULARY_ENTRY_ID = Integer.valueOf((String) vars.get(&quot;VOCABULARY_ENTRY_ID_ONE&quot;))
+final EXPECTED_CORRECT_ANSWERS_COUNT = 0
+final EXPECTED_ANTONYMS_SIZE = 1
+final EXPECTED_SYNONYMS_SIZE = 2
+final EXPECTED_ANTONYMS = Arrays.asList(
+        vars.get(&quot;VOCABULARY_ENTRY_ONE_ANTONYM_ONE&quot;)
+)
+final EXPECTED_SYNONYMS = Arrays.asList(
+        vars.get(&quot;VOCABULARY_ENTRY_ONE_SYNONYM_ONE&quot;),
+        vars.get(&quot;VOCABULARY_ENTRY_ONE_SYNONYM_TWO&quot;)
+)
+
+def failureMessage = &quot;&quot;
+org.apache.groovy.json.internal.LazyMap responseMap = null
+
+JsonSlurper JSON = new JsonSlurper()
+
+try {
+    responseMap = JSON.parseText(prev.getResponseDataAsString())
+} catch (Exception ignored) {
+    failureMessage += &quot;Invalid JSON.\n&quot;
+}
+
+if (!EXPECTED_STATUS.equals(prev.getResponseCode())) {
+    failureMessage += &quot;Expected &quot; + EXPECTED_STATUS + &quot; but got [&quot; + prev.getResponseCode() + &quot;]\n\n&quot;
+}
+
+def actualId = responseMap.get(&quot;id&quot;)
+if (EXPECTED_VOCABULARY_ENTRY_ID != actualId) {
+    failureMessage += String.format(&quot;Expected id %s, got %s\n\n&quot;, EXPECTED_VOCABULARY_ENTRY_ID, actualId)
+}
+
+def actualTargetWord = responseMap.get(&quot;targetWord&quot;)
+if (EXPECTED_TARGET_WORD != actualTargetWord) {
+    failureMessage += String.format(&quot;Expected targetWord %s, got %s\n\n&quot;, EXPECTED_TARGET_WORD, actualTargetWord)
+}
+
+if (responseMap.get(&quot;createdOn&quot;) == null) {
+    failureMessage += &quot;createdOn is null\n\n&quot;
+}
+
+def actualCorrectAnswersCount = responseMap.get(&quot;correctAnswersCount&quot;)
+if (actualCorrectAnswersCount != EXPECTED_CORRECT_ANSWERS_COUNT) {
+    failureMessage += String.format(&quot;Expected entryCount %s, got %s\n\n&quot;, EXPECTED_CORRECT_ANSWERS_COUNT, actualCorrectAnswersCount)
+}
+
+List&lt;String&gt; actualAntonyms = responseMap.get(&quot;antonyms&quot;)
+if (actualAntonyms.size() != EXPECTED_ANTONYMS_SIZE) {
+    failureMessage += String.format(&quot;Expected [antonyms] to have size %s, got %s\n\n&quot;, EXPECTED_ANTONYMS_SIZE, actualAntonyms.size())
+}
+EXPECTED_ANTONYMS.each {
+    antonym -&gt;
+        {
+            if (!actualAntonyms.contains(antonym)) {
+                failureMessage += String.format(&quot;Expected [antonyms] to have antonym %s\n\n&quot;, antonym)
+            }
+        }
+}
+
+List&lt;org.apache.groovy.json.internal.LazyMap&gt; actualSynonyms = responseMap.get(&quot;synonyms&quot;)
+if (actualSynonyms.size() != EXPECTED_SYNONYMS_SIZE) {
+    failureMessage += String.format(&quot;Expected [synonyms] to have size %s, got %s\n\n&quot;, EXPECTED_ANTONYMS_SIZE, actualSynonyms.size())
+}
+
+EXPECTED_SYNONYMS.each {
+    synonym -&gt;
+        {
+            if (!actualSynonyms.contains(synonym)) {
+                failureMessage += String.format(&quot;Expected [synonyms] to have synonym %s\n\n&quot;, synonym)
+            }
+        }
+}
+
+if (failureMessage?.trim()) {
+    failureMessage += &quot;URL: &quot; + SampleResult.getURL() + &quot;\n\n&quot;
+    failureMessage += &quot;JSON RESPONSE: &quot; + responseMap + &quot;\n\n&quot;
+    failureMessage += &quot;REQUEST HEADERS: &quot; + SampleResult.getRequestHeaders() + &quot;\n\n&quot;
+
+    AssertionResult.setFailureMessage(failureMessage)
+    AssertionResult.setFailure(true)
+}
+</stringProp>
+            </JSR223Assertion>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor: JsonFormat" enabled="true">
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="script">prev.setResponseData(groovy.json.JsonOutput.prettyPrint(prev.getResponseDataAsString()))</stringProp>
+              <stringProp name="scriptLanguage">groovy</stringProp>
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Default Vocabulary And Check If Entry Is Present" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -1113,8 +1367,8 @@ if (failureMessage?.trim()) {
               <stringProp name="script">import groovy.json.JsonSlurper
 
 final EXPECTED_STATUS = &quot;200&quot;
-final EXPECTED_DEFAULT_VOCABULARY_ID = Integer.valueOf((String) vars.get(&quot;DEFAULT_VOCABULARY_ID_ONE&quot;))
-final EXPECTED_ENTRY_COUNT = 0
+final EXPECTED_ENTRY_COUNT = 1
+final EXPECTED_TARGET_WORD = vars.get(&quot;VOCABULARY_ENTRY_ONE&quot;)
 
 def failureMessage = &quot;&quot;
 org.apache.groovy.json.internal.LazyMap responseMap = null
@@ -1131,23 +1385,18 @@ if (!EXPECTED_STATUS.equals(prev.getResponseCode())) {
     failureMessage += &quot;Expected &quot; + EXPECTED_STATUS + &quot; but got [&quot; + prev.getResponseCode() + &quot;]\n\n&quot;
 }
 
-def actualId = responseMap.get(&quot;id&quot;)
-if (EXPECTED_DEFAULT_VOCABULARY_ID != actualId) {
-    failureMessage += String.format(&quot;Expected id %s, got %s\n\n&quot;, EXPECTED_DEFAULT_VOCABULARY_ID, actualId)
-}
-
-if (responseMap.get(&quot;createdOn&quot;) == null) {
-    failureMessage += &quot;createdOn is null\n\n&quot;
-}
-
 def actualEntryCount = responseMap.get(&quot;entryCount&quot;)
 if (actualEntryCount != EXPECTED_ENTRY_COUNT) {
     failureMessage += String.format(&quot;Expected entryCount %s, got %s\n\n&quot;, EXPECTED_ENTRY_COUNT, actualEntryCount)
 }
 
 List&lt;org.apache.groovy.json.internal.LazyMap&gt; actualVocabularyEntries = responseMap.get(&quot;vocabularyEntries&quot;)
-if (!actualVocabularyEntries.isEmpty()) {
-    failureMessage += String.format(&quot;Expected vocabularyEntries to have size %s, got %s\n\n&quot;, 0, actualVocabularyEntries.size())
+if (actualVocabularyEntries.size() != EXPECTED_ENTRY_COUNT) {
+    failureMessage += String.format(&quot;Expected vocabularyEntries to have size %s, got %s\n\n&quot;, EXPECTED_ENTRY_COUNT, actualVocabularyEntries.size())
+}
+def containsTargetWord = actualVocabularyEntries.any { it.containsValue(EXPECTED_TARGET_WORD) }
+if (!containsTargetWord) {
+    failureMessage += String.format(&quot;Expected vocabularyEntries to contain targetWord %s\n\n&quot;, EXPECTED_TARGET_WORD)
 }
 
 if (failureMessage?.trim()) {
@@ -1170,6 +1419,12 @@ if (failureMessage?.trim()) {
             </JSR223PostProcessor>
             <hashTree/>
           </hashTree>
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugSampler>
+          <hashTree/>
         </hashTree>
       </hashTree>
     </hashTree>

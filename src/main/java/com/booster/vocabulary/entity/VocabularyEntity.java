@@ -33,7 +33,7 @@ import java.util.List;
         "user"
 })
 public class VocabularyEntity {
-
+// todo: entryCount
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

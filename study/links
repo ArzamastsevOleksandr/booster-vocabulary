@@ -3,3 +3,6 @@
 
 * gzip:
     https://www.baeldung.com/json-reduce-data-size
+
+* downstream collectors:
+    https://www.baeldung.com/java-groupingby-collector
