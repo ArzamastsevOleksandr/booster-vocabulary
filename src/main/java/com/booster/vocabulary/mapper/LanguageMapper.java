@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 public class LanguageMapper {
 
     public LanguageDto languageEntity2LanguageDto(LanguageEntity languageEntity) {
-        return LanguageDto.builder()
+        return LanguageDto
+                .builder()
                 .id(languageEntity.getId())
                 .name(languageEntity.getName())
                 .build();

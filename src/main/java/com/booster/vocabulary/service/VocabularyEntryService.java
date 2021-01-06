@@ -9,6 +9,7 @@ import com.booster.vocabulary.entity.WordEntity;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.VocabularyEntryEntityAlreadyExistsWithTargetWordException;
 import com.booster.vocabulary.exception.VocabularyEntryEntityByIdNotFoundException;
+import com.booster.vocabulary.mapper.VocabularyEntryMapper;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -33,6 +33,7 @@ public class VocabularyEntryService {
     private final UserRepository userRepository;
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyEntryRepository vocabularyEntryRepository;
+    private final VocabularyEntryMapper vocabularyEntryMapper;
 
     @Transactional
     public Long create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
@@ -93,33 +94,14 @@ public class VocabularyEntryService {
 
     public VocabularyEntryDto findById(Long vocabularyEntryId) {
         return vocabularyEntryRepository.findById(vocabularyEntryId)
-                .map(this::vocabularyEntryEntity2VocabularyEntryDto)
+                .map(vocabularyEntryMapper::vocabularyEntryEntity2VocabularyEntryDto)
                 .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(vocabularyEntryId));
-    }
-
-    private VocabularyEntryDto vocabularyEntryEntity2VocabularyEntryDto(VocabularyEntryEntity vocabularyEntryEntity) {
-        return VocabularyEntryDto
-                .builder()
-                .id(vocabularyEntryEntity.getId())
-                .targetWord(vocabularyEntryEntity.getTargetWord().getName())
-                .createdOn(vocabularyEntryEntity.getCreatedOn())
-                .correctAnswersCount(vocabularyEntryEntity.getCorrectAnswersCount())
-                .synonyms(getWordNames(vocabularyEntryEntity::getSynonyms))
-                .antonyms(getWordNames(vocabularyEntryEntity::getAntonyms))
-                .build();
-    }
-
-    private List<String> getWordNames(Supplier<List<WordEntity>> supplier) {
-        return supplier.get()
-                .stream()
-                .map(WordEntity::getName)
-                .collect(toList());
     }
 
     public List<VocabularyEntryDto> findAllForUserId(Long userId) {
         return vocabularyEntryRepository.findAllByUserId(userId)
                 .stream()
-                .map(this::vocabularyEntryEntity2VocabularyEntryDto)
+                .map(vocabularyEntryMapper::vocabularyEntryEntity2VocabularyEntryDto)
                 .collect(toList());
     }
 
