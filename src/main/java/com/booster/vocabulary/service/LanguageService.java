@@ -1,15 +1,14 @@
 package com.booster.vocabulary.service;
 
 import com.booster.vocabulary.dto.LanguageDto;
-import com.booster.vocabulary.entity.LanguageEntity;
 import com.booster.vocabulary.exception.LanguageEntityByIdNotFoundException;
+import com.booster.vocabulary.mapper.LanguageMapper;
 import com.booster.vocabulary.repository.LanguageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,25 +17,20 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class LanguageService {
 
-    private static final Function<LanguageEntity, LanguageDto> languageEntity2LanguageDto = le -> LanguageDto.builder()
-            .id(le.getId())
-            .name(le.getName())
-            .build();
-
+    private final LanguageMapper languageMapper;
     private final LanguageRepository languageRepository;
 
     public List<LanguageDto> findAll() {
         return languageRepository.findAll()
                 .stream()
-                .map(languageEntity2LanguageDto)
+                .map(languageMapper::languageEntity2LanguageDto)
                 .collect(toList());
     }
 
     public LanguageDto findById(Long languageId) {
-        LanguageEntity languageEntity = languageRepository.findById(languageId)
+        return languageRepository.findById(languageId)
+                .map(languageMapper::languageEntity2LanguageDto)
                 .orElseThrow(() -> new LanguageEntityByIdNotFoundException(languageId));
-
-        return languageEntity2LanguageDto.apply(languageEntity);
     }
 
 }
