@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.booster.vocabulary.entity.VocabularyEntity.DEFAULT_VOCABULARY_NAME;
+
 public interface VocabularyRepository extends JpaRepository<VocabularyEntity, Long> {
 
     List<VocabularyEntity> findByUserId(Long userId);
@@ -15,7 +17,7 @@ public interface VocabularyRepository extends JpaRepository<VocabularyEntity, Lo
     Optional<VocabularyEntity> findByUserIdAndName(Long userId, String name);
 
     default Optional<VocabularyEntity> findDefaultVocabulary(Long userId) {
-        return findByUserIdAndName(userId, "Default");
+        return findByUserIdAndName(userId, DEFAULT_VOCABULARY_NAME);
     }
 
 }

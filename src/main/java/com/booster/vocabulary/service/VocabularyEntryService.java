@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.Optional.ofNullable;
@@ -30,16 +29,10 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class VocabularyEntryService {
 
-    private static final Function<VocabularyEntryEntity, VocabularyEntryDto> vocabularyEntryEntity2VocabularyEntryDto =
-            vee -> VocabularyEntryDto.builder()
-                    .id(vee.getId())
-                    .targetWord(vee.getTargetWord().getName())
-                    .build();
-
-    private final VocabularyRepository vocabularyRepository;
-    private final VocabularyEntryRepository vocabularyEntryRepository;
     private final WordRepository wordRepository;
     private final UserRepository userRepository;
+    private final VocabularyRepository vocabularyRepository;
+    private final VocabularyEntryRepository vocabularyEntryRepository;
 
     @Transactional
     public Long create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
@@ -57,7 +50,6 @@ public class VocabularyEntryService {
         if (vocabularyEntryRepository.existsByUserIdAndTargetWordName(userId, word)) {
             throw new VocabularyEntryEntityAlreadyExistsWithTargetWordException(word);
         }
-
         var vocabularyEntryEntity = new VocabularyEntryEntity();
         vocabularyEntryEntity.setUser(userEntity);
 
@@ -100,10 +92,14 @@ public class VocabularyEntryService {
     }
 
     public VocabularyEntryDto findById(Long vocabularyEntryId) {
-        VocabularyEntryEntity vocabularyEntryEntity = vocabularyEntryRepository.findById(vocabularyEntryId)
+        return vocabularyEntryRepository.findById(vocabularyEntryId)
+                .map(this::vocabularyEntryEntity2VocabularyEntryDto)
                 .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(vocabularyEntryId));
+    }
 
-        return VocabularyEntryDto.builder()
+    private VocabularyEntryDto vocabularyEntryEntity2VocabularyEntryDto(VocabularyEntryEntity vocabularyEntryEntity) {
+        return VocabularyEntryDto
+                .builder()
                 .id(vocabularyEntryEntity.getId())
                 .targetWord(vocabularyEntryEntity.getTargetWord().getName())
                 .createdOn(vocabularyEntryEntity.getCreatedOn())
@@ -120,11 +116,10 @@ public class VocabularyEntryService {
                 .collect(toList());
     }
 
-    @Transactional
     public List<VocabularyEntryDto> findAllForUserId(Long userId) {
         return vocabularyEntryRepository.findAllByUserId(userId)
                 .stream()
-                .map(vocabularyEntryEntity2VocabularyEntryDto)
+                .map(this::vocabularyEntryEntity2VocabularyEntryDto)
                 .collect(toList());
     }
 

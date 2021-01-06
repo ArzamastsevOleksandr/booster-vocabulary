@@ -33,12 +33,16 @@ import java.util.List;
         "user"
 })
 public class VocabularyEntity {
-// todo: entryCount
+
+    public static final String DEFAULT_VOCABULARY_NAME = "Default";
+
+    // todo: entryCount
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name = "Default";
+    private String name = DEFAULT_VOCABULARY_NAME;
 
     private Timestamp createdOn = Timestamp.from(Instant.now());
 
