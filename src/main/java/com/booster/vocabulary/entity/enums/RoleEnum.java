@@ -1,4 +1,4 @@
-package com.booster.vocabulary.entity;
+package com.booster.vocabulary.entity.enums;
 
 public enum RoleEnum {
 

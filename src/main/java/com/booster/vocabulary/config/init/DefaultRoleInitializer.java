@@ -1,7 +1,7 @@
 package com.booster.vocabulary.config.init;
 
 import com.booster.vocabulary.entity.RoleEntity;
-import com.booster.vocabulary.entity.RoleEnum;
+import com.booster.vocabulary.entity.enums.RoleEnum;
 import com.booster.vocabulary.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

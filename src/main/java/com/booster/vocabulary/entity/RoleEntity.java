@@ -1,5 +1,6 @@
 package com.booster.vocabulary.entity;
 
+import com.booster.vocabulary.entity.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

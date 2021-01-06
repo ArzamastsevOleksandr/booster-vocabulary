@@ -1,7 +1,7 @@
 package com.booster.vocabulary.repository;
 
 import com.booster.vocabulary.entity.RoleEntity;
-import com.booster.vocabulary.entity.RoleEnum;
+import com.booster.vocabulary.entity.enums.RoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
