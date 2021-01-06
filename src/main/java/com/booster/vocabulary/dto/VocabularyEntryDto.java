@@ -17,6 +17,6 @@ public class VocabularyEntryDto {
     String targetWord;
     Integer correctAnswersCount;
     Timestamp createdOn;
-    List<String> antonyms;
-    List<String> synonyms;
+    List<WordDto> antonyms;
+    List<WordDto> synonyms;
 }
