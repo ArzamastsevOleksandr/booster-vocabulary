@@ -1,7 +1,5 @@
 package com.booster.vocabulary.service;
 
-import com.booster.vocabulary.dto.LanguageDto;
-import com.booster.vocabulary.dto.VocabularyDto;
 import com.booster.vocabulary.dto.request.LanguageVocabularySetRequestDto;
 import com.booster.vocabulary.dto.response.LanguageVocabularySetDto;
 import com.booster.vocabulary.entity.LanguageEntity;
@@ -12,6 +10,7 @@ import com.booster.vocabulary.exception.LanguageEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.LanguageVocabularySetEntityAlreadyExistsException;
 import com.booster.vocabulary.exception.LanguageVocabularySetEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
+import com.booster.vocabulary.mapper.LanguageVocabularySetMapper;
 import com.booster.vocabulary.repository.LanguageRepository;
 import com.booster.vocabulary.repository.LanguageVocabularySetRepository;
 import com.booster.vocabulary.repository.UserRepository;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -31,20 +29,12 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class LanguageVocabularySetService {
 
-    private static final Function<VocabularyEntity, VocabularyDto> vocabularyEntity2VocabularyDto = ve -> VocabularyDto.builder()
-            .id(ve.getId())
-            .name(ve.getName())
-            .build();
-
-    private static final Function<LanguageEntity, LanguageDto> languageEntity2LanguageDto = le -> LanguageDto.builder()
-            .id(le.getId())
-            .name(le.getName())
-            .build();
-
     private final LanguageVocabularySetRepository languageVocabularySetRepository;
     private final LanguageRepository languageRepository;
     private final UserRepository userRepository;
     private final VocabularyRepository vocabularyRepository;
+
+    private final LanguageVocabularySetMapper languageVocabularySetMapper;
 
     public Long create(LanguageVocabularySetRequestDto languageVocabularySetRequestDto) {
         Long languageId = languageVocabularySetRequestDto.getLanguageId();
@@ -77,30 +67,15 @@ public class LanguageVocabularySetService {
     }
 
     public LanguageVocabularySetDto findById(Long languageVocabularySetId) {
-        LanguageVocabularySetEntity languageVocabularySetEntity = languageVocabularySetRepository.findById(languageVocabularySetId)
+        return languageVocabularySetRepository.findById(languageVocabularySetId)
+                .map(languageVocabularySetMapper::languageVocabularySetEntity2LanguageVocabularySetDto)
                 .orElseThrow(() -> new LanguageVocabularySetEntityByIdNotFoundException(languageVocabularySetId));
-
-        return LanguageVocabularySetDto.builder()
-                .id(languageVocabularySetEntity.getId())
-                .createdOn(languageVocabularySetEntity.getCreatedOn())
-                .languageDto(languageEntity2LanguageDto.apply(languageVocabularySetEntity.getLanguage()))
-                .vocabularyDtoList(languageVocabularySetEntity.getVocabularies()
-                        .stream()
-                        .map(vocabularyEntity2VocabularyDto)
-                        .collect(toList())
-                )
-                .build();
     }
 
     public List<LanguageVocabularySetDto> findAllForUserId(Long userId) {
         return languageVocabularySetRepository.findAllByUserId(userId)
                 .stream()
-                .map(
-                        languageVocabularySetEntity -> LanguageVocabularySetDto.builder()
-                                .id(languageVocabularySetEntity.getId())
-                                .languageDto(languageEntity2LanguageDto.apply(languageVocabularySetEntity.getLanguage()))
-                                .build()
-                )
+                .map(languageVocabularySetMapper::languageVocabularySetEntity2LanguageVocabularySetDto)
                 .collect(toList());
     }
 
