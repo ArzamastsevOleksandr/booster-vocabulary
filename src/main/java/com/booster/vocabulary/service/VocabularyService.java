@@ -64,15 +64,16 @@ public class VocabularyService {
         return vocabularyEntity.getId();
     }
 
-    public VocabularyDto findById(Long vocabularyId) {
-        return vocabularyRepository.findById(vocabularyId)
-                .map(vocabularyMapper::vocabularyEntity2VocabularyDto)
-                .orElseThrow(() -> new VocabularyEntityByIdNotFoundException(vocabularyId));
+    public VocabularyDto findById(Long id) {
+        return vocabularyRepository.findById(id)
+                .map(vocabularyMapper::entity2Dto)
+                .orElseThrow(() -> new VocabularyEntityByIdNotFoundException(id));
     }
 
-    public List<VocabularyDto> findAllForUserId(Long userId) {
-        return vocabularyRepository.findByUserId(userId).stream()
-                .map(vocabularyMapper::vocabularyEntity2VocabularyDto)
+    public List<VocabularyDto> findAllByUserId(Long userId) {
+        return vocabularyRepository.findByUserId(userId)
+                .stream()
+                .map(vocabularyMapper::entity2Dto)
                 .collect(toList());
     }
 

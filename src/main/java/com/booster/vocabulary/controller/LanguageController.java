@@ -26,9 +26,9 @@ public class LanguageController {
         return ResponseEntity.ok(languageDtoList);
     }
 
-    @GetMapping("/{languageId}")
-    ResponseEntity<LanguageDto> languageById(@PathVariable Long languageId) {
-        LanguageDto languageDto = languageService.findById(languageId);
+    @GetMapping("/{id}")
+    ResponseEntity<LanguageDto> languageById(@PathVariable Long id) {
+        LanguageDto languageDto = languageService.findById(id);
         return ResponseEntity.ok(languageDto);
     }
 

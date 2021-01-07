@@ -40,12 +40,12 @@ public class VocabularyController {
     @GetMapping("/list")
     ResponseEntity<List<VocabularyDto>> list() {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        return ResponseEntity.ok(vocabularyService.findAllForUserId(userId));
+        return ResponseEntity.ok(vocabularyService.findAllByUserId(userId));
     }
 
-    @GetMapping("/{vocabularyId}")
-    ResponseEntity<VocabularyDto> vocabularyById(@PathVariable Long vocabularyId) {
-        return ResponseEntity.ok(vocabularyService.findById(vocabularyId));
+    @GetMapping("/{id}")
+    ResponseEntity<VocabularyDto> vocabularyById(@PathVariable Long id) {
+        return ResponseEntity.ok(vocabularyService.findById(id));
     }
 
 }

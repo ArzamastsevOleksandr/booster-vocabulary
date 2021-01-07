@@ -18,7 +18,7 @@ public class VocabularyEntryMapper {
 
     private final WordMapper wordMapper;
 
-    public VocabularyEntryDto vocabularyEntryEntity2VocabularyEntryDto(VocabularyEntryEntity vocabularyEntryEntity) {
+    public VocabularyEntryDto entity2Dto(VocabularyEntryEntity vocabularyEntryEntity) {
         return VocabularyEntryDto
                 .builder()
                 .id(vocabularyEntryEntity.getId())
@@ -33,7 +33,7 @@ public class VocabularyEntryMapper {
     private List<WordDto> getWordDtoList(Supplier<List<WordEntity>> supplier) {
         return supplier.get()
                 .stream()
-                .map(wordMapper::wordEntity2WordDto)
+                .map(wordMapper::entity2Dto)
                 .collect(toList());
     }
 

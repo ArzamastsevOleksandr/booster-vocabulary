@@ -66,16 +66,16 @@ public class LanguageVocabularySetService {
         return languageVocabularySetEntity.getId();
     }
 
-    public LanguageVocabularySetDto findById(Long languageVocabularySetId) {
-        return languageVocabularySetRepository.findById(languageVocabularySetId)
-                .map(languageVocabularySetMapper::languageVocabularySetEntity2LanguageVocabularySetDto)
-                .orElseThrow(() -> new LanguageVocabularySetEntityByIdNotFoundException(languageVocabularySetId));
+    public LanguageVocabularySetDto findById(Long id) {
+        return languageVocabularySetRepository.findById(id)
+                .map(languageVocabularySetMapper::entity2Dto)
+                .orElseThrow(() -> new LanguageVocabularySetEntityByIdNotFoundException(id));
     }
 
-    public List<LanguageVocabularySetDto> findAllForUserId(Long userId) {
+    public List<LanguageVocabularySetDto> findAllByUserId(Long userId) {
         return languageVocabularySetRepository.findAllByUserId(userId)
                 .stream()
-                .map(languageVocabularySetMapper::languageVocabularySetEntity2LanguageVocabularySetDto)
+                .map(languageVocabularySetMapper::entity2Dto)
                 .collect(toList());
     }
 

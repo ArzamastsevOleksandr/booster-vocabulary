@@ -92,16 +92,16 @@ public class VocabularyEntryService {
                 });
     }
 
-    public VocabularyEntryDto findById(Long vocabularyEntryId) {
-        return vocabularyEntryRepository.findById(vocabularyEntryId)
-                .map(vocabularyEntryMapper::vocabularyEntryEntity2VocabularyEntryDto)
-                .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(vocabularyEntryId));
+    public VocabularyEntryDto findById(Long id) {
+        return vocabularyEntryRepository.findById(id)
+                .map(vocabularyEntryMapper::entity2Dto)
+                .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(id));
     }
 
     public List<VocabularyEntryDto> findAllForUserId(Long userId) {
         return vocabularyEntryRepository.findAllByUserId(userId)
                 .stream()
-                .map(vocabularyEntryMapper::vocabularyEntryEntity2VocabularyEntryDto)
+                .map(vocabularyEntryMapper::entity2Dto)
                 .collect(toList());
     }
 

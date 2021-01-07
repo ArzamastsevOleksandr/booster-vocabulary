@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class WordMapper {
 
-    public WordDto wordEntity2WordDto(WordEntity wordEntity) {
+    public WordDto entity2Dto(WordEntity wordEntity) {
         return WordDto
                 .builder()
                 .id(wordEntity.getId())

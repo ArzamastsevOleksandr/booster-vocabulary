@@ -44,9 +44,9 @@ public class VocabularyEntryController {
         return ResponseEntity.ok(vocabularyEntryDtoList);
     }
 
-    @GetMapping("/{vocabularyEntryId}")
-    ResponseEntity<VocabularyEntryDto> getById(@PathVariable Long vocabularyEntryId) {
-        VocabularyEntryDto vocabularyEntryDto = vocabularyEntryService.findById(vocabularyEntryId);
+    @GetMapping("/{id}")
+    ResponseEntity<VocabularyEntryDto> getById(@PathVariable Long id) {
+        VocabularyEntryDto vocabularyEntryDto = vocabularyEntryService.findById(id);
         return ResponseEntity.ok(vocabularyEntryDto);
     }
 

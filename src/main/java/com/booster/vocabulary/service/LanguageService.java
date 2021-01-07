@@ -23,14 +23,14 @@ public class LanguageService {
     public List<LanguageDto> findAll() {
         return languageRepository.findAll()
                 .stream()
-                .map(languageMapper::languageEntity2LanguageDto)
+                .map(languageMapper::entity2Dto)
                 .collect(toList());
     }
 
-    public LanguageDto findById(Long languageId) {
-        return languageRepository.findById(languageId)
-                .map(languageMapper::languageEntity2LanguageDto)
-                .orElseThrow(() -> new LanguageEntityByIdNotFoundException(languageId));
+    public LanguageDto findById(Long id) {
+        return languageRepository.findById(id)
+                .map(languageMapper::entity2Dto)
+                .orElseThrow(() -> new LanguageEntityByIdNotFoundException(id));
     }
 
 }

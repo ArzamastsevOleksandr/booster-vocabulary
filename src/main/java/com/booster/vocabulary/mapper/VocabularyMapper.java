@@ -18,10 +18,10 @@ public class VocabularyMapper {
     private final VocabularyEntryRepository vocabularyEntryRepository;
     private final VocabularyEntryMapper vocabularyEntryMapper;
 
-    public VocabularyDto vocabularyEntity2VocabularyDto(VocabularyEntity vocabularyEntity) {
+    public VocabularyDto entity2Dto(VocabularyEntity vocabularyEntity) {
         List<VocabularyEntryDto> vocabularyEntryDtoList = vocabularyEntity.getVocabularyEntries()
                 .stream()
-                .map(vocabularyEntryMapper::vocabularyEntryEntity2VocabularyEntryDto)
+                .map(vocabularyEntryMapper::entity2Dto)
                 .collect(toList());
 
         return VocabularyDto.builder()

@@ -39,13 +39,13 @@ public class LanguageVocabularySetController {
     @GetMapping("/list")
     ResponseEntity<List<LanguageVocabularySetDto>> list() {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        List<LanguageVocabularySetDto> languageVocabularySetDtoList = languageVocabularySetService.findAllForUserId(userId);
+        List<LanguageVocabularySetDto> languageVocabularySetDtoList = languageVocabularySetService.findAllByUserId(userId);
         return ResponseEntity.ok(languageVocabularySetDtoList);
     }
 
-    @GetMapping("/{languageVocabularySetId}")
-    ResponseEntity<LanguageVocabularySetDto> languageVocabularySetById(@PathVariable Long languageVocabularySetId) {
-        LanguageVocabularySetDto languageVocabularySetDto = languageVocabularySetService.findById(languageVocabularySetId);
+    @GetMapping("/{id}")
+    ResponseEntity<LanguageVocabularySetDto> languageVocabularySetById(@PathVariable Long id) {
+        LanguageVocabularySetDto languageVocabularySetDto = languageVocabularySetService.findById(id);
         return ResponseEntity.ok(languageVocabularySetDto);
     }
 

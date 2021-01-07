@@ -19,12 +19,12 @@ public class LanguageVocabularySetMapper {
     private final LanguageMapper languageMapper;
     private final VocabularyMapper vocabularyMapper;
 
-    public LanguageVocabularySetDto languageVocabularySetEntity2LanguageVocabularySetDto(LanguageVocabularySetEntity languageVocabularySetEntity) {
+    public LanguageVocabularySetDto entity2Dto(LanguageVocabularySetEntity languageVocabularySetEntity) {
         LanguageEntity languageEntity = languageVocabularySetEntity.getLanguage();
-        LanguageDto languageDto = languageMapper.languageEntity2LanguageDto(languageEntity);
+        LanguageDto languageDto = languageMapper.entity2Dto(languageEntity);
         List<VocabularyDto> vocabularyDtoList = languageVocabularySetEntity.getVocabularies()
                 .stream()
-                .map(vocabularyMapper::vocabularyEntity2VocabularyDto)
+                .map(vocabularyMapper::entity2Dto)
                 .collect(toList());
 
         return LanguageVocabularySetDto.builder()
