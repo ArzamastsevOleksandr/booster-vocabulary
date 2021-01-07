@@ -1,7 +1,5 @@
-package com.booster.vocabulary.dto.response;
+package com.booster.vocabulary.dto;
 
-import com.booster.vocabulary.dto.LanguageDto;
-import com.booster.vocabulary.dto.VocabularyDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

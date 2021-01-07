@@ -1,20 +1,14 @@
 package com.booster.vocabulary.controller;
 
 import com.booster.vocabulary.config.security.UserDetailsImpl;
+import com.booster.vocabulary.dto.LanguageVocabularySetDto;
 import com.booster.vocabulary.dto.request.LanguageVocabularySetRequestDto;
-import com.booster.vocabulary.dto.response.LanguageVocabularySetDto;
-import com.booster.vocabulary.dto.response.LanguageVocabularySetResponseId;
 import com.booster.vocabulary.service.LanguageVocabularySetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,11 +23,11 @@ public class LanguageVocabularySetController {
     private final LanguageVocabularySetService languageVocabularySetService;
 
     @PostMapping(value = "/create", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<LanguageVocabularySetResponseId> create(@RequestBody LanguageVocabularySetRequestDto languageVocabularySetRequestDto) {
+    ResponseEntity<LanguageVocabularySetDto> create(@RequestBody LanguageVocabularySetRequestDto languageVocabularySetRequestDto) {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         languageVocabularySetRequestDto.setUserId(userId);
-        Long languageVocabularySetId = languageVocabularySetService.create(languageVocabularySetRequestDto);
-        return ResponseEntity.ok(new LanguageVocabularySetResponseId(languageVocabularySetId));
+        LanguageVocabularySetDto languageVocabularySetDto = languageVocabularySetService.create(languageVocabularySetRequestDto);
+        return ResponseEntity.ok(languageVocabularySetDto);
     }
 
     @GetMapping("/list")

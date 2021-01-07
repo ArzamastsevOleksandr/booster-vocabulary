@@ -3,8 +3,8 @@ package com.booster.vocabulary.controller;
 import com.booster.vocabulary.config.security.UserDetailsImpl;
 import com.booster.vocabulary.config.security.jwt.JwtUtils;
 import com.booster.vocabulary.entity.RoleEntity;
-import com.booster.vocabulary.entity.enums.RoleEnum;
 import com.booster.vocabulary.entity.UserEntity;
+import com.booster.vocabulary.entity.enums.RoleEnum;
 import com.booster.vocabulary.repository.RoleRepository;
 import com.booster.vocabulary.repository.UserRepository;
 import lombok.Data;
@@ -16,11 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;

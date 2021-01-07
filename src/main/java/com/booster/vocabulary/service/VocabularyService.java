@@ -32,7 +32,7 @@ public class VocabularyService {
 
     private final VocabularyMapper vocabularyMapper;
 
-    public Long create(VocabularyRequestDto vocabularyRequestDto) {
+    public VocabularyDto create(VocabularyRequestDto vocabularyRequestDto) {
         Long userId = vocabularyRequestDto.getUserId();
         Long languageId = vocabularyRequestDto.getLanguageId();
         String vocabularyName = vocabularyRequestDto.getVocabularyName();
@@ -61,7 +61,7 @@ public class VocabularyService {
         languageVocabularySetEntity.getVocabularies().add(vocabularyEntity);
         languageVocabularySetRepository.save(languageVocabularySetEntity);
 
-        return vocabularyEntity.getId();
+        return vocabularyMapper.entity2Dto(vocabularyEntity);
     }
 
     public VocabularyDto findById(Long id) {

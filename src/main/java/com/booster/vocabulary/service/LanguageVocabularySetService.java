@@ -1,7 +1,7 @@
 package com.booster.vocabulary.service;
 
 import com.booster.vocabulary.dto.request.LanguageVocabularySetRequestDto;
-import com.booster.vocabulary.dto.response.LanguageVocabularySetDto;
+import com.booster.vocabulary.dto.LanguageVocabularySetDto;
 import com.booster.vocabulary.entity.LanguageEntity;
 import com.booster.vocabulary.entity.LanguageVocabularySetEntity;
 import com.booster.vocabulary.entity.UserEntity;
@@ -36,7 +36,7 @@ public class LanguageVocabularySetService {
 
     private final LanguageVocabularySetMapper languageVocabularySetMapper;
 
-    public Long create(LanguageVocabularySetRequestDto languageVocabularySetRequestDto) {
+    public LanguageVocabularySetDto create(LanguageVocabularySetRequestDto languageVocabularySetRequestDto) {
         Long languageId = languageVocabularySetRequestDto.getLanguageId();
         Long userId = languageVocabularySetRequestDto.getUserId();
 
@@ -63,7 +63,7 @@ public class LanguageVocabularySetService {
         languageVocabularySetEntity.getVocabularies().add(defaultVocabularyEntity);
         languageVocabularySetRepository.save(languageVocabularySetEntity);
 
-        return languageVocabularySetEntity.getId();
+        return languageVocabularySetMapper.entity2Dto(languageVocabularySetEntity);
     }
 
     public LanguageVocabularySetDto findById(Long id) {

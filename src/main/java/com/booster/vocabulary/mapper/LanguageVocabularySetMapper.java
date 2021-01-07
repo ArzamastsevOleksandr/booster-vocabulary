@@ -2,7 +2,7 @@ package com.booster.vocabulary.mapper;
 
 import com.booster.vocabulary.dto.LanguageDto;
 import com.booster.vocabulary.dto.VocabularyDto;
-import com.booster.vocabulary.dto.response.LanguageVocabularySetDto;
+import com.booster.vocabulary.dto.LanguageVocabularySetDto;
 import com.booster.vocabulary.entity.LanguageEntity;
 import com.booster.vocabulary.entity.LanguageVocabularySetEntity;
 import lombok.RequiredArgsConstructor;

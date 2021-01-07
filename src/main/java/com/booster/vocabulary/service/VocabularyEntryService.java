@@ -33,10 +33,11 @@ public class VocabularyEntryService {
     private final UserRepository userRepository;
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyEntryRepository vocabularyEntryRepository;
+
     private final VocabularyEntryMapper vocabularyEntryMapper;
 
     @Transactional
-    public Long create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
+    public VocabularyEntryDto create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
         Long userId = vocabularyEntryRequestDto.getUserId();
         String word = vocabularyEntryRequestDto.getWord();
 
@@ -79,7 +80,7 @@ public class VocabularyEntryService {
         vocabularyEntity.getVocabularyEntries().add(vocabularyEntryEntity);
         vocabularyRepository.save(vocabularyEntity);
 
-        return vocabularyEntryEntity.getId();
+        return vocabularyEntryMapper.entity2Dto(vocabularyEntryEntity);
     }
 
     private WordEntity getWordEntityByNameOrCreateAndSave(String word) {
