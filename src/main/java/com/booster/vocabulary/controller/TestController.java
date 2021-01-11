@@ -111,12 +111,6 @@ public class TestController {
                         roleEntities.add(adminRoleEntity);
 
                         break;
-                    case "mod":
-                        RoleEntity modRoleEntity = roleRepository.findByName(RoleEnum.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roleEntities.add(modRoleEntity);
-
-                        break;
                     default:
                         RoleEntity userRoleEntity = roleRepository.findByName(RoleEnum.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
