@@ -1,7 +1,7 @@
 package com.booster.vocabulary.config.init;
 
-import com.booster.vocabulary.entity.LanguageEntity;
-import com.booster.vocabulary.repository.LanguageRepository;
+import com.booster.vocabulary.entity.BaseLanguageEntity;
+import com.booster.vocabulary.repository.BaseLanguageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -11,9 +11,9 @@ import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-public class DefaultLanguageListInitializer {
+public class BaseLanguageListInitializer {
 
-    private final LanguageRepository languageRepository;
+    private final BaseLanguageRepository baseLanguageRepository;
 
     @EventListener
     public void handle(ContextRefreshedEvent event) {
@@ -21,11 +21,11 @@ public class DefaultLanguageListInitializer {
                 "English",
                 "German"
         )
-                .filter(name -> !languageRepository.existsByName(name))
+                .filter(name -> !baseLanguageRepository.existsByName(name))
                 .forEach(name -> {
-                    var languageEntity = new LanguageEntity();
+                    var languageEntity = new BaseLanguageEntity();
                     languageEntity.setName(name);
-                    languageRepository.save(languageEntity);
+                    baseLanguageRepository.save(languageEntity);
                 });
     }
 

@@ -15,6 +15,6 @@ import java.util.List;
 public class LanguageToLearnDto {
     Long id;
     Timestamp createdOn;
-    LanguageDto languageDto;
+    BaseLanguageDto baseLanguageDto;
     List<VocabularyDto> vocabularyDtos;
 }

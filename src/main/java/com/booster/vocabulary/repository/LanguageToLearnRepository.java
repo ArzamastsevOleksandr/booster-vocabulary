@@ -8,10 +8,8 @@ import java.util.Optional;
 
 public interface LanguageToLearnRepository extends JpaRepository<LanguageToLearnEntity, Long> {
 
-    boolean existsByUserIdAndLanguageId(Long userId, Long languageId);
+    boolean existsByUserIdAndBaseLanguageId(Long userId, Long baseLanguageId);
 
     List<LanguageToLearnEntity> findAllByUserId(Long userId);
-
-    Optional<LanguageToLearnEntity> findByUserIdAndLanguageId(Long userId, Long languageId);
 
 }

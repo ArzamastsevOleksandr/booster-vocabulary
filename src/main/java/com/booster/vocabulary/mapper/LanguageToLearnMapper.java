@@ -1,9 +1,9 @@
 package com.booster.vocabulary.mapper;
 
-import com.booster.vocabulary.dto.LanguageDto;
+import com.booster.vocabulary.dto.BaseLanguageDto;
 import com.booster.vocabulary.dto.VocabularyDto;
 import com.booster.vocabulary.dto.LanguageToLearnDto;
-import com.booster.vocabulary.entity.LanguageEntity;
+import com.booster.vocabulary.entity.BaseLanguageEntity;
 import com.booster.vocabulary.entity.LanguageToLearnEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,12 +16,12 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class LanguageToLearnMapper {
 
-    private final LanguageMapper languageMapper;
+    private final BaseLanguageMapper baseLanguageMapper;
     private final VocabularyMapper vocabularyMapper;
 
     public LanguageToLearnDto entity2Dto(LanguageToLearnEntity languageToLearnEntity) {
-        LanguageEntity languageEntity = languageToLearnEntity.getLanguage();
-        LanguageDto languageDto = languageMapper.entity2Dto(languageEntity);
+        BaseLanguageEntity baseLanguageEntity = languageToLearnEntity.getBaseLanguage();
+        BaseLanguageDto baseLanguageDto = baseLanguageMapper.entity2Dto(baseLanguageEntity);
         List<VocabularyDto> vocabularyDtoList = languageToLearnEntity.getVocabularies()
                 .stream()
                 .map(vocabularyMapper::entity2Dto)
@@ -30,7 +30,7 @@ public class LanguageToLearnMapper {
         return LanguageToLearnDto.builder()
                 .id(languageToLearnEntity.getId())
                 .createdOn(languageToLearnEntity.getCreatedOn())
-                .languageDto(languageDto)
+                .baseLanguageDto(baseLanguageDto)
                 .vocabularyDtos(vocabularyDtoList)
                 .build();
     }

@@ -14,12 +14,12 @@ import java.util.List;
 @Table(name = "language_to_learn")
 @Data
 @EqualsAndHashCode(exclude = {
-        "language",
+        "baseLanguage",
         "vocabularies",
         "user"
 })
 @ToString(exclude = {
-        "language",
+        "baseLanguage",
         "vocabularies",
         "user"
 })
@@ -32,7 +32,7 @@ public class LanguageToLearnEntity {
     private Timestamp createdOn = Timestamp.from(Instant.now());
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private LanguageEntity language;
+    private BaseLanguageEntity baseLanguage;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<VocabularyEntity> vocabularies = new ArrayList<>();

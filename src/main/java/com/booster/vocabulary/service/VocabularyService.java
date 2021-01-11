@@ -2,13 +2,12 @@ package com.booster.vocabulary.service;
 
 import com.booster.vocabulary.dto.VocabularyDto;
 import com.booster.vocabulary.dto.request.VocabularyRequestDto;
-import com.booster.vocabulary.entity.LanguageEntity;
+import com.booster.vocabulary.entity.BaseLanguageEntity;
 import com.booster.vocabulary.entity.LanguageToLearnEntity;
 import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.exception.*;
 import com.booster.vocabulary.mapper.VocabularyMapper;
-import com.booster.vocabulary.repository.LanguageRepository;
 import com.booster.vocabulary.repository.LanguageToLearnRepository;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
@@ -45,11 +44,11 @@ public class VocabularyService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
 
-        LanguageEntity languageEntity = languageToLearnEntity.getLanguage();
+        BaseLanguageEntity baseLanguageEntity = languageToLearnEntity.getBaseLanguage();
 
         var vocabularyEntity = new VocabularyEntity();
         vocabularyEntity.setName(vocabularyName);
-        vocabularyEntity.setLanguage(languageEntity);
+        vocabularyEntity.setBaseLanguage(baseLanguageEntity);
         vocabularyEntity.setUser(userEntity);
         vocabularyRepository.save(vocabularyEntity);
 

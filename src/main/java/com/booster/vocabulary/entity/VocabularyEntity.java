@@ -14,12 +14,12 @@ import java.util.List;
 @Table(name = "vocabulary")
 @Data
 @EqualsAndHashCode(exclude = {
-        "language",
+        "baseLanguage",
         "vocabularyEntries",
         "user"
 })
 @ToString(exclude = {
-        "language",
+        "baseLanguage",
         "vocabularyEntries",
         "user"
 })
@@ -38,7 +38,7 @@ public class VocabularyEntity {
     private Timestamp createdOn = Timestamp.from(Instant.now());
 
     @ManyToOne
-    private LanguageEntity language;
+    private BaseLanguageEntity baseLanguage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
