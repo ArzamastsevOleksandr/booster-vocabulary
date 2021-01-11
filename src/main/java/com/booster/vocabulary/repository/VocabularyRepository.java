@@ -10,7 +10,7 @@ import static com.booster.vocabulary.entity.VocabularyEntity.DEFAULT_VOCABULARY_
 
 public interface VocabularyRepository extends JpaRepository<VocabularyEntity, Long> {
 
-    List<VocabularyEntity> findByUserId(Long userId);
+    List<VocabularyEntity> findByUserIdAndLanguageToLearnId(Long userId, Long languageToLearnId);
 
     boolean existsByUserIdAndName(Long userId, String name);
 

@@ -15,11 +15,13 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(exclude = {
         "baseLanguage",
+        "languageToLearn",
         "vocabularyEntries",
         "user"
 })
 @ToString(exclude = {
         "baseLanguage",
+        "languageToLearn",
         "vocabularyEntries",
         "user"
 })
@@ -39,6 +41,9 @@ public class VocabularyEntity {
 
     @ManyToOne
     private BaseLanguageEntity baseLanguage;
+
+    @ManyToOne
+    private LanguageToLearnEntity languageToLearn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;

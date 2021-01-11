@@ -49,6 +49,7 @@ public class VocabularyService {
         var vocabularyEntity = new VocabularyEntity();
         vocabularyEntity.setName(vocabularyName);
         vocabularyEntity.setBaseLanguage(baseLanguageEntity);
+        vocabularyEntity.setLanguageToLearn(languageToLearnEntity);
         vocabularyEntity.setUser(userEntity);
         vocabularyRepository.save(vocabularyEntity);
 
@@ -64,8 +65,8 @@ public class VocabularyService {
                 .orElseThrow(() -> new VocabularyEntityByIdNotFoundException(id));
     }
 
-    public List<VocabularyDto> findAllByUserId(Long userId) {
-        return vocabularyRepository.findByUserId(userId)
+    public List<VocabularyDto> findAllByUserIdAndLanguageToLearnId(Long userId, Long languageToLearnId) {
+        return vocabularyRepository.findByUserIdAndLanguageToLearnId(userId, languageToLearnId)
                 .stream()
                 .map(vocabularyMapper::entity2Dto)
                 .collect(toList());

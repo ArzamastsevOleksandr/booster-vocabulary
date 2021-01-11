@@ -31,10 +31,10 @@ public class VocabularyController {
         return ResponseEntity.ok(vocabularyDto);
     }
 
-    @GetMapping("/list")
-    ResponseEntity<List<VocabularyDto>> list() {
+    @GetMapping("/list/{languageToLearnId}")
+    ResponseEntity<List<VocabularyDto>> listByLanguageToLearnId(@PathVariable Long languageToLearnId) {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        return ResponseEntity.ok(vocabularyService.findAllByUserId(userId));
+        return ResponseEntity.ok(vocabularyService.findAllByUserIdAndLanguageToLearnId(userId, languageToLearnId));
     }
 
     @GetMapping("/{id}")
