@@ -13,7 +13,6 @@ import com.booster.vocabulary.mapper.VocabularyEntryMapper;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
-import com.booster.vocabulary.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class VocabularyEntryService {
 
-    private final WordRepository wordRepository;
+    private final WordService wordService;
     private final UserRepository userRepository;
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyEntryRepository vocabularyEntryRepository;
@@ -55,13 +54,13 @@ public class VocabularyEntryService {
         var vocabularyEntryEntity = new VocabularyEntryEntity();
         vocabularyEntryEntity.setUser(userEntity);
 
-        WordEntity wordEntity = getWordEntityByNameOrCreateAndSave(word);
+        WordEntity wordEntity = wordService.getWordEntityByNameOrCreateAndSave(word);
         vocabularyEntryEntity.setTargetWord(wordEntity);
 
         ofNullable(vocabularyEntryRequestDto.getAntonyms()).ifPresent(
                 antonyms -> antonyms.forEach(
                         antonym -> {
-                            WordEntity antonymEntity = getWordEntityByNameOrCreateAndSave(antonym);
+                            WordEntity antonymEntity = wordService.getWordEntityByNameOrCreateAndSave(antonym);
                             vocabularyEntryEntity.getAntonyms().add(antonymEntity);
                         }
                 )
@@ -69,7 +68,7 @@ public class VocabularyEntryService {
         ofNullable(vocabularyEntryRequestDto.getSynonyms()).ifPresent(
                 synonyms -> synonyms.forEach(
                         synonym -> {
-                            WordEntity synonymEntity = getWordEntityByNameOrCreateAndSave(synonym);
+                            WordEntity synonymEntity = wordService.getWordEntityByNameOrCreateAndSave(synonym);
                             vocabularyEntryEntity.getSynonyms().add(synonymEntity);
                         }
                 )
@@ -81,16 +80,6 @@ public class VocabularyEntryService {
         vocabularyRepository.save(vocabularyEntity);
 
         return vocabularyEntryMapper.entity2Dto(vocabularyEntryEntity);
-    }
-
-    private WordEntity getWordEntityByNameOrCreateAndSave(String word) {
-        return wordRepository.findByName(word)
-                .orElseGet(() -> {
-                    var newWordEntity = new WordEntity();
-                    newWordEntity.setName(word);
-                    wordRepository.save(newWordEntity);
-                    return newWordEntity;
-                });
     }
 
     public VocabularyEntryDto findById(Long id) {
