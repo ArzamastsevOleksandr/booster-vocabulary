@@ -38,9 +38,9 @@
             <stringProp name="Argument.value">/language</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="languageVocabularySetPath" elementType="Argument">
-            <stringProp name="Argument.name">languageVocabularySetPath</stringProp>
-            <stringProp name="Argument.value">/language-vocabulary-set</stringProp>
+          <elementProp name="languageToLearnPath" elementType="Argument">
+            <stringProp name="Argument.name">languageToLearnPath</stringProp>
+            <stringProp name="Argument.value">/language-to-learn</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="vocabularyPath" elementType="Argument">
@@ -612,7 +612,7 @@ if (failureMessage?.trim()) {
             <stringProp name="HTTPSampler.port">${boosterVocabularyPort}</stringProp>
             <stringProp name="HTTPSampler.protocol">${boosterVocabularyProtocol}</stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">${boosterVocabularyPath}/${languageVocabularySetPath}/create</stringProp>
+            <stringProp name="HTTPSampler.path">${boosterVocabularyPath}/${languageToLearnPath}/create</stringProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -684,7 +684,7 @@ if (failureMessage?.trim()) {
             <stringProp name="HTTPSampler.port">${boosterVocabularyPort}</stringProp>
             <stringProp name="HTTPSampler.protocol">${boosterVocabularyProtocol}</stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">${boosterVocabularyPath}/${languageVocabularySetPath}/${LANG_VOCAB_SET_ID_ONE}</stringProp>
+            <stringProp name="HTTPSampler.path">${boosterVocabularyPath}/${languageToLearnPath}/${LANG_VOCAB_SET_ID_ONE}</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -755,7 +755,7 @@ if (actualLanguageName != EXPECTED_LANGUAGE_NAME) {
     failureMessage += String.format(&quot;Expected languageDto.name %s, got %s\n\n&quot;, EXPECTED_LANGUAGE_NAME, actualLanguageName)
 }
 
-List&lt;org.apache.groovy.json.internal.LazyMap&gt; actualVocabularyDtoList = responseMap.get(&quot;vocabularyDtoList&quot;)
+List&lt;org.apache.groovy.json.internal.LazyMap&gt; actualVocabularyDtoList = responseMap.get(&quot;vocabularyDtos&quot;)
 def actualVocabularyDtoListSize = actualVocabularyDtoList.size()
 if (actualVocabularyDtoListSize != EXPECTED_VOCABULARY_DTO_LIST_SIZE) {
     failureMessage += String.format(&quot;Expected vocabularyDtoList.size() %s, got %s\n\n&quot;, EXPECTED_VOCABULARY_DTO_LIST_SIZE, actualVocabularyDtoListSize)
