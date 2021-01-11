@@ -10,8 +10,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "LanguageVocabularySet")
-@Table(name = "language_vocabulary_set")
+@Entity(name = "LanguageToLearn")
+@Table(name = "language_to_learn")
 @Data
 @EqualsAndHashCode(exclude = {
         "language",
@@ -23,7 +23,7 @@ import java.util.List;
         "vocabularies",
         "user"
 })
-public class LanguageVocabularySetEntity {
+public class LanguageToLearnEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

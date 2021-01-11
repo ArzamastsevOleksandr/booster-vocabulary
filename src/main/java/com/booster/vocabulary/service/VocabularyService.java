@@ -3,13 +3,13 @@ package com.booster.vocabulary.service;
 import com.booster.vocabulary.dto.VocabularyDto;
 import com.booster.vocabulary.dto.request.VocabularyRequestDto;
 import com.booster.vocabulary.entity.LanguageEntity;
-import com.booster.vocabulary.entity.LanguageVocabularySetEntity;
+import com.booster.vocabulary.entity.LanguageToLearnEntity;
 import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.exception.*;
 import com.booster.vocabulary.mapper.VocabularyMapper;
 import com.booster.vocabulary.repository.LanguageRepository;
-import com.booster.vocabulary.repository.LanguageVocabularySetRepository;
+import com.booster.vocabulary.repository.LanguageToLearnRepository;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class VocabularyService {
 
     private final VocabularyRepository vocabularyRepository;
     private final UserRepository userRepository;
-    private final LanguageVocabularySetRepository languageVocabularySetRepository;
+    private final LanguageToLearnRepository languageToLearnRepository;
     private final LanguageRepository languageRepository;
 
     private final VocabularyMapper vocabularyMapper;
@@ -37,10 +37,10 @@ public class VocabularyService {
         Long languageId = vocabularyRequestDto.getLanguageId();
         String vocabularyName = vocabularyRequestDto.getVocabularyName();
 
-        LanguageVocabularySetEntity languageVocabularySetEntity = languageVocabularySetRepository.findByUserIdAndLanguageId(
+        LanguageToLearnEntity languageToLearnEntity = languageToLearnRepository.findByUserIdAndLanguageId(
                 userId, languageId
         ).orElseThrow(
-                () -> new LanguageVocabularySetEntityByLanguageIdNotFoundException(languageId)
+                () -> new LanguageToLearnEntityByLanguageIdNotFoundException(languageId)
         );
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
@@ -58,8 +58,8 @@ public class VocabularyService {
         vocabularyEntity.setUser(userEntity);
         vocabularyRepository.save(vocabularyEntity);
 
-        languageVocabularySetEntity.getVocabularies().add(vocabularyEntity);
-        languageVocabularySetRepository.save(languageVocabularySetEntity);
+        languageToLearnEntity.getVocabularies().add(vocabularyEntity);
+        languageToLearnRepository.save(languageToLearnEntity);
 
         return vocabularyMapper.entity2Dto(vocabularyEntity);
     }

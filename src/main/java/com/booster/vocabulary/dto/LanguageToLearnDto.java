@@ -12,9 +12,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LanguageVocabularySetDto {
+public class LanguageToLearnDto {
     Long id;
     Timestamp createdOn;
     LanguageDto languageDto;
-    List<VocabularyDto> vocabularyDtoList;
+    List<VocabularyDto> vocabularyDtos;
 }

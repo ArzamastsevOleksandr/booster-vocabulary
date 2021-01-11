@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class LanguageVocabularySetRequestDto {
+public class LanguageToLearnRequestDto {
     Long languageId;
 
     @JsonIgnore
