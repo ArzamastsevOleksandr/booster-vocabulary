@@ -60,7 +60,7 @@
           </elementProp>
           <elementProp name="DEFAULT_VOCABULARY_NAME" elementType="Argument">
             <stringProp name="Argument.name">DEFAULT_VOCABULARY_NAME</stringProp>
-            <stringProp name="Argument.value">Default</stringProp>
+            <stringProp name="Argument.value">DEFAULT</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="NEW_VOCABULARY_NAME" elementType="Argument">
