@@ -28,29 +28,24 @@ public class VocabularyService {
     private final VocabularyRepository vocabularyRepository;
     private final UserRepository userRepository;
     private final LanguageToLearnRepository languageToLearnRepository;
-    private final LanguageRepository languageRepository;
 
     private final VocabularyMapper vocabularyMapper;
 
     public VocabularyDto create(VocabularyRequestDto vocabularyRequestDto) {
         Long userId = vocabularyRequestDto.getUserId();
-        Long languageId = vocabularyRequestDto.getLanguageId();
+        Long languageToLearnId = vocabularyRequestDto.getLanguageToLearnId();
         String vocabularyName = vocabularyRequestDto.getVocabularyName();
-
-        LanguageToLearnEntity languageToLearnEntity = languageToLearnRepository.findByUserIdAndLanguageId(
-                userId, languageId
-        ).orElseThrow(
-                () -> new LanguageToLearnEntityByLanguageIdNotFoundException(languageId)
-        );
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
 
         if (vocabularyRepository.existsByUserIdAndName(userId, vocabularyName)) {
             throw new VocabularyEntityAlreadyExistsWithNameException(vocabularyName);
         }
+        LanguageToLearnEntity languageToLearnEntity = languageToLearnRepository.findById(languageToLearnId)
+                .orElseThrow(() -> new LanguageToLearnEntityByIdNotFoundException(languageToLearnId));
 
-        LanguageEntity languageEntity = languageRepository.findById(languageId)
-                .orElseThrow(() -> new LanguageEntityByIdNotFoundException(languageId));
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
+
+        LanguageEntity languageEntity = languageToLearnEntity.getLanguage();
 
         var vocabularyEntity = new VocabularyEntity();
         vocabularyEntity.setName(vocabularyName);

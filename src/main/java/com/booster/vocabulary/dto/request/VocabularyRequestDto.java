@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class VocabularyRequestDto {
     String vocabularyName;
-    Long languageId;
+    Long languageToLearnId;
 
     @JsonIgnore
     Long userId;
