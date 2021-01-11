@@ -43,14 +43,14 @@ public class VocabularyEntryService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
 
+        if (vocabularyEntryRepository.existsByUserIdAndTargetWordName(userId, word)) {
+            throw new VocabularyEntryEntityAlreadyExistsWithTargetWordException(word);
+        }
         VocabularyEntity vocabularyEntity = ofNullable(vocabularyEntryRequestDto.getVocabularyId())
                 .map(vocabularyRepository::findById)
                 .orElseGet(() -> vocabularyRepository.findDefaultVocabulary(userId))
                 .orElseThrow(RuntimeException::new);
 
-        if (vocabularyEntryRepository.existsByUserIdAndTargetWordName(userId, word)) {
-            throw new VocabularyEntryEntityAlreadyExistsWithTargetWordException(word);
-        }
         var vocabularyEntryEntity = new VocabularyEntryEntity();
         vocabularyEntryEntity.setUser(userEntity);
 
@@ -88,8 +88,8 @@ public class VocabularyEntryService {
                 .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(id));
     }
 
-    public List<VocabularyEntryDto> findAllForUserId(Long userId) {
-        return vocabularyEntryRepository.findAllByUserId(userId)
+    public List<VocabularyEntryDto> findAllByUserIdAndVocabularyId(Long userId, Long vocabularyId) {
+        return vocabularyEntryRepository.findAllByUserIdAndVocabularyId(userId, vocabularyId)
                 .stream()
                 .map(vocabularyEntryMapper::entity2Dto)
                 .collect(toList());

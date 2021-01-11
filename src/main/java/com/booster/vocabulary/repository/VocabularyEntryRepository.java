@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface VocabularyEntryRepository extends JpaRepository<VocabularyEntryEntity, Long> {
 
-    List<VocabularyEntryEntity> findAllByUserId(Long userId);
+    List<VocabularyEntryEntity> findAllByUserIdAndVocabularyId(Long userId, Long vocabularyId);
 
     boolean existsByUserIdAndTargetWordName(Long userId, String word);
 

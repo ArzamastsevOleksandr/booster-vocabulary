@@ -31,10 +31,10 @@ public class VocabularyEntryController {
         return ResponseEntity.ok(vocabularyEntryDto);
     }
 
-    @GetMapping("/list")
-    ResponseEntity<List<VocabularyEntryDto>> list() {
+    @GetMapping("/list/{vocabularyId}")
+    ResponseEntity<List<VocabularyEntryDto>> listByVocabularyId(@PathVariable Long vocabularyId) {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        List<VocabularyEntryDto> vocabularyEntryDtoList = vocabularyEntryService.findAllForUserId(userId);
+        List<VocabularyEntryDto> vocabularyEntryDtoList = vocabularyEntryService.findAllByUserIdAndVocabularyId(userId, vocabularyId);
         return ResponseEntity.ok(vocabularyEntryDtoList);
     }
 
