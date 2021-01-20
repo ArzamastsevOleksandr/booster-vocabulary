@@ -33,14 +33,14 @@ public class VocabularyEntryController {
     }
 
     @GetMapping("/list/{vocabularyId}")
-    ResponseEntity<List<VocabularyEntryDto>> listByVocabularyId(@PathVariable Long vocabularyId) {
+    ResponseEntity<List<VocabularyEntryDto>> findAllByVocabularyId(@PathVariable Long vocabularyId) {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<VocabularyEntryDto> vocabularyEntryDtoList = vocabularyEntryService.findAllByUserIdAndVocabularyId(userId, vocabularyId);
         return ResponseEntity.ok(vocabularyEntryDtoList);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<VocabularyEntryDto> getById(@PathVariable Long id) {
+    ResponseEntity<VocabularyEntryDto> findById(@PathVariable Long id) {
         VocabularyEntryDto vocabularyEntryDto = vocabularyEntryService.findById(id);
         return ResponseEntity.ok(vocabularyEntryDto);
     }

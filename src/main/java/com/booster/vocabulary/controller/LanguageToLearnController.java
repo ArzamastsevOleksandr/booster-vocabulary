@@ -31,14 +31,14 @@ public class LanguageToLearnController {
     }
 
     @GetMapping("/list")
-    ResponseEntity<List<LanguageToLearnDto>> list() {
+    ResponseEntity<List<LanguageToLearnDto>> findAll() {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<LanguageToLearnDto> languageToLearnDtos = languageToLearnService.findAllByUserId(userId);
         return ResponseEntity.ok(languageToLearnDtos);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<LanguageToLearnDto> languageVocabularySetById(@PathVariable Long id) {
+    ResponseEntity<LanguageToLearnDto> findById(@PathVariable Long id) {
         LanguageToLearnDto languageToLearnDto = languageToLearnService.findById(id);
         return ResponseEntity.ok(languageToLearnDto);
     }

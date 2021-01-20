@@ -21,13 +21,13 @@ public class BaseLanguageController {
     private final BaseLanguageService baseLanguageService;
 
     @GetMapping("/list")
-    ResponseEntity<List<BaseLanguageDto>> list() {
+    ResponseEntity<List<BaseLanguageDto>> findAll() {
         List<BaseLanguageDto> baseLanguageDtoList = baseLanguageService.findAll();
         return ResponseEntity.ok(baseLanguageDtoList);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<BaseLanguageDto> baseLanguageById(@PathVariable Long id) {
+    ResponseEntity<BaseLanguageDto> findById(@PathVariable Long id) {
         BaseLanguageDto baseLanguageDto = baseLanguageService.findById(id);
         return ResponseEntity.ok(baseLanguageDto);
     }

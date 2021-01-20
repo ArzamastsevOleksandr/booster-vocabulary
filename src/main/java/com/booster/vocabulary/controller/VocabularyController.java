@@ -6,6 +6,7 @@ import com.booster.vocabulary.dto.request.VocabularyRequestDto;
 import com.booster.vocabulary.service.VocabularyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,20 @@ public class VocabularyController {
     }
 
     @GetMapping("/list/{languageToLearnId}")
-    ResponseEntity<List<VocabularyDto>> listByLanguageToLearnId(@PathVariable Long languageToLearnId) {
+    ResponseEntity<List<VocabularyDto>> findAllByLanguageToLearnId(@PathVariable Long languageToLearnId) {
         Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         return ResponseEntity.ok(vocabularyService.findAllByUserIdAndLanguageToLearnId(userId, languageToLearnId));
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<VocabularyDto> vocabularyById(@PathVariable Long id) {
+    ResponseEntity<VocabularyDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(vocabularyService.findById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteById(@PathVariable Long id) {
+        vocabularyService.deleteById(id);
     }
 
 }
