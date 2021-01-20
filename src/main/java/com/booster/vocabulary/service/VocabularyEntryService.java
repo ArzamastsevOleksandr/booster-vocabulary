@@ -95,4 +95,17 @@ public class VocabularyEntryService {
                 .collect(toList());
     }
 
+    @Transactional
+    public void deleteById(Long id) {
+        VocabularyEntryEntity vocabularyEntryEntity = vocabularyEntryRepository.findById(id)
+                .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(id));
+
+        VocabularyEntity vocabularyEntity = vocabularyEntryEntity.getVocabulary();
+        vocabularyEntity.getVocabularyEntries()
+                .removeIf(e -> vocabularyEntryEntity.getId().equals(e.getId()));
+        vocabularyRepository.save(vocabularyEntity);
+
+        vocabularyEntryRepository.delete(vocabularyEntryEntity);
+    }
+
 }
