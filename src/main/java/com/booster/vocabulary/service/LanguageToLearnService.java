@@ -1,26 +1,20 @@
 package com.booster.vocabulary.service;
 
-import com.booster.vocabulary.dto.request.LanguageToLearnRequestDto;
 import com.booster.vocabulary.dto.LanguageToLearnDto;
-import com.booster.vocabulary.entity.BaseLanguageEntity;
-import com.booster.vocabulary.entity.LanguageToLearnEntity;
-import com.booster.vocabulary.entity.UserEntity;
-import com.booster.vocabulary.entity.VocabularyEntity;
+import com.booster.vocabulary.dto.request.LanguageToLearnRequestDto;
+import com.booster.vocabulary.entity.*;
 import com.booster.vocabulary.exception.BaseLanguageEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.LanguageToLearnEntityAlreadyExistsException;
 import com.booster.vocabulary.exception.LanguageToLearnEntityByIdNotFoundException;
 import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
 import com.booster.vocabulary.mapper.LanguageToLearnMapper;
-import com.booster.vocabulary.repository.BaseLanguageRepository;
-import com.booster.vocabulary.repository.LanguageToLearnRepository;
-import com.booster.vocabulary.repository.UserRepository;
-import com.booster.vocabulary.repository.VocabularyRepository;
+import com.booster.vocabulary.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -33,6 +27,7 @@ public class LanguageToLearnService {
     private final BaseLanguageRepository baseLanguageRepository;
     private final UserRepository userRepository;
     private final VocabularyRepository vocabularyRepository;
+    private final VocabularyEntryRepository vocabularyEntryRepository;
 
     private final LanguageToLearnMapper languageToLearnMapper;
 
@@ -73,6 +68,27 @@ public class LanguageToLearnService {
                 .stream()
                 .map(languageToLearnMapper::entity2Dto)
                 .collect(toList());
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        LanguageToLearnEntity languageToLearnEntity = languageToLearnRepository.findById(id)
+                .orElseThrow(() -> new LanguageToLearnEntityByIdNotFoundException(id));
+
+        List<VocabularyEntity> vocabularyEntities = languageToLearnEntity.getVocabularies();
+        languageToLearnEntity.setVocabularies(null);
+
+        vocabularyEntities.forEach(ve -> {
+            List<VocabularyEntryEntity> vocabularyEntryEntities = ve.getVocabularyEntries();
+            ve.setVocabularyEntries(null);
+            ve.setLanguageToLearn(null);
+            vocabularyEntryEntities.forEach(vee -> {
+                vee.setVocabulary(null);
+                vocabularyEntryRepository.delete(vee);
+            });
+            vocabularyRepository.delete(ve);
+        });
+        languageToLearnRepository.delete(languageToLearnEntity);
     }
 
 }
