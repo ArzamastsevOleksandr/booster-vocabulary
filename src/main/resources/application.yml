@@ -8,7 +8,6 @@ spring:
       ddl-auto: create-drop
     properties:
       dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
   main:
     banner-mode: console
 #  jmx:
@@ -17,7 +16,7 @@ spring:
 jwt:
   app:
     jwtSecret: dummySecretKey
-    jwtExpirationMs: 360000000
+    jwtExpirationMs: 60000
 
 server:
   servlet:

@@ -7,7 +7,10 @@ import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.enums.RoleEnum;
 import com.booster.vocabulary.repository.RoleRepository;
 import com.booster.vocabulary.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,7 +57,7 @@ public class TestController {
         return userRepository.findAll();
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -126,50 +129,43 @@ public class TestController {
     }
 
     @Data
-    private static class LoginRequest {
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LoginRequest {
         String username;
         String password;
     }
 
     @Data
-    private static class JwtResponse {
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class JwtResponse {
         String jwt;
         Long id;
         String username;
         String email;
         List<String> roles;
-
-        public JwtResponse(String jwt, Long id, String username, String email, List<String> roles) {
-            this.jwt = jwt;
-            this.id = id;
-            this.username = username;
-            this.email = email;
-            this.roles = roles;
-        }
     }
 
     @Data
-    private static class SignupRequest {
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SignupRequest {
         String username;
-
-        public SignupRequest(String username, String email, String password, Set<String> roles) {
-            this.username = username;
-            this.email = email;
-            this.password = password;
-            this.roles = roles;
-        }
-
         String email;
         String password;
         Set<String> roles;
     }
 
     @Data
-    private static class MessageResponse {
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MessageResponse {
         String message;
-
-        public MessageResponse(String message) {
-            this.message = message;
-        }
     }
+
 }

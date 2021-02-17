@@ -2,7 +2,7 @@ package com.booster.vocabulary.controller;
 
 import com.booster.vocabulary.dto.BaseLanguageDto;
 import com.booster.vocabulary.service.BaseLanguageService;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +21,22 @@ public class BaseLanguageController {
     private final BaseLanguageService baseLanguageService;
 
     @GetMapping("/list")
-    ResponseEntity<List<BaseLanguageDto>> findAll() {
+    ResponseEntity<BaseLanguageDtoList> findAll() {
         List<BaseLanguageDto> baseLanguageDtoList = baseLanguageService.findAll();
-        return ResponseEntity.ok(baseLanguageDtoList);
+        return ResponseEntity.ok(new BaseLanguageDtoList(baseLanguageDtoList));
     }
 
     @GetMapping("/{id}")
     ResponseEntity<BaseLanguageDto> findById(@PathVariable Long id) {
         BaseLanguageDto baseLanguageDto = baseLanguageService.findById(id);
         return ResponseEntity.ok(baseLanguageDto);
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BaseLanguageDtoList {
+        List<BaseLanguageDto> baseLanguageDtos;
     }
 
 }
