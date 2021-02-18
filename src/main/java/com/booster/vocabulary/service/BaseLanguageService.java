@@ -1,7 +1,6 @@
 package com.booster.vocabulary.service;
 
 import com.booster.vocabulary.dto.BaseLanguageDto;
-import com.booster.vocabulary.exception.BaseLanguageEntityByIdNotFoundException;
 import com.booster.vocabulary.mapper.BaseLanguageMapper;
 import com.booster.vocabulary.repository.BaseLanguageRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class BaseLanguageService {
     public BaseLanguageDto findById(Long id) {
         return baseLanguageRepository.findById(id)
                 .map(baseLanguageMapper::entity2Dto)
-                .orElseThrow(() -> new BaseLanguageEntityByIdNotFoundException(id));
+                .orElseThrow(RuntimeException::new);
     }
 
 }

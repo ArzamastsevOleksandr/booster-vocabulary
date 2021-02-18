@@ -3,10 +3,6 @@ package com.booster.vocabulary.service;
 import com.booster.vocabulary.dto.VocabularyDto;
 import com.booster.vocabulary.dto.request.VocabularyRequestDto;
 import com.booster.vocabulary.entity.*;
-import com.booster.vocabulary.exception.LanguageToLearnEntityByIdNotFoundException;
-import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
-import com.booster.vocabulary.exception.VocabularyEntityAlreadyExistsWithNameException;
-import com.booster.vocabulary.exception.VocabularyEntityByIdNotFoundException;
 import com.booster.vocabulary.mapper.VocabularyMapper;
 import com.booster.vocabulary.repository.LanguageToLearnRepository;
 import com.booster.vocabulary.repository.UserRepository;
@@ -39,13 +35,13 @@ public class VocabularyService {
         String vocabularyName = vocabularyRequestDto.getVocabularyName();
 
         if (vocabularyRepository.existsByUserIdAndName(userId, vocabularyName)) {
-            throw new VocabularyEntityAlreadyExistsWithNameException(vocabularyName);
+            throw new RuntimeException();
         }
         LanguageToLearnEntity languageToLearnEntity = languageToLearnRepository.findById(languageToLearnId)
-                .orElseThrow(() -> new LanguageToLearnEntityByIdNotFoundException(languageToLearnId));
+                .orElseThrow(RuntimeException::new);
 
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
+                .orElseThrow(RuntimeException::new);
 
         BaseLanguageEntity baseLanguageEntity = languageToLearnEntity.getBaseLanguage();
 
@@ -65,7 +61,7 @@ public class VocabularyService {
     public VocabularyDto findById(Long id) {
         return vocabularyRepository.findById(id)
                 .map(vocabularyMapper::entity2Dto)
-                .orElseThrow(() -> new VocabularyEntityByIdNotFoundException(id));
+                .orElseThrow(RuntimeException::new);
     }
 
     public List<VocabularyDto> findAllByUserIdAndLanguageToLearnId(Long userId, Long languageToLearnId) {
@@ -78,7 +74,7 @@ public class VocabularyService {
     @Transactional
     public void deleteById(Long id) {
         VocabularyEntity vocabularyEntity = vocabularyRepository.findById(id)
-                .orElseThrow(() -> new VocabularyEntityByIdNotFoundException(id));
+                .orElseThrow(RuntimeException::new);
 
         LanguageToLearnEntity languageToLearnEntity = vocabularyEntity.getLanguageToLearn();
         languageToLearnEntity.getVocabularies()

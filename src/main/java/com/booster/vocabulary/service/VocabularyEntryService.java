@@ -6,9 +6,6 @@ import com.booster.vocabulary.entity.UserEntity;
 import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.entity.VocabularyEntryEntity;
 import com.booster.vocabulary.entity.WordEntity;
-import com.booster.vocabulary.exception.UserEntityByIdNotFoundException;
-import com.booster.vocabulary.exception.VocabularyEntryEntityAlreadyExistsWithTargetWordException;
-import com.booster.vocabulary.exception.VocabularyEntryEntityByIdNotFoundException;
 import com.booster.vocabulary.mapper.VocabularyEntryMapper;
 import com.booster.vocabulary.repository.UserRepository;
 import com.booster.vocabulary.repository.VocabularyEntryRepository;
@@ -41,10 +38,10 @@ public class VocabularyEntryService {
         String word = vocabularyEntryRequestDto.getWord();
 
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UserEntityByIdNotFoundException(userId));
+                .orElseThrow(RuntimeException::new);
 
         if (vocabularyEntryRepository.existsByUserIdAndTargetWordName(userId, word)) {
-            throw new VocabularyEntryEntityAlreadyExistsWithTargetWordException(word);
+            throw new RuntimeException();
         }
         VocabularyEntity vocabularyEntity = ofNullable(vocabularyEntryRequestDto.getVocabularyId())
                 .map(vocabularyRepository::findById)
@@ -85,7 +82,7 @@ public class VocabularyEntryService {
     public VocabularyEntryDto findById(Long id) {
         return vocabularyEntryRepository.findById(id)
                 .map(vocabularyEntryMapper::entity2Dto)
-                .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(id));
+                .orElseThrow(RuntimeException::new);
     }
 
     public List<VocabularyEntryDto> findAllByUserIdAndVocabularyId(Long userId, Long vocabularyId) {
@@ -98,7 +95,7 @@ public class VocabularyEntryService {
     @Transactional
     public void deleteById(Long id) {
         VocabularyEntryEntity vocabularyEntryEntity = vocabularyEntryRepository.findById(id)
-                .orElseThrow(() -> new VocabularyEntryEntityByIdNotFoundException(id));
+                .orElseThrow(RuntimeException::new);
 
         VocabularyEntity vocabularyEntity = vocabularyEntryEntity.getVocabulary();
         vocabularyEntity.getVocabularyEntries()
