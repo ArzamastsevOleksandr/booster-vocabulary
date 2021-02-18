@@ -25,7 +25,7 @@ public class VocabularyEntryController {
 
     @PostMapping(value = "/create", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     ResponseEntity<VocabularyEntryDto> create(@RequestBody VocabularyEntryRequestDto vocabularyEntryRequestDto) {
-        Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        String userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         vocabularyEntryRequestDto.setUserId(userId);
 
         VocabularyEntryDto vocabularyEntryDto = vocabularyEntryService.create(vocabularyEntryRequestDto);
@@ -33,21 +33,21 @@ public class VocabularyEntryController {
     }
 
     @GetMapping("/list/{vocabularyId}")
-    ResponseEntity<List<VocabularyEntryDto>> findAllByVocabularyId(@PathVariable Long vocabularyId) {
-        Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+    ResponseEntity<List<VocabularyEntryDto>> findAllByVocabularyId(@PathVariable String vocabularyId) {
+        String userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<VocabularyEntryDto> vocabularyEntryDtoList = vocabularyEntryService.findAllByUserIdAndVocabularyId(userId, vocabularyId);
         return ResponseEntity.ok(vocabularyEntryDtoList);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<VocabularyEntryDto> findById(@PathVariable Long id) {
+    ResponseEntity<VocabularyEntryDto> findById(@PathVariable String id) {
         VocabularyEntryDto vocabularyEntryDto = vocabularyEntryService.findById(id);
         return ResponseEntity.ok(vocabularyEntryDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteById(@PathVariable Long id) {
+    void deleteById(@PathVariable String id) {
         vocabularyEntryService.deleteById(id);
     }
 

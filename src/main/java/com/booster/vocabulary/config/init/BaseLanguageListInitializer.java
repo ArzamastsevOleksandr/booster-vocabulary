@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
+import static com.booster.vocabulary.util.StringUtil.randomUuid;
+
 // TODO: SHOULD BE POPULATED VIA SEPARATE SQL-INSERT SCRIPT AT STARTUP (FLYWAY)
 @Profile("!test")
 @Component
@@ -26,9 +28,10 @@ public class BaseLanguageListInitializer {
                 .map(BaseLanguageEnum::toString)
                 .filter(name -> !baseLanguageRepository.existsByName(name))
                 .forEach(name -> {
-                    var languageEntity = new BaseLanguageEntity();
-                    languageEntity.setName(name);
-                    baseLanguageRepository.save(languageEntity);
+                    var baseLanguageEntity = new BaseLanguageEntity();
+                    baseLanguageEntity.setId(randomUuid());
+                    baseLanguageEntity.setName(name);
+                    baseLanguageRepository.save(baseLanguageEntity);
                 });
     }
 

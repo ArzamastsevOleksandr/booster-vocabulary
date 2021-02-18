@@ -32,8 +32,8 @@ public class VocabularyEntity {
     // todo: entryCount
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(length = 36)
+    private String id;
 
     private String name = DEFAULT_VOCABULARY_NAME;
 

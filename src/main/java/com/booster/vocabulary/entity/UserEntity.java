@@ -16,8 +16,8 @@ import java.util.Set;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(length = 36)
+    private String id;
 
     @Enumerated(EnumType.STRING)
     private RoleEnum name;

@@ -28,8 +28,8 @@ public class LanguageToLearnService {
     private final LanguageToLearnMapper languageToLearnMapper;
 
     public LanguageToLearnDto create(LanguageToLearnRequestDto languageToLearnRequestDto) {
-        Long baseLanguageId = languageToLearnRequestDto.getBaseLanguageId();
-        Long userId = languageToLearnRequestDto.getUserId();
+        String baseLanguageId = languageToLearnRequestDto.getBaseLanguageId();
+        String userId = languageToLearnRequestDto.getUserId();
 
         if (languageToLearnRepository.existsByUserIdAndBaseLanguageId(userId, baseLanguageId)) {
             throw new RuntimeException();
@@ -53,13 +53,13 @@ public class LanguageToLearnService {
         return languageToLearnMapper.entity2Dto(languageToLearnEntity);
     }
 
-    public LanguageToLearnDto findById(Long id) {
+    public LanguageToLearnDto findById(String id) {
         return languageToLearnRepository.findById(id)
                 .map(languageToLearnMapper::entity2Dto)
                 .orElseThrow(RuntimeException::new);
     }
 
-    public List<LanguageToLearnDto> findAllByUserId(Long userId) {
+    public List<LanguageToLearnDto> findAllByUserId(String userId) {
         return languageToLearnRepository.findAllByUserId(userId)
                 .stream()
                 .map(languageToLearnMapper::entity2Dto)
@@ -67,7 +67,7 @@ public class LanguageToLearnService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         LanguageToLearnEntity languageToLearnEntity = languageToLearnRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
 

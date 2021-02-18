@@ -26,7 +26,7 @@ public class BaseLanguageService {
                 .collect(toList());
     }
 
-    public BaseLanguageDto findById(Long id) {
+    public BaseLanguageDto findById(String id) {
         return baseLanguageRepository.findById(id)
                 .map(baseLanguageMapper::entity2Dto)
                 .orElseThrow(RuntimeException::new);

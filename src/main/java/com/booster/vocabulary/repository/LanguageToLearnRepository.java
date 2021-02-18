@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface LanguageToLearnRepository extends JpaRepository<LanguageToLearnEntity, Long> {
+public interface LanguageToLearnRepository extends JpaRepository<LanguageToLearnEntity, String> {
 
-    boolean existsByUserIdAndBaseLanguageId(Long userId, Long baseLanguageId);
+    boolean existsByUserIdAndBaseLanguageId(String userId, String baseLanguageId);
 
-    List<LanguageToLearnEntity> findAllByUserId(Long userId);
+    List<LanguageToLearnEntity> findAllByUserId(String userId);
 
 }

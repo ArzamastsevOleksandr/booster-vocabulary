@@ -5,12 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface VocabularyEntryRepository extends JpaRepository<VocabularyEntryEntity, Long> {
+public interface VocabularyEntryRepository extends JpaRepository<VocabularyEntryEntity, String> {
 
-    List<VocabularyEntryEntity> findAllByUserIdAndVocabularyId(Long userId, Long vocabularyId);
+    List<VocabularyEntryEntity> findAllByUserIdAndVocabularyId(String userId, String vocabularyId);
 
-    boolean existsByUserIdAndTargetWordName(Long userId, String word);
+    boolean existsByUserIdAndTargetWordName(String userId, String word);
 
-    Integer countAllByVocabularyId(Long vocabularyId);
+    Integer countAllByVocabularyId(String vocabularyId);
 
 }

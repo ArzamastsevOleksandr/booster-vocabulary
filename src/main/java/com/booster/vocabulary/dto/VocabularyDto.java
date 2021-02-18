@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VocabularyDto {
-    Long id;
+    String id;
     String name;
     Integer entryCount;
     Timestamp createdOn;

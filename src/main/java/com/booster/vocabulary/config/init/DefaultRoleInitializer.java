@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
+import static com.booster.vocabulary.util.StringUtil.randomUuid;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class DefaultRoleInitializer {
                 .filter(roleEnum -> !roleRepository.existsByName(roleEnum))
                 .map(r -> {
                     var roleEntity = new RoleEntity();
+                    roleEntity.setId(randomUuid());
                     roleEntity.setName(r);
                     return roleEntity;
                 }).forEach(roleRepository::save);

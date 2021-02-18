@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.booster.vocabulary.util.StringUtil.randomUuid;
+
 @Profile("test")
 @Service
 public class TestBaseLanguageOperations {
@@ -18,6 +20,7 @@ public class TestBaseLanguageOperations {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public BaseLanguageEntity createAndSaveBaseLanguageEntity(String name) {
         var baseLanguageEntity = new BaseLanguageEntity();
+        baseLanguageEntity.setId(randomUuid());
         baseLanguageEntity.setName(name);
         return baseLanguageRepository.save(baseLanguageEntity);
     }

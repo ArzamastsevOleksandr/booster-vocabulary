@@ -27,7 +27,7 @@ public class BaseLanguageController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<BaseLanguageDto> findById(@PathVariable Long id) {
+    ResponseEntity<BaseLanguageDto> findById(@PathVariable String id) {
         BaseLanguageDto baseLanguageDto = baseLanguageService.findById(id);
         return ResponseEntity.ok(baseLanguageDto);
     }

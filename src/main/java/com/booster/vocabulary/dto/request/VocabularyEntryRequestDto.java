@@ -13,8 +13,8 @@ public class VocabularyEntryRequestDto {
     Set<String> synonyms;
     Set<String> antonyms;
 
-    Long vocabularyId;
+    String vocabularyId;
 
     @JsonIgnore
-    Long userId;
+    String userId;
 }

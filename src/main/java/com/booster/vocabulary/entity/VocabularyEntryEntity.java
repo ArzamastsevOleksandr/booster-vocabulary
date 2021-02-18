@@ -24,8 +24,8 @@ import java.util.List;
 public class VocabularyEntryEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(length = 36)
+    private String id;
 
     private Integer correctAnswersCount = 0;
 

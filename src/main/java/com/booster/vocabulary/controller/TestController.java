@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.booster.vocabulary.util.StringUtil.randomUuid;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class TestController {
@@ -94,6 +96,7 @@ public class TestController {
 
         // Create new user's account
         UserEntity userEntity = new UserEntity();
+        userEntity.setId(randomUuid());
         userEntity.setUsername(signUpRequest.getUsername());
          userEntity.setEmail(signUpRequest.getEmail());
                 userEntity.setPassword(encoder.encode(signUpRequest.getPassword()));
@@ -143,7 +146,7 @@ public class TestController {
     @NoArgsConstructor
     public static class JwtResponse {
         String jwt;
-        Long id;
+        String id;
         String username;
         String email;
         List<String> roles;

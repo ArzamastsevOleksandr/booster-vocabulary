@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LanguageToLearnDto {
-    Long id;
+    String id;
     Timestamp createdOn;
     BaseLanguageDto baseLanguageDto;
     List<VocabularyDto> vocabularyDtos;

@@ -26,8 +26,8 @@ import java.util.List;
 public class LanguageToLearnEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(length = 36)
+    private String id;
 
     private Timestamp createdOn = Timestamp.from(Instant.now());
 

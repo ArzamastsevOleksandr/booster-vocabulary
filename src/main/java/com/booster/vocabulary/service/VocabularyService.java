@@ -30,8 +30,8 @@ public class VocabularyService {
     private final VocabularyMapper vocabularyMapper;
 
     public VocabularyDto create(VocabularyRequestDto vocabularyRequestDto) {
-        Long userId = vocabularyRequestDto.getUserId();
-        Long languageToLearnId = vocabularyRequestDto.getLanguageToLearnId();
+        String userId = vocabularyRequestDto.getUserId();
+        String languageToLearnId = vocabularyRequestDto.getLanguageToLearnId();
         String vocabularyName = vocabularyRequestDto.getVocabularyName();
 
         if (vocabularyRepository.existsByUserIdAndName(userId, vocabularyName)) {
@@ -58,13 +58,13 @@ public class VocabularyService {
         return vocabularyMapper.entity2Dto(vocabularyEntity);
     }
 
-    public VocabularyDto findById(Long id) {
+    public VocabularyDto findById(String id) {
         return vocabularyRepository.findById(id)
                 .map(vocabularyMapper::entity2Dto)
                 .orElseThrow(RuntimeException::new);
     }
 
-    public List<VocabularyDto> findAllByUserIdAndLanguageToLearnId(Long userId, Long languageToLearnId) {
+    public List<VocabularyDto> findAllByUserIdAndLanguageToLearnId(String userId, String languageToLearnId) {
         return vocabularyRepository.findByUserIdAndLanguageToLearnId(userId, languageToLearnId)
                 .stream()
                 .map(vocabularyMapper::entity2Dto)
@@ -72,7 +72,7 @@ public class VocabularyService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         VocabularyEntity vocabularyEntity = vocabularyRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
 

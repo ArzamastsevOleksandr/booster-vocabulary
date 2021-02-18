@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseLanguageDto {
-    Long id;
+    String id;
     String name;
 }

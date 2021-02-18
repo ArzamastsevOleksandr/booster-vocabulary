@@ -25,7 +25,7 @@ public class LanguageToLearnController {
 
     @PostMapping(value = "/create", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     ResponseEntity<LanguageToLearnDto> create(@RequestBody LanguageToLearnRequestDto languageToLearnRequestDto) {
-        Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        String userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         languageToLearnRequestDto.setUserId(userId);
         LanguageToLearnDto languageToLearnDto = languageToLearnService.create(languageToLearnRequestDto);
         return ResponseEntity.ok(languageToLearnDto);
@@ -33,20 +33,20 @@ public class LanguageToLearnController {
 
     @GetMapping("/list")
     ResponseEntity<List<LanguageToLearnDto>> findAll() {
-        Long userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        String userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<LanguageToLearnDto> languageToLearnDtos = languageToLearnService.findAllByUserId(userId);
         return ResponseEntity.ok(languageToLearnDtos);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<LanguageToLearnDto> findById(@PathVariable Long id) {
+    ResponseEntity<LanguageToLearnDto> findById(@PathVariable String id) {
         LanguageToLearnDto languageToLearnDto = languageToLearnService.findById(id);
         return ResponseEntity.ok(languageToLearnDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteById(@PathVariable Long id) {
+    void deleteById(@PathVariable String id) {
         languageToLearnService.deleteById(id);
     }
 

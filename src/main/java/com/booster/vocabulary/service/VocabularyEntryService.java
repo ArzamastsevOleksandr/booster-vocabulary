@@ -34,7 +34,7 @@ public class VocabularyEntryService {
 
     @Transactional
     public VocabularyEntryDto create(VocabularyEntryRequestDto vocabularyEntryRequestDto) {
-        Long userId = vocabularyEntryRequestDto.getUserId();
+        String userId = vocabularyEntryRequestDto.getUserId();
         String word = vocabularyEntryRequestDto.getWord();
 
         UserEntity userEntity = userRepository.findById(userId)
@@ -79,13 +79,13 @@ public class VocabularyEntryService {
         return vocabularyEntryMapper.entity2Dto(vocabularyEntryEntity);
     }
 
-    public VocabularyEntryDto findById(Long id) {
+    public VocabularyEntryDto findById(String id) {
         return vocabularyEntryRepository.findById(id)
                 .map(vocabularyEntryMapper::entity2Dto)
                 .orElseThrow(RuntimeException::new);
     }
 
-    public List<VocabularyEntryDto> findAllByUserIdAndVocabularyId(Long userId, Long vocabularyId) {
+    public List<VocabularyEntryDto> findAllByUserIdAndVocabularyId(String userId, String vocabularyId) {
         return vocabularyEntryRepository.findAllByUserIdAndVocabularyId(userId, vocabularyId)
                 .stream()
                 .map(vocabularyEntryMapper::entity2Dto)
@@ -93,7 +93,7 @@ public class VocabularyEntryService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         VocabularyEntryEntity vocabularyEntryEntity = vocabularyEntryRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
 

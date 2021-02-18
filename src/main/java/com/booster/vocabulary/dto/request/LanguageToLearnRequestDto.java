@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 @Builder
 public class LanguageToLearnRequestDto {
-    Long baseLanguageId;
+    String baseLanguageId;
 
     @JsonIgnore
-    Long userId;
+    String userId;
 }

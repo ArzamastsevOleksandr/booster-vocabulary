@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface WordRepository extends JpaRepository<WordEntity, Long> {
+public interface WordRepository extends JpaRepository<WordEntity, String> {
 
     Optional<WordEntity> findByName(String word);
 
