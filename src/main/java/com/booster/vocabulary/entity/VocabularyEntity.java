@@ -35,7 +35,7 @@ public class VocabularyEntity {
 
     private String name;
 
-    private Timestamp createdOn = Timestamp.from(Instant.now());
+    private Timestamp createdOn = new Timestamp(System.currentTimeMillis());
 
     @ManyToOne
     private BaseLanguageEntity baseLanguage;

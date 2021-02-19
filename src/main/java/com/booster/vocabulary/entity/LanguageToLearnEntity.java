@@ -29,7 +29,7 @@ public class LanguageToLearnEntity {
     @Column(length = 36)
     private String id;
 
-    private Timestamp createdOn = Timestamp.from(Instant.now());
+    private Timestamp createdOn = new Timestamp(System.currentTimeMillis());
 
     @ManyToOne(fetch = FetchType.LAZY)
     private BaseLanguageEntity baseLanguage;

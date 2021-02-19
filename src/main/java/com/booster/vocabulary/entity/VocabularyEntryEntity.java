@@ -29,7 +29,7 @@ public class VocabularyEntryEntity {
 
     private Integer correctAnswersCount = 0;
 
-    private Timestamp createdOn = Timestamp.from(Instant.now());
+    private Timestamp createdOn = new Timestamp(System.currentTimeMillis());
 
     @ManyToOne(fetch = FetchType.LAZY)
     private WordEntity targetWord;
