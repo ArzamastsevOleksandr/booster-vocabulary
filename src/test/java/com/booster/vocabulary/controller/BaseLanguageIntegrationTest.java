@@ -95,6 +95,7 @@ class BaseLanguageIntegrationTest {
         assertThat(actualBaseLanguageDto).isEqualTo(expectedBaseLanguageDto);
     }
 
+    // TODO: AVOID CONVERSION TO DTO
     private BaseLanguageDto toBaseLanguageDto(BaseLanguageEntity baseLanguageEntity) {
         return BaseLanguageDto.builder()
                 .id(baseLanguageEntity.getId())

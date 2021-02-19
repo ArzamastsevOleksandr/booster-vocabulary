@@ -2,7 +2,10 @@ package com.booster.vocabulary.controller;
 
 import com.booster.vocabulary.dto.BaseLanguageDto;
 import com.booster.vocabulary.service.BaseLanguageService;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/base-language")
-public class BaseLanguageController {
+class BaseLanguageController {
 
     private final BaseLanguageService baseLanguageService;
 

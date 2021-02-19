@@ -14,6 +14,7 @@ public class BaseLanguageEntity {
     @Column(length = 36)
     private String id;
 
+    // TODO: UC TO REJECT DUPLICATES
     private String name;
 
 }
