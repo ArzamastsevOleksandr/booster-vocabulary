@@ -25,6 +25,8 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class VocabularyEntryService {
 
+    private static final String DEFAULT_VOCABULARY_NAME = "DEFAULT_VOCABULARY";
+
     private final WordService wordService;
     private final UserRepository userRepository;
     private final VocabularyRepository vocabularyRepository;
@@ -45,7 +47,7 @@ public class VocabularyEntryService {
         }
         VocabularyEntity vocabularyEntity = ofNullable(vocabularyEntryRequestDto.getVocabularyId())
                 .map(vocabularyRepository::findById)
-                .orElseGet(() -> vocabularyRepository.findDefaultVocabulary(userId))
+                .orElseGet(() -> vocabularyRepository.findByUserIdAndName(userId, DEFAULT_VOCABULARY_NAME))
                 .orElseThrow(RuntimeException::new);
 
         var vocabularyEntryEntity = new VocabularyEntryEntity();

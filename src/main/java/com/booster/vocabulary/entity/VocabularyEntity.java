@@ -27,15 +27,13 @@ import java.util.List;
 })
 public class VocabularyEntity {
 
-    public static final String DEFAULT_VOCABULARY_NAME = "DEFAULT";
-
     // todo: entryCount
 
     @Id
     @Column(length = 36)
     private String id;
 
-    private String name = DEFAULT_VOCABULARY_NAME;
+    private String name;
 
     private Timestamp createdOn = Timestamp.from(Instant.now());
 

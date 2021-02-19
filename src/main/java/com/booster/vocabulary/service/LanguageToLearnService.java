@@ -3,6 +3,7 @@ package com.booster.vocabulary.service;
 import com.booster.vocabulary.dto.LanguageToLearnDto;
 import com.booster.vocabulary.dto.request.LanguageToLearnRequestDto;
 import com.booster.vocabulary.entity.*;
+import com.booster.vocabulary.exception.EntityByIdNotFoundException;
 import com.booster.vocabulary.mapper.LanguageToLearnMapper;
 import com.booster.vocabulary.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.booster.vocabulary.util.StringUtil.randomUuid;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class LanguageToLearnService {
+
+    private static final String DEFAULT_VOCABULARY_NAME = "DEFAULT_VOCABULARY";
 
     private final LanguageToLearnRepository languageToLearnRepository;
     private final BaseLanguageRepository baseLanguageRepository;
@@ -35,19 +39,22 @@ public class LanguageToLearnService {
             throw new RuntimeException();
         }
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new EntityByIdNotFoundException(userId, UserEntity.class.getSimpleName()));
         BaseLanguageEntity baseLanguageEntity = baseLanguageRepository.findById(baseLanguageId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new EntityByIdNotFoundException(baseLanguageId, BaseLanguageEntity.class.getSimpleName()));
 
-        var defaultVocabularyEntity = new VocabularyEntity();
-        defaultVocabularyEntity.setBaseLanguage(baseLanguageEntity);
-        defaultVocabularyEntity.setUser(userEntity);
-        vocabularyRepository.save(defaultVocabularyEntity);
+        var vocabularyEntity = new VocabularyEntity();
+        vocabularyEntity.setId(randomUuid());
+        vocabularyEntity.setName(DEFAULT_VOCABULARY_NAME);
+        vocabularyEntity.setBaseLanguage(baseLanguageEntity);
+        vocabularyEntity.setUser(userEntity);
+        vocabularyRepository.save(vocabularyEntity);
 
         var languageToLearnEntity = new LanguageToLearnEntity();
+        languageToLearnEntity.setId(randomUuid());
         languageToLearnEntity.setBaseLanguage(baseLanguageEntity);
         languageToLearnEntity.setUser(userEntity);
-        languageToLearnEntity.getVocabularies().add(defaultVocabularyEntity);
+        languageToLearnEntity.getVocabularies().add(vocabularyEntity);
         languageToLearnRepository.save(languageToLearnEntity);
 
         return languageToLearnMapper.entity2Dto(languageToLearnEntity);
