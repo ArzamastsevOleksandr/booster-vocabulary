@@ -37,10 +37,10 @@ public class VocabularyEntity {
 
     private Timestamp createdOn = new Timestamp(System.currentTimeMillis());
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private BaseLanguageEntity baseLanguage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private LanguageToLearnEntity languageToLearn;
 
     @ManyToOne(fetch = FetchType.LAZY)
