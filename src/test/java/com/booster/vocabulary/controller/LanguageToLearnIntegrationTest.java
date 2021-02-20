@@ -10,6 +10,7 @@ import com.booster.vocabulary.repository.LanguageToLearnRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,9 +19,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +41,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LanguageToLearnIntegrationTest {
 
     static final String DEFAULT_VOCABULARY_NAME = "DEFAULT_VOCABULARY";
+
+    @Autowired
+    EntityManager entityManager;
 
     @Autowired
     VocabularyRepository vocabularyRepository;
@@ -130,7 +136,7 @@ class LanguageToLearnIntegrationTest {
     }
 
     @Test
-    @DisplayName("/language-to-learn/{id}")
+    @DisplayName("find: /language-to-learn/{id}")
     void findById() {
         // TODO: TEST DTO CONTENT
         // given
@@ -162,6 +168,40 @@ class LanguageToLearnIntegrationTest {
         assertThat(actualLanguageToLearnDto.getBaseLanguageDto().getId()).isEqualTo(baseLanguageEntity.getId());
         assertThat(actualLanguageToLearnDto.getCreatedOn()).isNotNull();
         // TODO: TEST VOCABULARY DTOS
+    }
+
+    @Test
+    @DisplayName("delete: /language-to-learn/{id}")
+    void deleteById() {
+        // given
+        HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
+        var baseLanguageEntity = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("GERMAN");
+
+        var languageToLearnRequestDto = LanguageToLearnRequestDto.builder()
+                .baseLanguageId(baseLanguageEntity.getId())
+                .build();
+        ResponseEntity<LanguageToLearnDto> responseEntity = restTemplate.exchange(
+                "http://{host}:{port}/api/language-to-learn/create",
+                HttpMethod.POST,
+                new HttpEntity<>(languageToLearnRequestDto, httpHeaders),
+                LanguageToLearnDto.class,
+                host, port
+        );
+        LanguageToLearnDto expectedLanguageToLearnDto = responseEntity.getBody();
+
+        assertThat(languageToLearnRepository.findById(expectedLanguageToLearnDto.getId())).isNotEmpty();
+        // when
+        restTemplate.exchange(
+                "http://{host}:{port}/api/language-to-learn/{id}",
+                HttpMethod.DELETE,
+                new HttpEntity<>(httpHeaders),
+                Void.class,
+                host, port, expectedLanguageToLearnDto.getId()
+        );
+        entityManager.clear();
+        // then
+        assertThat(languageToLearnRepository.findById(expectedLanguageToLearnDto.getId())).isEmpty();
+        // TODO: TEST THAT VOCABULARIES & ENTRIES ARE DELETED
     }
 
 }
