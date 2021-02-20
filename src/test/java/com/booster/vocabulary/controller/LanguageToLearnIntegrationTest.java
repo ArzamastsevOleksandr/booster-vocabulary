@@ -129,4 +129,39 @@ class LanguageToLearnIntegrationTest {
         assertThat(actualLanguageToLearnDto.getId()).isEqualTo(expectedLanguageToLearnDto.getId());
     }
 
+    @Test
+    @DisplayName("/language-to-learn/{id}")
+    void findById() {
+        // TODO: TEST DTO CONTENT
+        // given
+        HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
+        var baseLanguageEntity = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("GERMAN");
+
+        var languageToLearnRequestDto = LanguageToLearnRequestDto.builder()
+                .baseLanguageId(baseLanguageEntity.getId())
+                .build();
+        ResponseEntity<LanguageToLearnDto> responseEntity = restTemplate.exchange(
+                "http://{host}:{port}/api/language-to-learn/create",
+                HttpMethod.POST,
+                new HttpEntity<>(languageToLearnRequestDto, httpHeaders),
+                LanguageToLearnDto.class,
+                host, port
+        );
+        LanguageToLearnDto expectedLanguageToLearnDto = responseEntity.getBody();
+        // when
+        ResponseEntity<LanguageToLearnDto> responseEntity1 = restTemplate.exchange(
+                "http://{host}:{port}/api/language-to-learn/{id}",
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                LanguageToLearnDto.class,
+                host, port, expectedLanguageToLearnDto.getId()
+        );
+        LanguageToLearnDto actualLanguageToLearnDto = responseEntity1.getBody();
+        // then
+        assertThat(actualLanguageToLearnDto.getId()).isEqualTo(expectedLanguageToLearnDto.getId());
+        assertThat(actualLanguageToLearnDto.getBaseLanguageDto().getId()).isEqualTo(baseLanguageEntity.getId());
+        assertThat(actualLanguageToLearnDto.getCreatedOn()).isNotNull();
+        // TODO: TEST VOCABULARY DTOS
+    }
+
 }
