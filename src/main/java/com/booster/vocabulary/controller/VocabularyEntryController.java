@@ -39,12 +39,14 @@ public class VocabularyEntryController {
         return ResponseEntity.ok(vocabularyEntryDtoList);
     }
 
+    // todo: security: an authenticated user can obtain an id and get someone's vocabularyEntry
     @GetMapping("/{id}")
     ResponseEntity<VocabularyEntryDto> findById(@PathVariable String id) {
         VocabularyEntryDto vocabularyEntryDto = vocabularyEntryService.findById(id);
         return ResponseEntity.ok(vocabularyEntryDto);
     }
 
+    // todo: security: an authenticated user can obtain an id and delete someone's vocabularyEntry
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteById(@PathVariable String id) {

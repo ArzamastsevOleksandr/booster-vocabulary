@@ -38,12 +38,14 @@ public class LanguageToLearnController {
         return ResponseEntity.ok(new LanguageToLearnDtoList(languageToLearnDtos));
     }
 
+    // todo: security: an authenticated user can obtain an id and get someone's languageToLearn
     @GetMapping("/{id}")
     ResponseEntity<LanguageToLearnDto> findById(@PathVariable String id) {
         LanguageToLearnDto languageToLearnDto = languageToLearnService.findById(id);
         return ResponseEntity.ok(languageToLearnDto);
     }
 
+    // todo: security: an authenticated user can obtain an id and delete someone's languageToLearn
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteById(@PathVariable String id) {
