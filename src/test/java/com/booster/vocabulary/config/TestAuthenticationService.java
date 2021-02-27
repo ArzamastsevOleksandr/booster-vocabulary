@@ -55,7 +55,6 @@ public class TestAuthenticationService {
         );
         var httpHeaders = new HttpHeaders();
         httpHeaders.set("Authorization", "Bearer " + jwtResponse.getJwt());
-
         return httpHeaders;
     }
 

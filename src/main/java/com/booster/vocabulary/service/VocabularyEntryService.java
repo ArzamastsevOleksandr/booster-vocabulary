@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.booster.vocabulary.util.StringUtil.randomUuid;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
@@ -51,6 +52,7 @@ public class VocabularyEntryService {
                 .orElseThrow(RuntimeException::new);
 
         var vocabularyEntryEntity = new VocabularyEntryEntity();
+        vocabularyEntryEntity.setId(randomUuid());
         vocabularyEntryEntity.setUser(userEntity);
 
         WordEntity wordEntity = wordService.getWordEntityByNameOrCreateAndSave(word);
@@ -59,16 +61,16 @@ public class VocabularyEntryService {
         ofNullable(vocabularyEntryRequestDto.getAntonyms()).ifPresent(
                 antonyms -> antonyms.forEach(
                         antonym -> {
-                            WordEntity antonymEntity = wordService.getWordEntityByNameOrCreateAndSave(antonym);
-                            vocabularyEntryEntity.getAntonyms().add(antonymEntity);
+                            WordEntity antonymWordEntity = wordService.getWordEntityByNameOrCreateAndSave(antonym);
+                            vocabularyEntryEntity.getAntonyms().add(antonymWordEntity);
                         }
                 )
         );
         ofNullable(vocabularyEntryRequestDto.getSynonyms()).ifPresent(
                 synonyms -> synonyms.forEach(
                         synonym -> {
-                            WordEntity synonymEntity = wordService.getWordEntityByNameOrCreateAndSave(synonym);
-                            vocabularyEntryEntity.getSynonyms().add(synonymEntity);
+                            WordEntity synonymWordEntity = wordService.getWordEntityByNameOrCreateAndSave(synonym);
+                            vocabularyEntryEntity.getSynonyms().add(synonymWordEntity);
                         }
                 )
         );
