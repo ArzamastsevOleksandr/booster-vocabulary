@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.booster.vocabulary.util.StringUtil.randomUuid;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -46,6 +47,7 @@ public class VocabularyService {
         BaseLanguageEntity baseLanguageEntity = languageToLearnEntity.getBaseLanguage();
 
         var vocabularyEntity = new VocabularyEntity();
+        vocabularyEntity.setId(randomUuid());
         vocabularyEntity.setName(vocabularyName);
         vocabularyEntity.setBaseLanguage(baseLanguageEntity);
         vocabularyEntity.setLanguageToLearn(languageToLearnEntity);

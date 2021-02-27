@@ -56,9 +56,9 @@ class BaseLanguageIntegrationTest {
         // given
         HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
 
-        var baseLanguageEntity1 = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("GERMAN");
+        var baseLanguageEntity1 = testBaseLanguageOperations.createBaseLanguageEntity("GERMAN");
         var baseLanguageDto1 = toBaseLanguageDto(baseLanguageEntity1);
-        var baseLanguageEntity2 = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("ITALIAN");
+        var baseLanguageEntity2 = testBaseLanguageOperations.createBaseLanguageEntity("ITALIAN");
         var baseLanguageDto2 = toBaseLanguageDto(baseLanguageEntity2);
         // when
         ResponseEntity<BaseLanguageController.BaseLanguageDtoList> responseEntity = restTemplate.exchange(
@@ -80,7 +80,7 @@ class BaseLanguageIntegrationTest {
         // given
         HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
 
-        BaseLanguageEntity baseLanguageEntity = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("FRENCH");
+        BaseLanguageEntity baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity("FRENCH");
         var expectedBaseLanguageDto = toBaseLanguageDto(baseLanguageEntity);
         // when
         ResponseEntity<BaseLanguageDto> responseEntity = restTemplate.exchange(

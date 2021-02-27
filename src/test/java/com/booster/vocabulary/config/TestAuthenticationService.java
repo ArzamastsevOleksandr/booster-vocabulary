@@ -1,7 +1,9 @@
 package com.booster.vocabulary.config;
 
 import com.booster.vocabulary.controller.TestController;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -11,13 +13,26 @@ import static com.booster.vocabulary.util.TestUtil.*;
 
 @Profile("test")
 @Service
+@RequiredArgsConstructor
 public class TestAuthenticationService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     public HttpHeaders getAuthorizationBearerHttpHeaders(String host, String port) {
         String username = randomUsername();
+        return getHttpHeaders(host, port, username);
+    }
+
+    public AuthenticationResponse getAuthenticationResponse(String host, String port) {
+        String username = randomUsername();
+        HttpHeaders httpHeaders = getHttpHeaders(host, port, username);
+        return AuthenticationResponse.builder()
+                .username(username)
+                .httpHeaders(httpHeaders)
+                .build();
+    }
+
+    private HttpHeaders getHttpHeaders(String host, String port, String username) {
         String password = randomPassword();
         var signupRequest = TestController.SignupRequest.builder()
                 .email(randomEmail())
@@ -40,7 +55,15 @@ public class TestAuthenticationService {
         );
         var httpHeaders = new HttpHeaders();
         httpHeaders.set("Authorization", "Bearer " + jwtResponse.getJwt());
+
         return httpHeaders;
+    }
+
+    @Data
+    @Builder
+    public static class AuthenticationResponse {
+        private HttpHeaders httpHeaders;
+        private String username;
     }
 
 }

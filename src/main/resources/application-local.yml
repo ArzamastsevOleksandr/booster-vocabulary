@@ -1,6 +1,5 @@
 server:
   port: 8090
-  host: localhost
 spring:
   jpa:
     show-sql: true

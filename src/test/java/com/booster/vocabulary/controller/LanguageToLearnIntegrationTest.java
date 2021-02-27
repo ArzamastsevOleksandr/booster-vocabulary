@@ -10,7 +10,6 @@ import com.booster.vocabulary.repository.LanguageToLearnRepository;
 import com.booster.vocabulary.repository.VocabularyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -68,7 +66,7 @@ class LanguageToLearnIntegrationTest {
         // TODO: TEST DTO CONTENT
         // given
         HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
-        var baseLanguageEntity = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("GERMAN");
+        var baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity("GERMAN");
         String baseLanguageEntityId = baseLanguageEntity.getId();
 
         // when
@@ -106,7 +104,7 @@ class LanguageToLearnIntegrationTest {
         // TODO: TEST DTO CONTENT
         // given
         HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
-        var baseLanguageEntity = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("GERMAN");
+        var baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity("GERMAN");
 
         var languageToLearnRequestDto = LanguageToLearnRequestDto.builder()
                 .baseLanguageId(baseLanguageEntity.getId())
@@ -141,7 +139,7 @@ class LanguageToLearnIntegrationTest {
         // TODO: TEST DTO CONTENT
         // given
         HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
-        var baseLanguageEntity = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("GERMAN");
+        var baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity("GERMAN");
 
         var languageToLearnRequestDto = LanguageToLearnRequestDto.builder()
                 .baseLanguageId(baseLanguageEntity.getId())
@@ -175,7 +173,7 @@ class LanguageToLearnIntegrationTest {
     void deleteById() {
         // given
         HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
-        var baseLanguageEntity = testBaseLanguageOperations.createAndSaveBaseLanguageEntity("GERMAN");
+        var baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity("GERMAN");
 
         var languageToLearnRequestDto = LanguageToLearnRequestDto.builder()
                 .baseLanguageId(baseLanguageEntity.getId())
