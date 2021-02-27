@@ -2,7 +2,10 @@ package com.booster.vocabulary.service;
 
 import com.booster.vocabulary.dto.VocabularyDto;
 import com.booster.vocabulary.dto.request.VocabularyRequestDto;
-import com.booster.vocabulary.entity.*;
+import com.booster.vocabulary.entity.BaseLanguageEntity;
+import com.booster.vocabulary.entity.LanguageToLearnEntity;
+import com.booster.vocabulary.entity.UserEntity;
+import com.booster.vocabulary.entity.VocabularyEntity;
 import com.booster.vocabulary.mapper.VocabularyMapper;
 import com.booster.vocabulary.repository.LanguageToLearnRepository;
 import com.booster.vocabulary.repository.UserRepository;
@@ -11,7 +14,6 @@ import com.booster.vocabulary.repository.VocabularyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -73,25 +75,9 @@ public class VocabularyService {
                 .collect(toList());
     }
 
-    @Transactional
+    // todo: test that entries are deleted as well
     public void deleteById(String id) {
-        VocabularyEntity vocabularyEntity = vocabularyRepository.findById(id)
-                .orElseThrow(RuntimeException::new);
-
-        LanguageToLearnEntity languageToLearnEntity = vocabularyEntity.getLanguageToLearn();
-        languageToLearnEntity.getVocabularies()
-                .removeIf(ve -> vocabularyEntity.getId().equals(ve.getId()));
-        languageToLearnRepository.save(languageToLearnEntity);
-
-        List<VocabularyEntryEntity> vocabularyEntryEntities = vocabularyEntity.getVocabularyEntries();
-        vocabularyEntity.setVocabularyEntries(null);
-
-        vocabularyEntryEntities
-                .stream()
-                .peek(vee -> vee.setVocabulary(null))
-                .forEach(vocabularyEntryRepository::delete);
-
-        vocabularyRepository.delete(vocabularyEntity);
+        vocabularyRepository.deleteById(id);
     }
 
 }

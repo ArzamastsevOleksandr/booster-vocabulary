@@ -43,7 +43,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class VocabularyIntegrationTest {
 
-    static final String VOCABULARY_NAME = "VOCABULARY_NAME";
+    static final String VOCABULARY_NAME1 = "VOCABULARY_NAME1";
+    static final String VOCABULARY_NAME2 = "VOCABULARY_NAME2";
     static final String BASE_LANGUAGE_NAME = "BASE_LANGUAGE_NAME";
 
     @Autowired
@@ -89,7 +90,7 @@ class VocabularyIntegrationTest {
         LanguageToLearnDto languageToLearnDto = responseEntity1.getBody();
         // when
         var vocabularyRequestDto = VocabularyRequestDto.builder()
-                .vocabularyName(VOCABULARY_NAME)
+                .vocabularyName(VOCABULARY_NAME1)
                 .languageToLearnId(languageToLearnDto.getId())
                 .build();
         ResponseEntity<VocabularyDto> responseEntity2 = restTemplate.exchange(
@@ -108,10 +109,12 @@ class VocabularyIntegrationTest {
 
         assertThat(vocabularyEntity.getBaseLanguage()).isEqualTo(baseLanguageEntity1);
         assertThat(vocabularyEntity.getLanguageToLearn()).isEqualTo(languageToLearnEntity);
-        assertThat(vocabularyEntity.getName()).isEqualTo(VOCABULARY_NAME);
+        assertThat(vocabularyEntity.getName()).isEqualTo(VOCABULARY_NAME1);
         assertThat(vocabularyEntity.getCreatedOn()).isNotNull();
         assertThat(vocabularyEntity.getUser()).isNotNull();
         assertThat(vocabularyEntity.getVocabularyEntries()).isEmpty();
+
+        assertThat(languageToLearnEntity.getVocabularies()).contains(vocabularyEntity);
     }
 
     @Test
@@ -124,8 +127,8 @@ class VocabularyIntegrationTest {
         UserEntity userEntity = userRepository.findByUsername(authenticationResponse.getUsername()).get();
 
         var languageToLearnEntity = testLanguageToLearnOperations.createLanguageToLearnEntity(baseLanguageEntity, userEntity);
-        VocabularyEntity vocabularyEntity1 = testVocabularyOperations.createVocabularyEntity(userEntity, languageToLearnEntity, "ONE");
-        VocabularyEntity vocabularyEntity2 = testVocabularyOperations.createVocabularyEntity(userEntity, languageToLearnEntity, "TWO");
+        VocabularyEntity vocabularyEntity1 = testVocabularyOperations.createVocabularyEntity(userEntity, languageToLearnEntity, VOCABULARY_NAME1);
+        VocabularyEntity vocabularyEntity2 = testVocabularyOperations.createVocabularyEntity(userEntity, languageToLearnEntity, VOCABULARY_NAME2);
         // when
         ResponseEntity<VocabularyController.VocabularyDtoList> responseEntity = restTemplate.exchange(
                 "http://{host}:{port}/api/vocabulary/list/{languageToLearnId}",
@@ -140,6 +143,55 @@ class VocabularyIntegrationTest {
         assertThat(vocabularyDtoList)
                 .extracting(VocabularyDto::getId)
                 .containsOnly(vocabularyEntity1.getId(), vocabularyEntity2.getId());
+    }
+
+    @Test
+    @DisplayName("/vocabulary/{id}")
+    void findById() {
+        // given
+        HttpHeaders httpHeaders = testAuthenticationService.getAuthorizationBearerHttpHeaders(host, port);
+
+        VocabularyEntity vocabularyEntity = testVocabularyOperations.createVocabularyEntity(VOCABULARY_NAME1);
+        // when
+        ResponseEntity<VocabularyDto> responseEntity = restTemplate.exchange(
+                "http://{host}:{port}/api/vocabulary/{id}",
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                VocabularyDto.class,
+                host, port, vocabularyEntity.getId()
+        );
+        VocabularyDto vocabularyDto = responseEntity.getBody();
+        // then
+        assertThat(vocabularyDto.getId()).isEqualTo(vocabularyEntity.getId());
+    }
+
+    @Test
+    @DisplayName("delete: /vocabulary/{Id}")
+    void deleteById() {
+        // given
+        TestAuthenticationService.AuthenticationResponse authenticationResponse = testAuthenticationService.getAuthenticationResponse(host, port);
+
+        var baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity(BASE_LANGUAGE_NAME);
+        UserEntity userEntity = userRepository.findByUsername(authenticationResponse.getUsername()).get();
+
+        var languageToLearnEntity = testLanguageToLearnOperations.createLanguageToLearnEntity(baseLanguageEntity, userEntity);
+        VocabularyEntity vocabularyEntity1 = testVocabularyOperations.createVocabularyEntity(userEntity, languageToLearnEntity, VOCABULARY_NAME1);
+        // when
+        restTemplate.exchange(
+                "http://{host}:{port}/api/vocabulary/{id}",
+                HttpMethod.DELETE,
+                new HttpEntity<>(authenticationResponse.getHttpHeaders()),
+                Void.class,
+                host, port, vocabularyEntity1.getId()
+        );
+        // then
+        assertThat(vocabularyRepository.findById(vocabularyEntity1.getId())).isEmpty();
+        LanguageToLearnEntity languageToLearnEntity1 = languageToLearnRepository.findById(languageToLearnEntity.getId()).get();
+        assertThat(languageToLearnEntity1.getVocabularies())
+                .extracting(VocabularyEntity::getId)
+                .doesNotContain(vocabularyEntity1.getId());
+
+        // todo: test that entries are deleted as well
     }
 
 }

@@ -31,4 +31,9 @@ public class TestVocabularyOperations {
         return vocabularyRepository.save(vocabularyEntity);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public VocabularyEntity createVocabularyEntity(String name) {
+        return this.createVocabularyEntity(null, null, name);
+    }
+
 }

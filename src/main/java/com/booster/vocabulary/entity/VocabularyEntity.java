@@ -6,7 +6,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,7 @@ public class VocabularyEntity {
     @Column(length = 36)
     private String id;
 
+    // todo: unique constraint
     private String name;
 
     private Timestamp createdOn = new Timestamp(System.currentTimeMillis());
