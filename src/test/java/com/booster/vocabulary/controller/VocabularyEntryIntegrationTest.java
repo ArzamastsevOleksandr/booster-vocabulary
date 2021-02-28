@@ -1,9 +1,6 @@
 package com.booster.vocabulary.controller;
 
-import com.booster.vocabulary.config.TestAuthenticationService;
-import com.booster.vocabulary.config.TestBaseLanguageOperations;
-import com.booster.vocabulary.config.TestLanguageToLearnOperations;
-import com.booster.vocabulary.config.TestVocabularyOperations;
+import com.booster.vocabulary.config.*;
 import com.booster.vocabulary.dto.VocabularyEntryDto;
 import com.booster.vocabulary.dto.request.VocabularyEntryRequestDto;
 import com.booster.vocabulary.entity.UserEntity;
@@ -26,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,6 +61,8 @@ class VocabularyEntryIntegrationTest {
     TestVocabularyOperations testVocabularyOperations;
     @Autowired
     TestAuthenticationService testAuthenticationService;
+    @Autowired
+    TestVocabularyEntryOperations testVocabularyEntryOperations;
 
     @Value("${server.host:localhost}")
     String host;
@@ -112,6 +112,88 @@ class VocabularyEntryIntegrationTest {
         VocabularyEntity actualVocabularyEntity = vocabularyEntryEntity.getVocabulary();
         assertThat(actualVocabularyEntity).isEqualTo(vocabularyEntity);
         assertThat(actualVocabularyEntity.getVocabularyEntries()).containsOnly(vocabularyEntryEntity);
+    }
+
+    @Test
+    @DisplayName("/vocabulary-entry/list/{vocabularyId}")
+    void findAllByVocabularyId() {
+        // given
+        TestAuthenticationService.AuthenticationResponse authenticationResponse = testAuthenticationService.getAuthenticationResponse(host, port);
+
+        var baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity(BASE_LANGUAGE_NAME);
+        UserEntity userEntity = userRepository.findByUsername(authenticationResponse.getUsername()).get();
+
+        var languageToLearnEntity = testLanguageToLearnOperations.createLanguageToLearnEntity(baseLanguageEntity, userEntity);
+        VocabularyEntity vocabularyEntity = testVocabularyOperations.createVocabularyEntity(userEntity, languageToLearnEntity, VOCABULARY_NAME1);
+
+        VocabularyEntryEntity vocabularyEntryEntity = testVocabularyEntryOperations.createVocabularyEntryEntity(userEntity, vocabularyEntity);
+        // when
+        ResponseEntity<VocabularyEntryController.VocabularyEntryDtoList> responseEntity = restTemplate.exchange(
+                "http://{host}:{port}/api/vocabulary-entry/list/{vocabularyId}",
+                HttpMethod.GET,
+                new HttpEntity<>(authenticationResponse.getHttpHeaders()),
+                VocabularyEntryController.VocabularyEntryDtoList.class,
+                host, port, vocabularyEntity.getId()
+        );
+        List<VocabularyEntryDto> vocabularyEntryDtoList = responseEntity.getBody().getVocabularyEntryDtoList();
+        // then
+        assertThat(vocabularyEntryDtoList)
+                .extracting(VocabularyEntryDto::getId)
+                .containsOnly(vocabularyEntryEntity.getId());
+    }
+
+    @Test
+    @DisplayName("GET: /vocabulary-entry/{id}")
+    void findById() {
+        // given
+        TestAuthenticationService.AuthenticationResponse authenticationResponse = testAuthenticationService.getAuthenticationResponse(host, port);
+
+        var baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity(BASE_LANGUAGE_NAME);
+        UserEntity userEntity = userRepository.findByUsername(authenticationResponse.getUsername()).get();
+
+        var languageToLearnEntity = testLanguageToLearnOperations.createLanguageToLearnEntity(baseLanguageEntity, userEntity);
+        VocabularyEntity vocabularyEntity = testVocabularyOperations.createVocabularyEntity(userEntity, languageToLearnEntity, VOCABULARY_NAME1);
+
+        VocabularyEntryEntity vocabularyEntryEntity = testVocabularyEntryOperations.createVocabularyEntryEntity(userEntity, vocabularyEntity);
+        // when
+        ResponseEntity<VocabularyEntryDto> responseEntity = restTemplate.exchange(
+                "http://{host}:{port}/api/vocabulary-entry/{id}",
+                HttpMethod.GET,
+                new HttpEntity<>(authenticationResponse.getHttpHeaders()),
+                VocabularyEntryDto.class,
+                host, port, vocabularyEntryEntity.getId()
+        );
+        VocabularyEntryDto vocabularyEntryDto = responseEntity.getBody();
+        // then
+        assertThat(vocabularyEntryEntity.getId()).isEqualTo(vocabularyEntryDto.getId());
+    }
+
+    @Test
+    @DisplayName("DELETE: /vocabulary-entry/{id}")
+    void deleteById() {
+        // given
+        TestAuthenticationService.AuthenticationResponse authenticationResponse = testAuthenticationService.getAuthenticationResponse(host, port);
+
+        var baseLanguageEntity = testBaseLanguageOperations.createBaseLanguageEntity(BASE_LANGUAGE_NAME);
+        UserEntity userEntity = userRepository.findByUsername(authenticationResponse.getUsername()).get();
+
+        var languageToLearnEntity = testLanguageToLearnOperations.createLanguageToLearnEntity(baseLanguageEntity, userEntity);
+        VocabularyEntity vocabularyEntity = testVocabularyOperations.createVocabularyEntity(userEntity, languageToLearnEntity, VOCABULARY_NAME1);
+
+        VocabularyEntryEntity vocabularyEntryEntity = testVocabularyEntryOperations.createVocabularyEntryEntity(userEntity, vocabularyEntity);
+
+        assertThat(vocabularyEntity.getVocabularyEntries()).containsOnly(vocabularyEntryEntity);
+        // when
+        restTemplate.exchange(
+                "http://{host}:{port}/api/vocabulary-entry/{id}",
+                HttpMethod.DELETE,
+                new HttpEntity<>(authenticationResponse.getHttpHeaders()),
+                Void.class,
+                host, port, vocabularyEntryEntity.getId()
+        );
+        //then
+        assertThat(vocabularyRepository.findById(vocabularyEntity.getId()).get().getVocabularyEntries()).isEmpty();
+        assertThat(vocabularyEntryRepository.findById(vocabularyEntryEntity.getId())).isEmpty();
     }
 
 }

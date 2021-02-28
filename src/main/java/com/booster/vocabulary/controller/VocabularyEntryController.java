@@ -4,6 +4,9 @@ import com.booster.vocabulary.config.security.UserDetailsImpl;
 import com.booster.vocabulary.dto.VocabularyEntryDto;
 import com.booster.vocabulary.dto.request.VocabularyEntryRequestDto;
 import com.booster.vocabulary.service.VocabularyEntryService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,7 @@ public class VocabularyEntryController {
 
     private final VocabularyEntryService vocabularyEntryService;
 
+    // todo: 201 status?
     @PostMapping(value = "/create", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     ResponseEntity<VocabularyEntryDto> create(@RequestBody VocabularyEntryRequestDto vocabularyEntryRequestDto) {
         String userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -33,10 +37,10 @@ public class VocabularyEntryController {
     }
 
     @GetMapping("/list/{vocabularyId}")
-    ResponseEntity<List<VocabularyEntryDto>> findAllByVocabularyId(@PathVariable String vocabularyId) {
+    ResponseEntity<VocabularyEntryDtoList> findAllByVocabularyId(@PathVariable String vocabularyId) {
         String userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<VocabularyEntryDto> vocabularyEntryDtoList = vocabularyEntryService.findAllByUserIdAndVocabularyId(userId, vocabularyId);
-        return ResponseEntity.ok(vocabularyEntryDtoList);
+        return ResponseEntity.ok(new VocabularyEntryDtoList(vocabularyEntryDtoList));
     }
 
     // todo: security: an authenticated user can obtain an id and get someone's vocabularyEntry
@@ -51,6 +55,13 @@ public class VocabularyEntryController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteById(@PathVariable String id) {
         vocabularyEntryService.deleteById(id);
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class VocabularyEntryDtoList {
+        List<VocabularyEntryDto> vocabularyEntryDtoList;
     }
 
 }
